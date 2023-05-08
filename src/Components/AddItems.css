@@ -1,0 +1,124 @@
+#divAddItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 100%;
+    width: 100%;
+}
+#divAddItems *{
+    font-size: var(--text);
+}
+#divAddItems > div > section > form > fieldset > legend{
+    font-size: var(--title2);
+}
+#divAddItems > div > section > form > fieldset > div > label{
+    font-size: var(--label);
+}
+#divAddItems>div {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8vmin;
+    background-color: white;
+    width: 95%;
+    height: 95%;
+    border-radius: 0.8vmin;
+}
+
+#divAddItems>div>section {
+    display: flex;
+    flex-direction: column;
+    width: 59.5%;
+    border-right: 0.2vmin solid #ccc;
+    padding: 0.4vmin;
+}
+
+#divAddItems>div>section>form {
+    margin-bottom: 0.6vmin;
+    border-bottom: 0.2vmin solid #ccc;
+
+}
+
+#divAddItems>div>aside {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    /* background-color: blue; */
+}
+#divAddItems>div>aside>div>h1{
+    font-size: var(--title2);
+    font-weight: bold;
+    margin:0px
+    /* background-color: red; */
+}
+
+#divContainerPrice>.totalItems{
+    font-size: var(--title2);
+    color:#f74c15;
+    font-weight: bold;
+}
+
+#divAddItems>div>aside>article{
+    overflow-y: auto;
+    flex-grow: 1;
+}
+#divAddItems>div>aside>article>div>span>button{
+    text-align: center;
+    width: 3vmin;
+    height: 3vmin;
+    border-radius: 1.5vmin;
+}
+#divAddItems>div>aside>article>div{
+    border: solid 0.2vmin #ccc;
+    margin: 1vmin 0vmin;
+    padding:0.4vmin;
+    border-radius: 0.8vmin;
+}
+#divAddItems>div>aside>footer{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-top: solid 0.2vmin #ccc;
+    padding: 1vmin;
+}
+#divAddItems>div>aside>footer>div{
+    display:flex;
+    justify-content:space-between;
+    width: 40%;
+
+}
+#divAddItems>div>aside>footer>div>button{
+    background-color: transparent;
+    padding: 0;
+    border: none;
+}
+#divAddItems>div>aside>footer>div>button>*{
+    font-size:4.8vmin
+}
+#divBodyAddItems {
+    overflow: auto;
+    /* background-color:#ccc */
+}
+
+.cardItem {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    margin: 1vmin 0vmin
+}
+
+.cardItem > div {
+    display: flex;
+    align-items:center;
+    overflow: hidden;
+    width: 85%;
+}
+.cardItem > div >input{
+    width: var(--text);
+    margin-right: 1.2vmin;
+}
+.cardItem > input {
+    overflow: hidden;
+    width: 15%;
+}

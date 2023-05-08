@@ -1,0 +1,25 @@
+#divOrderCard>div>span{
+    height: 6vmin;
+}
+#divOrderCard>article>div{
+    border:solid 0.4vmin #ced4da;
+    border-radius: 2vmin;
+    
+}
+#divOrderCard>article>div:hover{
+    box-shadow: 0.4vmin 0.4vmin 1vmin #ced4da;
+    cursor: pointer;
+}
+#divOrderCard>article>div>div>span *{
+    font-size: var(--subText);
+}
+#divOrderCard>article>div>div>span>label>svg{
+    font-size: var(--text);
+    
+}
+/* #divOrderCard>article>div>span>b{
+    width: 35%;
+}
+#divOrderCard>article>div>span>label{
+    width: 65%;
+} */

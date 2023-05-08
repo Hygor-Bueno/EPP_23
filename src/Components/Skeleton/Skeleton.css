@@ -1,0 +1,35 @@
+#skeleton{
+    display: flex;
+}
+#skeleton>section {
+    background-color: #fff;
+    height: 100vh;
+}
+
+#skeleton>aside {
+    display: flex;
+}
+
+#skeleton>aside>#verticalMenuDiv {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-dark);
+    padding: 0.8vmin;
+}
+#skeleton>aside>#divButtonMenu{
+    display: flex;
+    align-items: center;
+    height: 6vmin;
+}
+#skeleton>aside>#divButtonMenu>button{
+    font-size: var(--label);
+    color: var(--bg-dark);
+}
+
+#skeleton>aside>#verticalMenuDiv>button{
+    margin: 0.8vmin 0vmin;
+}
+#skeleton>aside>#verticalMenuDiv>button>svg{
+    color:white;
+    font-size: var(--label);
+}
