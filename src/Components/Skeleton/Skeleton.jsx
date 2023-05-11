@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { Connection } from '../../Util/RestApi';
 import Util from '../../Util/Util';
 import './Skeleton.css';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function Skeleton({ children }) {
     const [menu, setMenu] = useState(false)
-
+    const navigate = useNavigate();
     return (
         <div id="skeleton">
             <section>
@@ -24,6 +25,10 @@ export default function Skeleton({ children }) {
                     <button type="button" title="Tela de produção." onClick={() => console.log('Produção')}><FontAwesomeIcon icon="fa-boxes-packing" /></button>
                     <button type="button" title="Tela de vendas." onClick={() => console.log('Vendas')}><FontAwesomeIcon icon="fa-money-check-dollar" /></button>
                     <button type="button" title="Tela de Cadastro (Menu e Produtos)." onClick={() => console.log('Cadastro')}><FontAwesomeIcon icon="fa-computer" /></button>
+                    <button type="button" title="Realizar logoff." onClick={() => {
+                        navigate("/login");
+                        localStorage.removeItem('token');
+                    }}><FontAwesomeIcon icon="fa-solid fa-right-from-bracket" /></button>
                 </div>
             </aside>
         </div>

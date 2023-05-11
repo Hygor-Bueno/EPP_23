@@ -33,6 +33,14 @@ export default class LogSales {
             console.log(e)
         }
     }
+    async requestItem() {
+        try {
+            let req = await this.#conn.get(`&id_product=${this.epp_id_product}&id_shop=${localStorage.getItem('num_store')}`,'EPP/Product.php');
+            console.log(req);
+        } catch (error) {
+            console.log(error)
+        }
+    }
     async getConsincoPrice(id_product) {
         let price = 0;
             let itemConsinco = await this.#conn.get(`&id_product='${id_product}'&id_shop=${localStorage.getItem('num_store')}`, "EPP/Product.php")

@@ -10,6 +10,7 @@ import AddItems from '../AddItems';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Order } from '../../Class/Order';
 import OrderCardList from '../OrderCardList';
+import LogSales from '../../Class/LogSale';
 
 export default function Home() {
     const util = new Util();
@@ -187,20 +188,19 @@ export default function Home() {
     }
 
     async function create() {
-        // try {
-        //     let fields = mandatoryFields();
-        //     borderError(fields);
-        //     let values = validiteValues();
-        //     if (fields.length > 0) throw new Error("Preencha todos os campos obrigatórios.");
-        //     if (values.error) throw new Error(values.message);
-        //     let order = await postOrder();
-        //     if (order.error) throw new Error(order.message);
-        //     postLogs(order.lastId);
-        //     cleanPage();
-        // } catch (error) {
-        //     alert(error);
-        // }
-        postLogs(2348);
+        try {
+            let fields = mandatoryFields();
+            borderError(fields);
+            let values = validiteValues();
+            if (fields.length > 0) throw new Error("Preencha todos os campos obrigatórios.");
+            if (values.error) throw new Error(values.message);
+            let order = await postOrder();
+            if (order.error) throw new Error(order.message);
+            await postLogs(order.last_id);
+            cleanPage();
+        } catch (error) {
+            alert(error);
+        }
     }
     async function postOrder() {
         let order = new Order(null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, '0', localStorage.getItem('store'), localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
@@ -211,7 +211,7 @@ export default function Home() {
         let req = [];
         logSales.forEach(log => {
             log.epp_id_order = id_order;
-            req.push(postsFast(log,"EPP/LogSale.php"))
+            req.push(postsFast(log, "EPP/LogSale.php"))
         })
         await Promise.all(req).then(value => {
             console.log(value);
@@ -316,10 +316,10 @@ export default function Home() {
     }
 
     async function load() {
-        let value = ordersList[0];
+        let value = ordersList.filter(i => i.idOrder === '2354')[0]
+
         console.log(value);
         let log = await connection.get(`&epp_id_order=${value.idOrder}`, "EPP/LogSale.php");
-        console.log(log);
         setOrderCod(value.idOrder);
         setNameClient(value.nameClient);
         setFoneClient(value.fone || "");
@@ -336,8 +336,17 @@ export default function Home() {
         setMenu(value.idMenu || "");
         setRice("");
         setDessert("");
-        setLogSales([]);
+        setLogSales(loadLogSale(log.data));
         setModAdditional(false);
     }
-
+    function loadLogSale(array){
+        let result = [];
+        array.forEach(item=>{
+            let sale = new LogSales(item.eppIdLog,item.eppIdProduct,item.eppIdOrder,item.quantity,item.price,item.menu ,null,null,item.menu === '1'?true:false);
+            sale.requestItem();
+            result.push(sale);
+        })
+        console.log(result);
+        return result;
+    }
 }
