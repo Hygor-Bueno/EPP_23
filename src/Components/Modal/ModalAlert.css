@@ -1,0 +1,30 @@
+#ModalAlertContainer{
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: initial;
+    justify-content: center;
+    z-index: 200;
+    top: 0;
+    left: 0;
+}
+
+#ModalAlertContainer > div {
+    width: 400px;
+    height: 200px;
+    background-color: white;
+    padding: 0.6vmin;
+    border-radius: 0.5vmin;
+}
+
+#ModalAlertContainer > div > span{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ModalAlertContainer > div > span > h3{
+    margin: 0;
+}
