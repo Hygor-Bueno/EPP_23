@@ -1,0 +1,39 @@
+#ModalContainer{
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    
+}
+
+#ModalContainer > div {
+    width: 360px;
+    height: 370px;
+    background-color: white;
+    padding: 0.6vmin;
+    border-radius: 0.5vmin;
+}
+
+#ModalContainer > div > button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 40px;
+    border-radius: var(--bd-radius-g);
+    
+}
+
+#ModalContainer > div > span{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ModalContainer > div > span > h3{
+    margin: 0;
+}

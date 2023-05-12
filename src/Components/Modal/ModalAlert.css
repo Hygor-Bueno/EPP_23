@@ -1,0 +1,47 @@
+#ModalAlertContainer{
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: initial;
+    justify-content: center;
+    z-index: 200;
+    top: 0;
+    left: 0;
+}
+
+#ModalAlertContainer > div {
+    width: 400px;
+    height: 200px;
+    padding: 0.6vmin;
+    border-radius: 0.5vmin;
+}
+
+#ModalAlertContainer > div > span{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ModalAlertContainer > div > span > h3{
+    margin: 0;
+}
+
+#ModalAlertContainer > div > p{
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+#ModalAlertContainer > #ModalColor0 {
+    background-color: #BADBCC;  
+}
+
+#ModalAlertContainer > #ModalColor1 {
+    background-color: #FFECB5;
+}
+
+#ModalAlertContainer > #ModalColor2 {
+    background-color:#F5C2C7;
+}
