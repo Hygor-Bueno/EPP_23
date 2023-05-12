@@ -8,6 +8,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import Home from '../Components/Home/Home';
 import Skeleton from '../Components/Skeleton/Skeleton';
+import Product from '../Components/Product/Product';
+import Order from '../Components/Order/Order';
 
 library.add(faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation)
 
@@ -19,6 +21,8 @@ export default function App() {
                 <Route path="*" element={loadPage(<Skeleton><Home /></Skeleton>)} />
                 <Route path="/" element={loadPage(<Skeleton><Home /></Skeleton>)} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/order" element={<Skeleton><Order /></Skeleton>} />
+                <Route path="/product" element={<Skeleton><Product /></Skeleton>} />
             </Routes>
         </HashRouter>
     )
