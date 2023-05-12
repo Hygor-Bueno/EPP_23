@@ -6,16 +6,22 @@ import Util from '../../Util/Util';
 import './Login.css';
 import ModalCenter from '../Modal/ModalCenter';
 import PasswordRevealer from "../PasswordRevealer/PasswordRevealer";
+import ModalAlert from '../Modal/ModalAlert';
 
 export default function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [modalPassword, setModalPassword] = useState(false);
+    const [modalAttention, setModalAttention] = useState(false);
     const util = new Util();
 
     return (
         <div className='login'>
+            {modalAttention && <ModalAlert closeModalAlert={setModalAttention} title={'Erro!'}>
+                {errorPass()}</ModalAlert>}
+            {modalAttention && <ModalAlert closeModalAlert={setModalAttention} title={'Erro!'}>
+                {errorLogin()}</ModalAlert>}
             {modalPassword && <ModalCenter closeModal={setModalPassword} title={'Alterar Senha'}>
                 {changePass()}</ModalCenter>}
             <div id="content-login" className='w-100 h-100 d-flex align-items-center justify-content-center'>
@@ -33,7 +39,7 @@ export default function Login() {
             </div>
         </div>
     )
-    
+
     async function login() {
         let connection = new Connection();
         const user = { user: username, password: password }
@@ -49,7 +55,19 @@ export default function Login() {
 
     function changePass() {
         return (
-            <PasswordRevealer username = {username} password = {password} closeModal={setModalPassword}/>
+            <PasswordRevealer username={username} password={password} closeModal={setModalPassword} />
+        );
+    }
+
+    function errorPass() {
+        return (
+            <PasswordRevealer username={username} password={password} closeModal={setModalPassword} />
+        );
+    }
+
+    function errorLogin() {
+        return (
+            <PasswordRevealer username={username} password={password} closeModal={setModalPassword} />
         );
     }
 

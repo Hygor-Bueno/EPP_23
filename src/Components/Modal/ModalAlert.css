@@ -14,7 +14,6 @@
 #ModalAlertContainer > div {
     width: 400px;
     height: 200px;
-    background-color: white;
     padding: 0.6vmin;
     border-radius: 0.5vmin;
 }
@@ -27,4 +26,22 @@
 
 #ModalAlertContainer > div > span > h3{
     margin: 0;
+}
+
+#ModalAlertContainer > div > p{
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+#ModalAlertContainer > #ModalColor0 {
+    background-color: #BADBCC;  
+}
+
+#ModalAlertContainer > #ModalColor1 {
+    background-color: #FFECB5;
+}
+
+#ModalAlertContainer > #ModalColor2 {
+    background-color:#F5C2C7;
 }

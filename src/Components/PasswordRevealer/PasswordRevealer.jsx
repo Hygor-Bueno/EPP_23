@@ -11,30 +11,44 @@ export default function PasswordRevealer(props) {
     const [newPass, setNewPass] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
     const [modalAttention, setModalAttention] = useState(false);
-    const [messageAttention, setMessageAttention] = useState("");
+    const [jAlert, setJAlert] = useState({ type: '', title: '', message: '' })
 
     return (
-        <div className="wrapper">
-            {modalAttention && <ModalAlert closeModalAlert={setModalAttention} title={'Atenção!'} message={messageAttention} />}
-            <div className="head-password">
+        <div className="head-password">
+            {modalAttention && <ModalAlert closeModalAlert= {setModalAttention} jAlert={jAlert} />}
+            <div className="body-password">
                 {componenteInput("Nova senha:", "pass-input", newPass, setNewPass, typeNewPass, setTypeNewPass)}
                 {componenteInput("Repetir senha:", "confirm-input", confirmPass, setConfirmPass, typeConfirmPass, setTypeConfirmPass)}
-                <button className="save-button" type="button" title="Salvar Alteração" onClick={() => {
-                    try {
-                        let validate = verificaPassword();
-                        if (validate.error) throw new Error(validate.message)
-                        updatePassword();
-                        props.closeModal(false);
-                    } catch (error) {
-                        setModalAttention(true);
-                        setMessageAttention(error);
-                    }
-                }}>Salvar</button>
+                <button className="save-button" type="button" title="Salvar Alteração" onClick={() => { updateButton() }}>Salvar</button>
             </div>
         </div>
     );
 
-    function verificaPassword() {
+    async function updateButton() {
+        try {
+            let validate = verifyPassword();
+            if (validate.error) throw new Error(validate.message)
+            let request = await updatePassword();
+            if (request.error) throw new Error(request.message)
+            setModalAttention(true);
+            setJAlert({ ...paramModal(0, "Parabéns!", "Senha alterada com sucesso.") })
+            /*props.closeModal(false);*/
+        } catch (error) {
+            setModalAttention(true);
+            setJAlert({ ...paramModal(2, "Erro!", error.toString()) })
+        }
+    }
+
+    function paramModal(type, title, message) {
+        let result = {
+            type: type,
+            title: title,
+            message: message
+        }
+        return result;
+    }
+
+    function verifyPassword() {
         let result = { error: false, message: "" };
         let characters = passwordCharacters(newPass, 8);
         let reader = passwordReader(newPass, confirmPass);
@@ -47,21 +61,15 @@ export default function PasswordRevealer(props) {
     }
 
     async function updatePassword() {
-        try {
-            let connection = new Connection();
-            let update = {
-                new_password: newPass,
-                confirm_password: confirmPass,
-                user: props.username,
-                password: props.password
-            };
-            let response = await connection.putDefaltPassw(update, 'CCPP/Login.php');
-            if (response.error) { throw Error(response.message); }
-
-        } catch (error) {
-            setModalAttention(true);
-            setMessageAttention(error.toString());
-        }
+        let connection = new Connection();
+        let update = {
+            new_password: newPass,
+            confirm_password: confirmPass,
+            user: props.username,
+            password: props.password
+        };
+        let response = await connection.putDefaltPassw(update, 'CCPP/Login.php');
+        return response;
     }
 
     function passwordCharacters(password, min) {
@@ -91,7 +99,7 @@ export default function PasswordRevealer(props) {
                 <div className="form-control p-0 d-flex align-items-center justify-content-between">
                     <input id={idInput} className='custom-input' type={type} value={value} onChange={(event) => setValue(event.target.value)} />
 
-                    <label for={idInput} className='icon-span' onClick={() => {
+                    <label htmlFor={idInput} className='icon-span' onClick={() => {
                         type === "password" ? setType("text") : setType("password")
                     }}>
                         <FontAwesomeIcon icon={type === "password" ? faEye : faEyeSlash} />
@@ -100,4 +108,10 @@ export default function PasswordRevealer(props) {
             </div>
         )
     }
+
+    /*function change(value) {
+        if (value === "Enter") {
+            login();
+        }
+    }*/
 }
