@@ -1,8 +1,4 @@
 #HomePage>form {
-    /* border-right: 2px solid var(--bg-dark); */
-}
-
-#HomePage>form {
     display: flex;
     flex-direction: column;
     overflow: auto;

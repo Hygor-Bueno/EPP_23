@@ -15,7 +15,7 @@ export default function PasswordRevealer(props) {
 
     return (
         <div className="head-password">
-            {modalAttention && <ModalAlert closeModalAlert= {setModalAttention} jAlert={jAlert} />}
+            {modalAttention && <ModalAlert closeModalAlert={setModalAttention} jAlert={jAlert} existButton={jAlert.type == 1 ? true : false} assistentFunc = {() => console.log('functionAssistant')}/>}
             <div className="body-password">
                 {componenteInput("Nova senha:", "pass-input", newPass, setNewPass, typeNewPass, setTypeNewPass)}
                 {componenteInput("Repetir senha:", "confirm-input", confirmPass, setConfirmPass, typeConfirmPass, setTypeConfirmPass)}
@@ -30,9 +30,9 @@ export default function PasswordRevealer(props) {
             if (validate.error) throw new Error(validate.message)
             let request = await updatePassword();
             if (request.error) throw new Error(request.message)
-            setModalAttention(true);
+            setModalAttention(true)
             setJAlert({ ...paramModal(0, "Parabéns!", "Senha alterada com sucesso.") })
-            /*props.closeModal(false);*/
+            props.closeModal(true);
         } catch (error) {
             setModalAttention(true);
             setJAlert({ ...paramModal(2, "Erro!", error.toString()) })
@@ -51,11 +51,11 @@ export default function PasswordRevealer(props) {
     function verifyPassword() {
         let result = { error: false, message: "" };
         let characters = passwordCharacters(newPass, 8);
-        let reader = passwordReader(newPass, confirmPass);
-        if (characters.error || reader.error) {
+        let equals = passwordEquals(newPass, confirmPass);
+        if (characters.error || equals.error) {
             result.error = true;
             if (characters.error) result.message += characters.message;
-            if (reader.error) result.message += reader.message;
+            if (equals.error) result.message += equals.message;
         }
         return result;
     }
@@ -81,7 +81,7 @@ export default function PasswordRevealer(props) {
         return result;
     }
 
-    function passwordReader(password, confirm_password) {
+    function passwordEquals(password, confirm_password) {
         let result = { error: false, message: "" };
         if (password !== confirm_password) {
             result.error = true;
@@ -94,10 +94,10 @@ export default function PasswordRevealer(props) {
         return (
             <div >
                 <form>
-                    <label>{label}</label>
+                    <label className="title-input">{label}</label>
                 </form>
                 <div className="form-control p-0 d-flex align-items-center justify-content-between">
-                    <input id={idInput} className='custom-input' type={type} value={value} onChange={(event) => setValue(event.target.value)} />
+                    <input id={idInput} className='custom-input' type={type} value={value} onKeyUp={(evente) => { changePassword(evente.key) }} onChange={(event) => setValue(event.target.value)} />
 
                     <label htmlFor={idInput} className='icon-span' onClick={() => {
                         type === "password" ? setType("text") : setType("password")
@@ -109,9 +109,9 @@ export default function PasswordRevealer(props) {
         )
     }
 
-    /*function change(value) {
+    function changePassword(value) {
         if (value === "Enter") {
-            login();
+            updateButton();
         }
-    }*/
+    }
 }

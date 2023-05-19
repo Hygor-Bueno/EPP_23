@@ -14,14 +14,12 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [modalPassword, setModalPassword] = useState(false);
     const [modalAttention, setModalAttention] = useState(false);
+    const [jAlert, setJAlert] = useState({ type: '', title: '', message: '' })
     const util = new Util();
 
     return (
         <div className='login'>
-            {modalAttention && <ModalAlert closeModalAlert={setModalAttention} title={'Erro!'}>
-                {errorPass()}</ModalAlert>}
-            {modalAttention && <ModalAlert closeModalAlert={setModalAttention} title={'Erro!'}>
-                {errorLogin()}</ModalAlert>}
+            {modalAttention && <ModalAlert jAlert={jAlert} existHr={jAlert.type == 1 ? true : false} closeModalAlert={setModalAttention} />}
             {modalPassword && <ModalCenter closeModal={setModalPassword} title={'Alterar Senha'}>
                 {changePass()}</ModalCenter>}
             <div id="content-login" className='w-100 h-100 d-flex align-items-center justify-content-center'>
@@ -32,7 +30,7 @@ export default function Login() {
                     </div>
                     <div id="password-login" className='d-flex align-items-center p-1'>
                         <FontAwesomeIcon className="w-25" icon="fa fa-lock" size="2xl" color="white" />
-                        <input type="password" placeholder="Senha" className='m-2' value={password} onKeyUp={(evente) => { controller(evente.key) }} onChange={(item) => util.setValue(item.target.value, setPassword)} />
+                        <input type="password" placeholder="Senha" className='m-2' value={password} onKeyUp={(evente) => { controller(evente) }} onChange={(item) => util.setValue(item.target.value, setPassword)} />
                     </div >
                     <button onClick={() => login()}>Entrar</button>
                 </section>
@@ -49,7 +47,17 @@ export default function Login() {
             navigate("/");
         } else {
             let verify = response.message.includes('Default password');
-            verify ? setModalPassword(true) : console.log(response.message);
+            if (verify) {
+                setJAlert({ type: 1, title: "Atenção!", message: response.message });
+                setModalAttention(true);
+                setTimeout(() => {
+                    setModalAttention(false);
+                    setModalPassword(true);
+                }, 5000);
+            } else {
+                setModalAttention(true);
+                setJAlert({ type: 2, title: "Erro!", message: response.message });
+            }
         }
     }
 
@@ -59,21 +67,10 @@ export default function Login() {
         );
     }
 
-    function errorPass() {
-        return (
-            <PasswordRevealer username={username} password={password} closeModal={setModalPassword} />
-        );
-    }
-
-    function errorLogin() {
-        return (
-            <PasswordRevealer username={username} password={password} closeModal={setModalPassword} />
-        );
-    }
-
     function controller(value) {
-        if (value === "Enter") {
+        if (value.key === "Enter") {
             login();
+            value.target.blur();
         }
     }
 }

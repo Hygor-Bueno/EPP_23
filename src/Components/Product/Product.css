@@ -1,0 +1,112 @@
+#ProductPage>form {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    background-color: var(--bg-dark);
+}
+
+#ProductPage>form>fieldset {
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 0.6vmin;
+}
+
+#ProductPage>form>fieldset>div>input {
+    font-size: var(--text);
+}
+
+#ProductPage>form>fieldset>div>select {
+    font-size: var(--text);
+}
+
+#ProductPage .additionalItem>div {
+    font-size: 1.8vmin
+}
+
+#divAdditionalItems {
+    height: 10vmin;
+    overflow-y: auto;
+}
+
+#orderField {
+    display: flex;
+    flex-grow: 1;
+}
+
+#orderField>div>div>button>svg {
+    font-size: var(--label);
+    color: var(--secondary-color);
+}
+
+#ProductPage>form>fieldset>div>div>label>b, #ProductPage>form>fieldset>div>label>b {
+    font-size: var(--text);
+}
+
+#divAdditionalItems>div {
+    font-size: var(--subText);
+    margin-bottom: var(--subText);
+}
+
+#txtareaObservation textarea {
+    font-size: var(--subText);
+}
+
+#divGroupButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4.8vmin;
+}
+
+#divGroupButton button {
+    font-size: 2.4vmin;
+    color: aliceblue;
+    border-radius: 1vmin;
+}
+
+#divGroupButtonLeft {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+}
+
+#divGroupButtonLeft>button {
+    border: solid 0.2vmin white;
+}
+
+#divGroupButton button:hover {
+    background-color: var(--secondary-color);
+    border: none;
+}
+
+#divGroupButtonRigth {
+    display: flex;
+    width: 15%;
+    justify-content: space-around;
+}
+
+#ProductPage>section input {
+    font-size: var(--text);
+}
+
+#ProductPage>section svg {
+    font-size: var(--label);
+}
+
+#ProductPage>section>#divOrderCard {
+    height: 100%;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+}
+
+#ProductPage>section>#divOrderCard>div {
+    border-bottom: solid 1px #ced4da;
+}
+
+#ProductPage>section>#divOrderCard>article {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    overflow-y: auto;
+    /* flex-grow: 1; */
+}

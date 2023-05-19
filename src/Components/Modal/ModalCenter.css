@@ -6,13 +6,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
-    
+    z-index: 100;    
 }
 
 #ModalContainer > div {
-    width: 360px;
-    height: 370px;
+    overflow-y: auto;
+    width: 38.5vmin;
+    height: 39.5vmin;
     background-color: white;
     padding: 0.6vmin;
     border-radius: 0.5vmin;
@@ -22,10 +22,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 150px;
-    height: 40px;
+    width: 15vmin;
+    height: 4vmin;
     border-radius: var(--bd-radius-g);
-    
+}
+
+#ModalContainer > div > span > button{
+    width: 4vmin;
+    height: 4vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #ModalContainer > div > span{
@@ -35,5 +42,6 @@
 }
 
 #ModalContainer > div > span > h3{
+    font-size: 3.5vmin;
     margin: 0;
 }

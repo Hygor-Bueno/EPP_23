@@ -1,30 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './ModalAlert.css'
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Translator from "../../Class/Translator";
 
 export default function ModalAlert(props) {
+  const [translator] = useState(new Translator(props.jAlert.message))
   return (
     <div id='ModalAlertContainer'>
-      <div id={styleModal(props.jAlert.type)}>
+      <div className='d-flex flex-column' id={styleModal(props.jAlert.type)}>
         <span>
           <h3>{props.jAlert.title}</h3>
           <button className="btn btn-danger" onClick={() => props.closeModalAlert()}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
         </span>
-        <p>{props.jAlert.message}</p>
+        <div>
+          <p>{translator.getMessagePT()}</p>
+        </div>
+        {props.existHr && <hr className='time-out' id={styleModal(props.jAlert.type)}/>}
+        {props.existButton && <button id='ButtonColor1' className="continue-button" onClick={() => props.assistentFunc()}>Continue</button>} 
       </div>
     </div>
   );
 
-  function styleModal(type){
+  function styleModal(type) {
     let result = '';
-    if(type === 0){
+    if (type === 0) {
       result = 'ModalColor0'
-    }else if (type === 1){
+    } else if (type === 1) {
       result = 'ModalColor1'
-    }else{
+    } else {
       result = 'ModalColor2'
     }
     return result;
