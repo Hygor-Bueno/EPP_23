@@ -2,11 +2,13 @@ import React from 'react';
 
 export default function MenuField(props) {
     return (
-        <fieldset className='form-group row border-bottom border-dark'>
+        <fieldset id="fieldMenu" className='form-group row'>
             <legend>Cadastrar menu</legend>
-            {props.itemForm("Cód.:", "", "Código do menu", "number", 2, props.orderCod, props.setOrderCod, true,null,false)}
-            {props.itemForm("Descrição:", "Nome do menu", "Digite o nome do menu", "text", 6, props.descMenu, props.setDescMenu, false,null,true)}
-            {/*props.selectForm("Status:", 6, props.statusMenu, props.setStatusMenu, false, null, true)*/}
+            {/*             id,        label,placInput, titleInput,  typeInput,divLength,value,     funSetValue,  enabled, funAssistant, mandatory */}
+            {props.itemForm("menuId", "Cód.:", "", "Código do menu", "number", 4, props.idMenu, props.setIdMenu, true, null, false)}
+            {props.itemForm("descriptionMenu", "Descrição:", "Nome do menu", "Digite o nome do menu", "text", 8, props.descMenu, props.setDescMenu, false, null, true)}
+            {/*                 id,      label, divLength, list,                                                       defaultValue,   funSetValue, funAssistant, mandatory */}
+            {props.selectForm("status", "Status:", 4, [{ id: "1", value: "Ativo" }, { id: "0", value: "Inativo" }], props.statusMenu, props.setStatusMenu, null, true)}
         </fieldset>
     )
 }

@@ -24,7 +24,7 @@ export default function Skeleton({ children }) {
                 <div id="verticalMenuDiv" className={menu ? 'd-flex' : "d-none"}>
                     <button type="button" title="Tela de produção." onClick={() => navigate("/order")}><FontAwesomeIcon icon="fa-boxes-packing" /></button>
                     <button type="button" title="Tela de vendas." onClick={() => navigate("/")}><FontAwesomeIcon icon="fa-money-check-dollar" /></button>
-                    <button type="button" title="Tela de Cadastro (Menu e Produtos)." onClick={() => navigate("/product")}><FontAwesomeIcon icon="fa-computer" /></button>
+                    <button type="button" title="Tela de Cadastro (Menu e Produtos)." onClick={() => navigate("/registry")}><FontAwesomeIcon icon="fa-computer" /></button>
                     <button type="button" title="Realizar logoff." onClick={() => {
                         navigate("/login");
                         localStorage.removeItem('token');

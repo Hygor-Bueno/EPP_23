@@ -1,16 +1,16 @@
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { Connection } from '../../Util/RestApi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Order } from '../../Class/Order';
 import Util from '../../Util/Util';
 import ClientField from '../FieldsForm/ClientField';
 import DeliveryField from '../FieldsForm/DeliveryField';
 import OrderField from '../FieldsForm/OrderField';
-import './Home.css'
 import AddItems from '../AddItems';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Order } from '../../Class/Order';
 import OrderCardList from '../OrderCardList';
 import LogSales from '../../Class/LogSale';
+import './Home.css'
 
 export default function Home() {
     const util = new Util();
@@ -22,12 +22,12 @@ export default function Home() {
     const [storeList, setStoreList] = useState([]);
     const [logsMenusList, setLogsMenusList] = useState([]);
 
-
     //Valores selecionados no formulário:
     const [orderCod, setOrderCod] = useState("");
     const [nameClient, setNameClient] = useState("");
     const [foneClient, setFoneClient] = useState("");
     const [email, setEmail] = useState("");
+
     const [dateOrder, setDateOrder] = useState(util.dateCurrent());
     const [observation, setObservation] = useState("");
     const [signal, setSignal] = useState("");
@@ -268,7 +268,7 @@ export default function Home() {
             <div className={`col-${divLength} my-1 d-flex flex-column`}>
                 <label>{label} {mandatory && <b className='text-danger'>*</b>}</label>
                 <select data-mandatory={mandatory ? 1 : 0} className="form-control p-1" onClick={(element) => { funAssistant && funAssistant(element.target.value); }} onChange={(element) => { funSetValue(element.target.value); resetClass(element.target); }} value={defaultValue}>
-                    <option value="0" hidden>Selecione</option>
+                    <option value="" hidden>Selecione</option>
                     {list.map((item, index) => <option key={index} value={item.id}>{item.value}</option>)}
                 </select>
             </div>
@@ -314,7 +314,6 @@ export default function Home() {
         setLogSales([]);
         setModAdditional(false);
     }
-
     async function load() {
         let value = ordersList.filter(i => i.idOrder === '2354')[0]
 
@@ -344,7 +343,7 @@ export default function Home() {
         array.forEach(item=>{
             let sale = new LogSales(item.eppIdLog,item.eppIdProduct,item.eppIdOrder,item.quantity,item.price,item.menu ,null,null,item.menu === '1'?true:false);
             sale.requestItem();
-            result.push(sale);
+            result.push(sale); 
         })
         console.log(result);
         return result;

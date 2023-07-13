@@ -1,15 +1,21 @@
 import React from 'react';
+import Util from '../../Util/Util';
 
 export default function ProductField(props) {
+    const util = new Util();
     return (
-        <fieldset className='form-group row border-bottom border-dark'>
+        <fieldset id="fieldProduct" className='form-group row'>
             <legend>Cadastrar produto</legend>
-            {props.itemForm("Cód.:", "", "Código do pedido.", "number", 2, props.orderCod, props.setOrderCod, false,null,true)}
-            {props.itemForm("Descrição:", "Nome do produto", "Digite o nome do produto", "text", 6, props.nameProduct, props.setNameProduct, false,null,true)}
-            {props.itemForm("Preço:", "R$ ", "Digite o valor do produto", "number", 4, props.valProduct, props.setValProduct, false,null,true)}
-            {props.selectForm("Categoria:", 6, props.category, props.setCategory, false, null, true)}
-            {props.selectForm("Embalagem:", 6, props.pack, props.setPack, false, null,true)}
-            {props.selectForm("Status:", 6, props.status, props.setStatus, false, null,true)}
+            {/*               id,         label,placInput, titleInput,    typeInput,divLength, value,          funSetValue,   enabled, funAssistant, mandatory */}
+            {props.itemForm("productId", "Cód.:", "", "Código do produto.", "number", 4, props.idProduct, props.setIdProduct, false, null, true)}
+            {props.itemForm("descriptionProd", "Descrição:", "Nome do produto", "Digite o nome do produto", "text", 8, props.descProduct, props.setDescProduct, false,null,true)}
+            {/* {props.itemForm("price", "Preço:", "R$ ", "Digite o valor do produto", "number", 3, props.priceProduct, props.setPriceProduct, false, null, true)} */}
+            {/*                  id,         label, divLength, list,                                                                        defaultValue,   funSetValue, funAssistant, mandatory */}
+            {props.selectForm("category", "Categoria:", 4, util.formatJsonForSelect(props.categoryList, 'id_category', 'cat_description'), props.category, props.setCategory, null, true)}
+            {props.selectForm("measure", "Emb.:", 4, [{id:"Kg", value:"Kg"}, {id:"Un", value:"Un"}], props.measure, props.setMeasure, null, true)}
+            {props.selectForm("statusProd", "Status:", 4, [{id:"1", value:"Ativo"}, {id:"0", value:"Inativo"}], props.statusProduct, props.setStatusProduct, null, true)}
+            {/*                id,    label, placArea, titleArea,     typeArea,divLength,value,               funSetValue,  enabled, funAssistant, mandatory */}
+            {props.areaForm("price", "Preço:", "", "Valores do produto", "text", 12, props.priceProduct, props.setPriceProduct, true, null, false)}
         </fieldset>
     )
 }

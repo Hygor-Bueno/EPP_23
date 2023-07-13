@@ -1,0 +1,194 @@
+#ProductPage > form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: auto;
+    background-color: var(--bg-dark);
+    margin-right: 0;
+}
+
+#ProductPage > section {
+    display: flex;
+    flex-direction: column;
+}
+
+#ProductPage > form fieldset {
+    display: flex;
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 0.6vmin;
+}
+
+#ProductPage > form legend {
+    font-size: 3vmin;
+}
+
+#ProductPage > section input {
+    font-size: 2vmin;
+}
+
+#ProductPage > section select {
+    font-size: 2vmin;
+}
+
+#ProductPage > section svg {
+    font-size: 2vmin;
+}
+
+#ProductPage > section thead {
+    font-size: 2vmin;
+}
+
+#ProductPage > section > #divOrderCard {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#ProductPage .additionalItem > div {
+    font-size: 1.8vmin
+}
+
+#CarouselButtons {
+    display: flex;
+    width: 100%;
+    height: 50%;
+    justify-content: space-evenly;
+}
+
+#CarouselButtons button {
+    font-size: 3vmin;
+    color: aliceblue;
+}
+
+#CarouselButtonLeft>svg,
+#CarouselButtonRight>svg {
+    cursor: pointer;
+}
+
+#ContainerFields {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 80%;
+    height: 100%;
+}
+
+#ContainerFields > fieldset > div > label {
+    font-size: 2vmin;
+}
+
+#ContainerFields > fieldset > div > input {
+    font-size: 2vmin;
+}
+
+#ContainerFields > fieldset > div > select {
+    font-size: 2vmin;
+}
+
+#divProductButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    height: 4.8vmin;
+    margin-top: 5%;
+}
+
+#divProductButton button {
+    font-size: 2.4vmin;
+    color: aliceblue;
+    border-radius: 1vmin;
+    border: solid 0.2vmin white;
+    width: 20%;
+}
+
+#divProductButton button:hover {
+    background-color: var(--secondary-color);
+    border: none;
+}
+
+#divMenuFilter {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
+    background-color: #fff;
+}
+
+#divOptionsFilter > span > label {
+    font-size: 2vmin;
+}
+
+#divOptionsFilter > span > label > select {
+    font-size: 2vmin;
+}
+
+#divButtonsFilter {
+    justify-content: space-around;
+}
+
+#divButtonsFilter button {
+    width: 4.2vmin;
+    height: 4.2vmin;
+    color: var(--bg-dark);
+    border: 0.2vmin solid #ced4da;
+    border-radius: 8px;
+}
+
+#divButtonsFilter button:hover {
+    box-shadow: 0px 0px 8px #ced4da inset;
+}
+
+#BodyTable {
+    max-width: 50%;
+    max-height: 10vh;
+    font-size: 2vmin;
+}
+
+#divTable {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#divDetailsTable {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+#price {
+    max-height: 22vh;
+}
+
+.detailsButton {
+    cursor: pointer;
+}
+
+.rowDescritpion {
+    white-space: nowrap;
+    max-width: 22vmax;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rowCategory {
+    white-space: nowrap;
+    max-width: 15vmax;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.custom-textarea {
+    height: 30vh;
+    padding-top: 10px;
+    resize: none;
+    text-align: top;
+}

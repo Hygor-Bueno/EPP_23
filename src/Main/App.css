@@ -44,6 +44,10 @@ button{
     resize: none;
 }
 
+form>fieldset {
+    width: 100%;
+}
+
 form>fieldset>legend {
     font-size: var(--label);
     font-weight: bold;

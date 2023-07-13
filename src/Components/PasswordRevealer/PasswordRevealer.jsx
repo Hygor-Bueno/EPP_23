@@ -92,7 +92,7 @@ export default function PasswordRevealer(props) {
 
     function componenteInput(label, idInput, value, setValue, type, setType) {
         return (
-            <div >
+            <div>
                 <form>
                     <label className="title-input">{label}</label>
                 </form>

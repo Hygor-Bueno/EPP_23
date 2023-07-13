@@ -2,11 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Connection } from '../../Util/RestApi';
-import Util from '../../Util/Util';
-import './Login.css';
 import ModalCenter from '../Modal/ModalCenter';
 import PasswordRevealer from "../PasswordRevealer/PasswordRevealer";
 import ModalAlert from '../Modal/ModalAlert';
+import Util from '../../Util/Util';
+import './Login.css';
 
 export default function Login() {
     const navigate = useNavigate();
