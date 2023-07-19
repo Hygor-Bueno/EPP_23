@@ -1,23 +1,25 @@
 export class ProdMenuObj {
     epp_log_id;
-    type_base;
     epp_id_menu;
     epp_id_product;
     plu_menu;
+    type_base;
 
-    constructor(epp_id_menu, epp_id_product, plu_menu) {
+    constructor(epp_log_id, epp_id_menu, plu_menu, epp_id_product, type_base ) {
+        this.epp_log_id = epp_log_id;
         this.epp_id_menu = epp_id_menu;
-        this.epp_id_product = epp_id_product;
         this.plu_menu = plu_menu;
+        this.epp_id_product = epp_id_product;
+        this.type_base = type_base
     }
 
     exportJson() {
         return {
             epp_log_id: this.epp_log_id,
-            type_base: this.type_base,
             epp_id_menu: this.epp_id_menu,
+            plu_menu: this.plu_menu,
             epp_id_product: this.epp_id_product,
-            plu_menu: this.plu_menu
+            type_base: this.type_base
         }
     }
 

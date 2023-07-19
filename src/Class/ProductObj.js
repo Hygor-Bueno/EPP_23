@@ -9,30 +9,30 @@ export class ProductObj {
     status_prod = "";
     price = "";
 
-    constructor(id_product, description, category, measure, status_prod, price){
+    constructor(id_product, description, category, measure, status_prod, price) {
         this.id_product = id_product;
         this.description = description;
+        this.category = category;
         this.id_category = category;
         this.id_category_fk = category;
-        this.category = category;
         this.cat_description = category;
         this.measure = measure;
         this.status_prod = status_prod;
         this.price = price;
     }
 
-    exportJson(){
-        return{
+    exportJson() {
+        return {
             id_product: this.id_product,
             description: this.description,
-            id_category: this.id_category,
-            id_category_fk: this.id_category_fk,
             category: this.category,
+            id_category: this.category,
+            id_category_fk: this.category,
             cat_description: this.cat_description,
             measure: this.measure,
             status_prod: this.status_prod,
             price: this.price,
-        }
+        };
     }
     
     setId_Product(id_product) {
@@ -43,16 +43,19 @@ export class ProductObj {
         this.description = description;
     }
     
+    setCategory(category) {
+        this.category = category;
+        this.id_category = category;
+        this.id_category_fk = category;
+    }
+
     setId_Category(id_category) {
         this.id_category = id_category;
-    }
-    
-    setId_Category_Fk(id_category) {
         this.id_category_fk = id_category;
     }
     
-    setCategory(category) {
-        this.category = category;
+    setId_Category_Fk(id_category_fk) {
+        this.id_category_fk = id_category_fk;
     }
     
     setCat_Description(cat_description) {
@@ -79,7 +82,6 @@ export class ProductObj {
         return this.description;
     }
 
-    
     getId_Category() {
         return this.id_category;
     }
@@ -92,7 +94,7 @@ export class ProductObj {
         return this.category;
     }
     
-    getCat_Description(){
+    getCat_Description() {
         return this.cat_description;
     }
     
@@ -107,5 +109,4 @@ export class ProductObj {
     getPrice() {
         return this.price;
     }
-        
 }

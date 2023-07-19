@@ -168,6 +168,10 @@
     max-height: 22vh;
 }
 
+/* .detailsMenu {
+    justify-content: center;
+} */
+
 .detailsButton {
     cursor: pointer;
 }
@@ -191,4 +195,8 @@
     padding-top: 10px;
     resize: none;
     text-align: top;
+}
+
+.productTable {
+    cursor: pointer;
 }
