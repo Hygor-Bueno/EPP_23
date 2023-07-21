@@ -68,6 +68,7 @@
     animation: load 5.5s linear;
 }
 
+
 @keyframes load {
     0% {
         width: 90%;
@@ -101,28 +102,39 @@
     }
 }
 
-#ModalAlertContainer > div > div > p {
+#ModalAlertContainer textarea{
+    height: 100%;
     width: 100%;
-    margin: 2vmin;
-    display: flex;
-    justify-content: center;
+    border: none;
+    padding: 1.2vmin;
+    resize: none;
     font-size: 1.7vmin;
 }
 
-#ModalAlertContainer > #ModalColor0 {
+#ModalAlertContainer > #ModalColor0, #ModalAlertContainer textarea  {
     color: #0F5132;
     border-color: #BADBCC;
 }
 
-#ModalAlertContainer > #ModalColor1 {
+#ModalAlertContainer > #ModalColor1, #ModalAlertContainer textarea  {
     border-color: #FFE564;
 }
 
-#ModalAlertContainer > #ModalColor2 {
+#ModalAlertContainer > #ModalColor2 , #ModalAlertContainer textarea {
     color: #842029;
     border-color: #F5C2C7;
 }
 
 #ModalAlertContainer > div > #ButtonColor1{
     background-color: #FFECB5;
+}
+
+#buttonsDetails {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+#buttonsDetails button {
+    width: 40%;
 }

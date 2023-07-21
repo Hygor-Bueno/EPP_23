@@ -73,7 +73,7 @@ export default function Registry() {
                 setTempTableMenu([...reqMenu.data]);
                 setCategoryList([...reqCategory.data]);
                 setMenuList([...reqMenu.data]);
-                // console.log(loadMenus);
+                console.log(loadProducts);
                 // let test = await connection.get(`&id_shop=${storeLists.data[5].number}&id_product=40391`, 'EPP/Product.php');
                 // let test = await connection.get('&id_shop='+storeLists.data[5].number+'&id_product=40391', 'EPP/Product.php');
             }
@@ -415,9 +415,9 @@ export default function Registry() {
     function updateProduct(idProp, descriptionProp, categoryProp, measureProp, statusProp, priceProp) {
         let result = [];
         tempTableProduct.forEach((item) => {
-            console.log(tempTableProduct)
             if (item.id_product === idProp) {
                 if (
+                    item.id_product !== idProp ||
                     item.description !== descriptionProp ||
                     item.category !== categoryProp ||
                     item.measure !== measureProp ||
@@ -511,31 +511,32 @@ export default function Registry() {
     // }
 
     async function putItems(item) {
-        console.log(item);
+        // console.log(item);
         try {
             let value = [];
             let result = [];
             if (item === 'fieldProduct') {
                 value = updateProduct(idProduct, descProduct, category, measure, statusProduct, priceProduct);
-                console.log(category);
                 let newProduct = value.map(item => new ProductObj(item.id_product, item.description, item.category, item.measure, item.status_prod, item.price))
                 for await (let element of newProduct) {
                     let putProduct = await connection.put(element, "EPP/Product.php", "");
-                    console.log('Entrou no if');
                     result.push(putProduct);
-                    setModalUpdate(false);
-                    showAlert(0, "Sucesso!", "Produto alterado com sucesso.");
+                    if (result[0].message === 'Update data success') {
+                        setModalUpdate(false);
+                        showAlert(0, "Sucesso!", "Produto alterado com sucesso.");
+                    }
                 }
             } else if (item === 'fieldMenu') {
                 value = updateMenu(idMenu, descMenu, statusMenu);
                 let newMenu = value.map(item => new MenuObj(item.idMenu, item.description, item.status))
-                console.error(newMenu, item)
                 for await (let element of newMenu) {
                     let putMenu = await connection.put(element, "EPP/Menu.php", "");
-                    console.log(putMenu)
                     result.push(putMenu);
-                    setModalUpdate(false);
-                    showAlert(0, "Sucesso!", "Menu alterado com sucesso.");
+                    setLoadMenus([...tempTableMenu])
+                    if (result[0].message === 'Update data success') {
+                        setModalUpdate(false);
+                        showAlert(0, "Sucesso!", "Menu alterado com sucesso.");
+                    }
                 }
             } else if (item === 'fieldProdMenu') {
                 await updateProduMenu()
@@ -546,35 +547,66 @@ export default function Registry() {
         }
     }
 
+    // async function deleteItems(value) {
+    //     try {
+    //         let item = [
+    //             [document.getElementById("fieldProduct"), "productId", "id_product", "Product.php"],
+    //             [document.getElementById("fieldMenu"), "menuId", "id_menu", "Menu.php"],
+    //             [document.getElementById("fieldProdMenu"), "prodMenuId", "eppLogId", "LogMenu.php"]
+    //         ];
+    //         let req;
+    //         for (let element of item) {
+    //             if (element[0] && value === element[0].id) {
+    //                 let key = {}
+    //                 key[element[2]] = element[0].querySelector(`#${element[1]}`).value
+    //                 console.log(element[0].querySelector(`#${element[1]}`).value)
+    //                 req = await connection.delete(key, `EPP/${element[3]}`, true)
+    //                 console.log(req);
+    //             }
+    //         }
+    //         cleanPage();
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
     async function deleteItems(value) {
-        console.log(value)
         try {
             let item = [
                 [document.getElementById("fieldProduct"), "productId", "id_product", "Product.php"],
-                [document.getElementById("fieldMenu"), "menuId", "idMenu", "Menu.php"],
-                [document.getElementById("fieldProdMenu"), "prodMenuId", "eppLogId", "LogMenu.php"]
+                [document.getElementById("fieldMenu"), "menuId", "id_menu", "Menu.php"],
+                [document.getElementById("fieldProdMenu"), "prodMenuId", "epp_log_id", "LogMenu.php"]
             ];
-            console.log(document.getElementById("fieldProduct"))
-            console.log(document.getElementById("fieldMenu"))
             let req;
-            for await (let element of item) {
-                // console.log(value, element[0].id)
-                if (value === element[0].id) {
-                    let key = {}
-                    key[element[2]] = element[0].querySelector(`#${element[1]}`).value
-                    // || element[0].querySelector(`#${element[1]}`).innerText
-                    console.log(element[0].querySelector(`#${element[1]}`).value)
-                    req = await connection.delete(key, `EPP/${element[3]}`, true)
+            for (let element of item) {
+                if (element[0] && value === element[0].id) {
+                    if (element[0].querySelector(`#${element[1]}`).value.includes("-")) {
+                        const [id1, id2] = element[0].querySelector(`#${element[1]}`).value.split("-");
+                        let key1 = {};
+                        key1[element[2]] = id1;
+                        req = await connection.delete(key1, `EPP/${element[3]}`, true);
+                        console.log(req);
+                        let key2 = {};
+                        key2[element[2]] = id2;
+                        req = await connection.delete(key2, `EPP/${element[3]}`, true);
+                        console.log(req);
+                    } else {
+                        let key = {}
+                        key[element[2]] = element[0].querySelector(`#${element[1]}`).value;
+                        console.log(element[0].querySelector(`#${element[1]}`).value);
+                        req = await connection.delete(key, `EPP/${element[3]}`, true);
+                        console.log(req);
+                    }
                 }
             }
-            cleanPage();
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
+        cleanPage();
     }
 
+
     async function del(value) {
-        console.log(value)
         try {
             deleteItems(value);
         } catch (error) {
@@ -727,9 +759,7 @@ export default function Registry() {
         } catch (error) {
             console.error(error)
         }
-        console.log(point)
         setPointer(0)
-        console.log(point)
     }
 
     function populateFormMenu(menuId) {
@@ -743,9 +773,7 @@ export default function Registry() {
         } catch (error) {
             console.error(error)
         }
-        console.log(point)
         setPointer(1)
-        console.log(point)
     }
 
     function resetClass(element) {

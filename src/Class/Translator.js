@@ -47,7 +47,6 @@ export default class Translator {
 
     validation(messagePT) {
         let result = '';
-
         if (messagePT.toUpperCase().includes('IS BROKEN')) {
             result = 'IS BROKEN';
         } else if (messagePT.toUpperCase().includes('NO DATA')) {

@@ -45,7 +45,7 @@ export default function AlterStatus(props) {
     async function showAlert(type, title, message) {
         setJAlert({ type, title, message });
         setModalAttention(true);
-        setTimeout(() => setModalAttention(false), 3000);
+        // setTimeout(() => setModalAttention(false), 3000);
     }
 
     function copyList(list) {
@@ -124,21 +124,38 @@ export default function AlterStatus(props) {
     async function putStatus() {
         try {
             let value = [];
-            let result = [];
+            let valueError = [];
+            let valueErrorNew = '';
+            let contErr=1;
+            let putProduct;
+            let putMenu;
             if (props.keysTable.includes('category')) {
                 value = updateProduct('id_product', 'description', 'price', 'category', 'measure', 'status_prod');
                 for await (let element of value) {
-                    let putProduct = await connection.put(element, "EPP/Product.php", "");
+                    console.log(element.description)
+                    putProduct = await connection.put(element, "EPP/Product.php", "");
                     console.log(putProduct);
                     props.setList([...tempList]);
+                    if (putProduct.error === true){
+                        valueErrorNew += `${contErr !== 1 ? '\n' : '' }${contErr}º ${element.description}`;
+                        contErr++;
+                    }
+                }
+                if (putProduct.message !== 'Update data success') {
+                    showAlert(2, "Erro!", `Ocorreu erro na alteração dos produtos:\n\n${valueErrorNew}`);
+                } else {
                     showAlert(0, "Sucesso!", "Status dos produtos alterados com sucesso.");
                 }
             } else {
                 value = updateMenu('idMenu', 'description', 'status');
                 for await (let element of value) {
-                    let putMenu = await connection.put(element, "EPP/Menu.php", "");
+                    putMenu = await connection.put(element, "EPP/Menu.php", "");
                     console.log(putMenu);
                     props.setList([...tempList]);
+                }
+                if (putMenu.message !== 'Update data success'){
+                    showAlert(2, "Erro!", `Ocorreu erro na alteração dos menus: ${valueError}`);
+                } else {
                     showAlert(0, "Sucesso!", "Status dos menus alterados com sucesso.");
                 }
             }
