@@ -22,6 +22,7 @@ export default function Registry() {
     const [tempTableMenu, setTempTableMenu] = useState([]);
     const [loadStores, setLoadStores] = useState([]);
     const [modalAttention, setModalAttention] = useState(false);
+    const [modalUpdate, setModalUpdate] = useState(false);
     const [modalStatus, setModalStatus] = useState(false);
     const [modalDetails, setModalDetails] = useState(false);
     const [jAlert, setJAlert] = useState({ type: '', title: '', message: '' })
@@ -32,6 +33,7 @@ export default function Registry() {
     const [selectedMenu, setSelectedMenu] = useState('');
     const [selectedProdMenu, setSelectedProdMenu] = useState('');
     const [showModal, setShowModal] = useState(false);
+    const [putProdMenu, setPutProdMenu] = useState({})
 
     //Valores selecionados no formulário:
     const [idProduct, setIdProduct] = useState("");
@@ -71,10 +73,9 @@ export default function Registry() {
                 setTempTableMenu([...reqMenu.data]);
                 setCategoryList([...reqCategory.data]);
                 setMenuList([...reqMenu.data]);
-                // console.log(storeLists.data);
+                // console.log(loadMenus);
                 // let test = await connection.get(`&id_shop=${storeLists.data[5].number}&id_product=40391`, 'EPP/Product.php');
                 // let test = await connection.get('&id_shop='+storeLists.data[5].number+'&id_product=40391', 'EPP/Product.php');
-                console.log(loadStores);
             }
             renderInit();
         } catch (error) {
@@ -89,6 +90,7 @@ export default function Registry() {
     return (
         <div id="ProductPage" className='d-flex h-100 flex-direction-colum'>
             {modalAttention && <ModalAlert jAlert={jAlert} existFields={jAlert.type == 1 ? true : false} closeModalAlert={setModalAttention} />}
+            {modalUpdate && <ModalAlert jAlert={jAlert} existFields={jAlert.type == 1 ? true : false} closeModalAlert={setModalUpdate} confirm={true} confirmFunc={() => putItems(fieldValue())} />}
             {modalStatus && <ModalCenter closeModal={setModalStatus} title={'Editar status'}>{statusEdit()}</ModalCenter>}
             {modalDetails && <ModalCenter closeModal={setModalDetails} title={'Detalhes menu'}>{detailsMenu()}</ModalCenter>}
             <form className="col-5 p-1">
@@ -267,7 +269,7 @@ export default function Registry() {
     function bodyProduct(tBody) {
         return (
             tBody.map(row => (
-                <tr className="productTable" onClick={() => (populate('productField', row.id_product))} key={`product_tr_${row.id_product}`}>
+                <tr className="productTable" onClick={() => (populateFormProduct(row.id_product))} key={`product_tr_${row.id_product}`}>
                     <td className="rowId">{row.id_product}</td>
                     <td title={row.description} className="rowDescritpion">{row.description}</td>
                     <td title={row.category} className="rowCategory">{row.category}</td>
@@ -283,8 +285,8 @@ export default function Registry() {
         return (
             tBody.map(row => (
                 <tr className="menuTable" key={`menu_tr_${row.idMenu}`}>
-                    <td className="idMenu"><button onClick={() => (populate('menuField', row.idMenu))}>{row.idMenu}</button></td>
-                    <td title={row.description} className="descritpionMenu" on onClick={() => (populateFormProdMenu('prodMenuField', row.idProdMenu))}>{row.description}</td>
+                    <td className="idMenu"><button onClick={() => (populateFormMenu(row.idMenu))}>{row.idMenu}</button></td>
+                    <td title={row.description} className="descritpionMenu">{row.description}</td>
                     <td className="statusMenu">{row.status === "1" ? 'Ativo' : 'Inativo'}</td>
                     <td className="detailsMenu"><button className="detailsButton" onClick={() => { setIdValueMenu(row.idMenu); details() }}><FontAwesomeIcon icon={"fa-circle-plus"} /></button></td>
                 </tr>
@@ -293,12 +295,8 @@ export default function Registry() {
     }
 
     function detailsMenu() {
-        const formProdMenuClick = () => {
-            populateFormProdMenu('prodMenuField', idProdMenu);
-        };
-
         return (
-            <DetailsMenu keyValue={idValueMenu} list={loadProdMenus} closeModal={setModalDetails} formProdMenu={formProdMenuClick} />
+            <DetailsMenu setPutProdMenu={setPutProdMenu} keyValue={idValueMenu} list={loadProdMenus} closeModal={setModalDetails} pointDetails={point} setIdProdMenu={setIdProdMenu} setDessert={setDessert} setRice={setRice} setIdMenu={setIdMenu} setIdSale={setIdSale} setPointer={setPointer} />
         )
     }
 
@@ -336,7 +334,7 @@ export default function Registry() {
         return (
             <div id="divProductButton">
                 <button type="button" onClick={() => { create(fieldValue()) }} title="Salvar cadastro"><FontAwesomeIcon icon="fa-plus" /></button>
-                <button type="button" onClick={() => { update(fieldValue()) }} title="Editar cadastro"><FontAwesomeIcon icon="fa-pen" /></button>
+                <button type="button" onClick={() => { update() }} title="Editar cadastro"><FontAwesomeIcon icon="fa-pen" /></button>
                 <button type="button" onClick={() => { del(fieldValue()) }} title="Excluir cadastro"><FontAwesomeIcon icon="fa-trash" /></button>
                 <button type="button" onClick={() => { clean() }} title="Limpar formulário"><FontAwesomeIcon icon="fa-eraser" /></button>
             </div>
@@ -414,51 +412,133 @@ export default function Registry() {
         }
     }
 
-    function updateProduct(idProp, descriptionProp, priceProp, categoryProp, measureProp, statusProp) {
+    function updateProduct(idProp, descriptionProp, categoryProp, measureProp, statusProp, priceProp) {
         let result = [];
         tempTableProduct.forEach((item) => {
-            const tempItem = loadProducts.find((temp) => temp[idProp] === item[idProp]);
-            if (tempItem && (tempItem[descriptionProp] !== item[descriptionProp]) || (tempItem[priceProp] !== item[priceProp]) || (tempItem[categoryProp] !== item[categoryProp]) || (tempItem[measureProp] !== item[measureProp]) || (tempItem[statusProp] !== item[statusProp])) {
-                result.push({ id_product: item[idProp], description: item[descriptionProp], price: item[priceProp], category: item[categoryProp], measure: item[measureProp], status_prod: item[statusProp] });
+            console.log(tempTableProduct)
+            if (item.id_product === idProp) {
+                if (
+                    item.description !== descriptionProp ||
+                    item.category !== categoryProp ||
+                    item.measure !== measureProp ||
+                    item.status_prod !== statusProp
+                ) {
+                    result.push({
+                        id_product: idProp,
+                        description: descriptionProp,
+                        category: categoryProp,
+                        measure: measureProp,
+                        status_prod: statusProp,
+                        price: priceProp = 0
+                    });
+                } else {
+                    setModalUpdate(false);
+                    showAlert(2, "Erro!", "Nenhum campo foi alterado.");
+                }
             }
         });
-        console.log(result);
         return result;
     }
 
     function updateMenu(idProp, descriptionProp, statusProp) {
+        console.log(idProp, descriptionProp, statusProp);
         let result = [];
         tempTableMenu.forEach((item) => {
-            const tempItem = loadMenus.find((temp) => temp[idProp] === item[idProp]);
-            if (tempItem && (tempItem[descriptionProp] !== item[descriptionProp]) || (tempItem[statusProp] !== item[statusProp])) {
-                result.push({ id_menu: item[idProp], description: item[descriptionProp], status: item[statusProp] });
+            if (item.idMenu === idProp) {
+                if (
+                    item.description !== descriptionProp ||
+                    item.status !== statusProp
+                ) {
+                    result.push({
+                        idMenu: idProp,
+                        description: descriptionProp,
+                        status: statusProp,
+                    });
+                } else {
+                    setModalUpdate(false);
+                    showAlert(2, "Erro!", "Nenhum campo foi alterado.");
+                }
             }
         });
-        // console.log(result);
         return result;
     }
 
+    async function updateProduMenu() {
+        let result = constructorProduMenu();
+        for await (let element of result) {
+            let putProdMenu = await connection.put(element, "EPP/LogMenu.php", "");
+            console.log(putProdMenu);
+        }
+    }
+
+    function constructorProduMenu() {
+        let result = [];
+        let keys = idProdMenu.split('-');
+        keys.forEach(key => {
+            let response = {
+                epp_log_id: putProdMenu[key].eppLogId,
+                epp_id_menu: idMenu,
+                epp_id_product: putProdMenu[key].typeBase.toUpperCase().includes('RICE') ? rice : dessert,
+                plu_menu: idSale,
+                type_base: putProdMenu[key].typeBase
+            };
+            result.push(response);
+        })
+        return result;
+    }
+
+    // function updateProdMenu(idProp, idMenuProp, idSaleProp, idProductProp, typeProp) {
+    //     let result = [];
+    //     loadProdMenus.forEach((item) => {
+    //         if (item.pluMenu === idSaleProp) {
+    //             if (
+    //                 item.pluMenu !== idSaleProp ||
+    //                 item.eppIdMenu !== idMenuProp ||
+    //                 item.eppIdProduct !== idProductProp ||
+    //                 item.typeBase != typeProp
+    //             ) {
+    //                 result.push({
+    //                     eppLogId: idProp,
+    //                     eppIdMenu: idMenuProp,
+    //                     pluMenu: idSaleProp,
+    //                     eppIdProduct: idProductProp,
+    //                     typeBase: typeProp
+    //                 });
+    //             }
+    //         }
+    //     });
+    //     return result;
+    // }
+
     async function putItems(item) {
+        console.log(item);
         try {
             let value = [];
             let result = [];
             if (item === 'fieldProduct') {
-                value = updateProduct('id_product', 'description', 'price', 'category', 'measure', 'status_prod');
-                console.log(value);
-                for await (let element of value) {
+                value = updateProduct(idProduct, descProduct, category, measure, statusProduct, priceProduct);
+                console.log(category);
+                let newProduct = value.map(item => new ProductObj(item.id_product, item.description, item.category, item.measure, item.status_prod, item.price))
+                for await (let element of newProduct) {
                     let putProduct = await connection.put(element, "EPP/Product.php", "");
                     console.log('Entrou no if');
                     result.push(putProduct);
-                    showAlert(0, "Sucesso!", "Status dos produtos alterados com sucesso.");
+                    setModalUpdate(false);
+                    showAlert(0, "Sucesso!", "Produto alterado com sucesso.");
                 }
             } else if (item === 'fieldMenu') {
-                value = updateMenu('idMenu', 'description', 'status');
-                for await (let element of value) {
+                value = updateMenu(idMenu, descMenu, statusMenu);
+                let newMenu = value.map(item => new MenuObj(item.idMenu, item.description, item.status))
+                console.error(newMenu, item)
+                for await (let element of newMenu) {
                     let putMenu = await connection.put(element, "EPP/Menu.php", "");
-                    console.log(element)
+                    console.log(putMenu)
                     result.push(putMenu);
-                    showAlert(0, "Sucesso!", "Status dos menus alterados com sucesso.");
+                    setModalUpdate(false);
+                    showAlert(0, "Sucesso!", "Menu alterado com sucesso.");
                 }
+            } else if (item === 'fieldProdMenu') {
+                await updateProduMenu()
             }
             return result;
         } catch (error) {
@@ -469,27 +549,32 @@ export default function Registry() {
     async function deleteItems(value) {
         console.log(value)
         try {
-            let item = [[document.getElementById("fieldProduct"), "productId", "id_product", "Product.php"], [document.getElementById("fieldMenu"), "menuId", "idMenu", "Menu.php"]];
+            let item = [
+                [document.getElementById("fieldProduct"), "productId", "id_product", "Product.php"],
+                [document.getElementById("fieldMenu"), "menuId", "idMenu", "Menu.php"],
+                [document.getElementById("fieldProdMenu"), "prodMenuId", "eppLogId", "LogMenu.php"]
+            ];
+            console.log(document.getElementById("fieldProduct"))
+            console.log(document.getElementById("fieldMenu"))
             let req;
             for await (let element of item) {
-                console.log(value, element[1].id)
+                // console.log(value, element[0].id)
                 if (value === element[0].id) {
                     let key = {}
-                    key[element[2]] = element[0].querySelector(`#${element[1]}`).value || element[0].querySelector(`#${element[1]}`).innerText
+                    key[element[2]] = element[0].querySelector(`#${element[1]}`).value
+                    // || element[0].querySelector(`#${element[1]}`).innerText
                     console.log(element[0].querySelector(`#${element[1]}`).value)
-                    // req = await connection.delete(key, `EPP/${element[3]}`, true)
-                } else if (value === element[1].id) {
-                    let key = {}
-                    key[element[2]] = element[0].querySelector(`#${element[1]}`).value || element[0].querySelector(`#${element[1]}`).innerText
-                    console.log(element[0].querySelector(`#${element[1]}`).value)
+                    req = await connection.delete(key, `EPP/${element[3]}`, true)
                 }
             }
+            cleanPage();
         } catch (error) {
             console.log(error)
         }
     }
 
     async function del(value) {
+        console.log(value)
         try {
             deleteItems(value);
         } catch (error) {
@@ -502,6 +587,15 @@ export default function Registry() {
             setJAlert({ type, title, message });
             setModalAttention(true);
             setTimeout(() => setModalAttention(false), 3000);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function showModalUpdate(type, title, message) {
+        try {
+            setJAlert({ type, title, message });
+            setModalUpdate(true);
         } catch (error) {
             console.log(error)
         }
@@ -596,13 +690,29 @@ export default function Registry() {
         )
     }
 
-    async function populateFormProduct(field, productId) {
-        if (field === 'productField') {
-            if (point === 1) {
-                point = point - 1
-            } else if (point === 2) {
-                point = point - 2
+    async function priceStores(productId) {
+        let result = [];
+        let item = [];
+        for await (const store of loadStores) {
+            try {
+                let response = await connection.get(`&id_shop=${store.number}&id_product=${productId}`, 'EPP/Product.php');
+                item = response;
+                // console.log(item.length)
+                if (item.length === 0) {
+                    result = 0
+                } else {
+                    result += `Loja ${(store.description)}, Status ${item[0].STATUSVENDA} -  R$ ${parseFloat(item[0].PRECO).toFixed(2)}\n`;
+                }
+            } catch (error) {
+                console.error(error)
             }
+        }
+        return result;
+    }
+
+    async function populateFormProduct(productId) {
+        try {
+
             const selectedProduct = tempTableProduct.find(product => product.id_product === productId);
             if (selectedProduct) {
                 setIdProduct(selectedProduct.id_product);
@@ -613,67 +723,28 @@ export default function Registry() {
                 setStatusProduct(selectedProduct.status_prod);
                 setPriceProduct(selectedProduct.price = await priceStores(productId));
             }
-        } else {
-            console.log(point)
+
+        } catch (error) {
+            console.error(error)
         }
-        setPointer(point)
+        console.log(point)
+        setPointer(0)
+        console.log(point)
     }
 
-    async function priceStores(productId) {
-        let result = [];
-        let item = [];
-        for await (const store of loadStores) {
-            try {
-                let response = await connection.get(`&id_shop=${store.number}&id_product=${productId}`, 'EPP/Product.php');
-                item = response;
-                console.log(item)
-                result += `Loja ${(store.description)}, Status ${item[0].STATUSVENDA} -  R$ ${parseFloat(item[0].PRECO).toFixed(2)}\n`;
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        return result;
-    }
-
-    function populateFormMenu(field, menuId) {
-        if (field === 'menuField') {
-            if (point === 0) {
-                point = point + 1
-            } else if (point === 2) {
-                point = point - 1
-            }
+    function populateFormMenu(menuId) {
+        try {
             const selectedMenu = tempTableMenu.find(menu => menu.idMenu === menuId);
             if (selectedMenu) {
                 setIdMenu(selectedMenu.idMenu);
                 setDescMenu(selectedMenu.description);
                 setStatusMenu(selectedMenu.status);
             }
-        } else {
-            console.log(point)
+        } catch (error) {
+            console.error(error)
         }
-        setPointer(point)
-    }
-
-    function populateFormProdMenu(value, prodMenuId) {
-        if (value === 'prodMenuField') {
-            if (point === 0) {
-                point = point + 2
-            } else if (point === 1) {
-                point = point + 1
-            }
-            const selectedProdMenu = loadProdMenus.find(prodMenu => prodMenu.idProdMenu === prodMenuId)
-            console.log(selectedProdMenu);
-            if (selectedProdMenu) {
-                setIdProdMenu(selectedProdMenu.logMenu.eppLogId);
-                setIdMenu(selectedProdMenu.logMenu.eppIdMenu);
-                setIdSale(selectedProdMenu.logMenu.pluMenu);
-                setRice(selectedProdMenu.logMenu.eppIdProduct);
-                setDessert(selectedProdMenu.logMenu.eppIdProduct);
-            }
-        } else {
-            console.log(point)
-        }
-        setPointer(point)
+        console.log(point)
+        setPointer(1)
         console.log(point)
     }
 
@@ -684,13 +755,19 @@ export default function Registry() {
     }
 
     async function update(item) {
-        try {
-            console.log("Atualizar")
-            putItems(item)
-        } catch (error) {
-            console.log(error)
+        if (item === 'fieldProduct') {
+            showModalUpdate(1, "Atenção!", "Confirma alteração do produto?");
+        } else if (item === 'fieldMenu') {
+            showModalUpdate(1, "Atenção!", "Confirma alteração do menu?");
+        } else {
+            showModalUpdate(1, "Atenção!", "Confirma alteração do menu?");
         }
+        setModalUpdate(true);
     }
+
+    // async function update() {
+    //     setModalUpdate(true);
+    // }
 
     function clean() {
         cleanPage();
@@ -709,12 +786,6 @@ export default function Registry() {
         setModalDetails(true);
     }
 
-    function populate(field, value) {
-        populateFormProduct(field, value)
-        populateFormMenu(field, value)
-        populateFormProdMenu(field, value)
-    }
-
     function cleanPage() {
         setIdProduct("");
         setDescProduct("");
@@ -722,6 +793,7 @@ export default function Registry() {
         setCategory("");
         setMeasure("");
         setStatusProduct("");
+        setIdProdMenu("")
         setIdMenu("");
         setDescMenu("");
         setStatusMenu("");
@@ -730,9 +802,13 @@ export default function Registry() {
         setTypeCod("");
         setStatusSelect("");
         setIdSale("");
-        setTypeMenu(0);
-        setTypeTable(0);
-        setControllerTable(false);
+        setTypeMenu('');
+        if (typeTable === 0) {
+            setTypeTable(0);
+        } else if (typeTable === 1) {
+            setTypeTable(1);
+        }
+        // setControllerTable(false);
         // setLoadProducts(loadProducts);
         // setLoadMenus(loadMenus);
         setTempTableProduct(loadProducts);

@@ -18,8 +18,14 @@ export default function ModalAlert(props) {
         <div>
           <p>{translator.getMessagePT()}</p>
         </div>
-        {props.existHr && <hr className='time-out' id={styleModal(props.jAlert.type)}/>}
-        {props.existButton && <button id='ButtonColor1' className="continue-button" onClick={() => props.assistentFunc()}>Continue</button>} 
+        {props.existHr && <hr className='time-out' id={styleModal(props.jAlert.type)} />}
+        {props.existButton && <button id='ButtonColor1' className="continue-button" onClick={() => props.assistentFunc()}>Continue</button>}
+        {props.confirm &&
+          <div>
+            <button title="Salvar" onClick={() => props.confirmFunc()}>Salvar</button>
+            <button title="Cancelar" onClick={() => props.closeModalAlert()}>Cancelar</button>
+          </div>
+        }
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ export default function ProductField(props) {
             {props.selectForm("measure", "Emb.:", 4, [{id:"Kg", value:"Kg"}, {id:"Un", value:"Un"}], props.measure, props.setMeasure, null, true)}
             {props.selectForm("statusProd", "Status:", 4, [{id:"1", value:"Ativo"}, {id:"0", value:"Inativo"}], props.statusProduct, props.setStatusProduct, null, true)}
             {/*                id,    label, placArea, titleArea,     typeArea,divLength,value,               funSetValue,  enabled, funAssistant, mandatory */}
-            {props.areaForm("price", "Preço:", "", "Valores do produto", "text", 12, props.priceProduct, props.setPriceProduct, true, null, false)}
+            {props.areaForm("price", "Informações Consinco:", "", "Informações Consinco", "text", 12, props.priceProduct, props.setPriceProduct, true, null, false)}
         </fieldset>
     )
 }
