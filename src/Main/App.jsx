@@ -21,13 +21,8 @@ export default function App() {
                 <Route path="*" element={loadPage(<Skeleton><Home /></Skeleton>)} />
                 <Route path="/" element={loadPage(<Skeleton><Home /></Skeleton>)} />
                 <Route path="/login" element={<Login />} />
-<<<<<<< HEAD
-                <Route path="/order" element={loadPage(<Skeleton><Order /></Skeleton>)} />
-                <Route path="/product" element={loadPage(<Skeleton><Product /></Skeleton>)} />
-=======
                 <Route path="/order" element={<Skeleton><Order /></Skeleton>} />
                 <Route path="/registry" element={<Skeleton><Registry /></Skeleton>} />
->>>>>>> 11e8c5a3d468b8c9293d6ebe82b1a24c395d66a2
             </Routes>
         </HashRouter>
     )
