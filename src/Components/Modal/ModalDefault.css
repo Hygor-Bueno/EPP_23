@@ -29,6 +29,10 @@
   font-size: 2vw;
   margin-bottom:1.4vh;
 }
+#modalSection footer{
+  display:flex;
+  justify-content: space-around;
+}
 #modalSection footer button{
   margin:0vw 0.8vw
 }

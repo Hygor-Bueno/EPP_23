@@ -11,12 +11,12 @@ export default function Modal(props) {
             <FontAwesomeIcon onClick={()=>{props.onClose(false)}} icon='fa-circle-xmark' className='text-danger'/>
           </header>
           <section>
-            <p>{props.message}</p>
+            {props.children}
           </section>
             {props.isConfirmation ?
             <footer>
-              <button className='btn btn-danger' title="Confirmar" onClick={() => props.onConfirm()}>Confirmar</button>
-              <button className='btn btn-success' title="Cancelar" onClick={() => props.onCancel()}>Confirmar</button>
+              <button className='btn btn-success' title="Confirmar" onClick={() => props.onConfirm()}>Confirmar</button>
+              <button className='btn btn-danger' title="Cancelar" onClick={() => props.onCancel()}>Cancelar</button>
             </footer> :
             null
           }

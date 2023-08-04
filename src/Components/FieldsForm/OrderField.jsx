@@ -7,7 +7,6 @@ export default function OrderField(props) {
     const util = new Util();
     const [contObs, setContObs] = useState(props.observation.length);
     const limitObs = 250
-
     return (
         <fieldset id="orderField" className='form-group row border-bottom border-dark'>
             <legend>Dados do pedido</legend>
@@ -67,7 +66,7 @@ export default function OrderField(props) {
     function selectMenu(value) {
         props.setMenu(value);
         riceAndDessertClean();
-
+        console.log(props.logSales.length);
         props.logSales.length > 0 && deleteMenuLog();
         reloadTotal();
         let list = props.logsMenusList;
@@ -140,7 +139,7 @@ export default function OrderField(props) {
     function deleteMenuLog() {
         let items = props.logSales;
         items.forEach(item => {
-            if (item.menu === 1) {
+            if (parseInt(item.menu) === 1) {
                 removeItem(item.epp_id_product);
             }
         });
@@ -163,18 +162,31 @@ export default function OrderField(props) {
     };
 
     async function addItemLogSale(item) {
-        const list = props.logSales;
-        const validate = list.filter(elem => elem.epp_id_product === item.pluMenu).length;
-        if (validate === 0) {
-            let log = new LogSales(null, item.pluMenu, null, 1, null, 1, item.description, 'Un', true);
-            await log.addItem();
-            let exist = existItem(list);
-            if (exist.exist) {
-                list[exist.position] = log;
-            } else {
-                list.push(log);
+        try {
+            const list = props.logSales;
+            const validate = list.filter(elem => elem.epp_id_product === item.pluMenu).length;
+            if (validate === 0) {
+                let log = new LogSales(null, item.pluMenu, null, 1, null, 1, item.description, 'Un', true);
+                let req = await log.addItem();
+                if(req.error) throw new Error(req.message);
+                let exist = existItem(list);
+                if (exist.exist) {
+                    list[exist.position] = log;
+                } else {
+                    list.push(log);
+                }
+                props.setLogSales([...list]);
             }
-            props.setLogSales([...list]);
+        } catch (error) {
+            props.setIsOpenModal(true);
+            props.setParamsModal({
+                type: "Error",
+                message: error.toString(),
+                title: "Erro!",
+                isConfirmation: false,
+                onConfirm: ""
+            });
+            props.cleanOrder();
         }
     }
 
@@ -190,6 +202,7 @@ export default function OrderField(props) {
     }
 
     function reloadTotal() {
+        console.log(props.logSales);
         let items = props.logSales;
         let relTotal = 0.0;
         items.forEach(lSale => {

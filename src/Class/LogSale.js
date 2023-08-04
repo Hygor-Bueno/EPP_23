@@ -24,14 +24,18 @@ export default class LogSales {
         this.#base_item = base_item || false;
     }
     async addItem() {
-        try{
-            let price = await this.getConsincoPrice(this.epp_id_product);
-            if(price <= 0) throw new Error("Dados não Encontrados");
+        let result = {error: false,message:''}
+        let price = await this.getConsincoPrice(this.epp_id_product);
+        if(price > 0){
             this.#price_base = price;
             this.price = price * this.quantity;
-        }catch(e){
-            console.log(e)
+        }else{
+            this.#price_base = 0;
+            this.price = 0 * this.quantity;
+            result.error=true;
+            result.message = 'Falha ao buscar item...'
         }
+        return result;
     }
     async requestItem() {
         try {
@@ -43,7 +47,7 @@ export default class LogSales {
     }
     async getConsincoPrice(id_product) {
         let price = 0;
-            let itemConsinco = await this.#conn.get(`&id_product='${id_product}'&id_shop=${localStorage.getItem('num_store')}`, "EPP/Product.php")
+            let itemConsinco = await this.#conn.get(`&id_product='${id_product}'&id_shop=${localStorage.getItem('num_store')}`, "EPP/Product.php");
             if (itemConsinco.length > 0) price = itemConsinco[0].PRECO;
         return price;
     }

@@ -73,7 +73,6 @@ export default function Registry() {
                 setTempTableMenu([...reqMenu.data]);
                 setCategoryList([...reqCategory.data]);
                 setMenuList([...reqMenu.data]);
-                console.log(loadProducts);
                 // let test = await connection.get(`&id_shop=${storeLists.data[5].number}&id_product=40391`, 'EPP/Product.php');
                 // let test = await connection.get('&id_shop='+storeLists.data[5].number+'&id_product=40391', 'EPP/Product.php');
             }
@@ -228,7 +227,6 @@ export default function Registry() {
             } else {
                 console.log(value);
             }
-            console.log(point);
             setPointer(point)
         }
 
@@ -356,9 +354,7 @@ export default function Registry() {
             if (value === 'fieldProduct') {
                 try {
                     let registerProduct = new ProductObj(idProduct, descProduct, category, measure, statusProduct, "0");
-                    console.log(registerProduct)
                     let postProduct = await connection.post(registerProduct, "EPP/Product.php", '');
-                    console.log(postProduct);
                     if (postProduct.error) throw new Error(postProduct.message);
                     loadProducts.push(registerProduct);
                     setLoadProducts([...loadProducts]);
@@ -441,7 +437,6 @@ export default function Registry() {
     }
 
     function updateMenu(idProp, descriptionProp, statusProp) {
-        console.log(idProp, descriptionProp, statusProp);
         let result = [];
         tempTableMenu.forEach((item) => {
             if (item.idMenu === idProp) {
@@ -467,7 +462,6 @@ export default function Registry() {
         let result = constructorProduMenu();
         for await (let element of result) {
             let putProdMenu = await connection.put(element, "EPP/LogMenu.php", "");
-            console.log(putProdMenu);
         }
     }
 
@@ -585,17 +579,13 @@ export default function Registry() {
                         let key1 = {};
                         key1[element[2]] = id1;
                         req = await connection.delete(key1, `EPP/${element[3]}`, true);
-                        console.log(req);
                         let key2 = {};
                         key2[element[2]] = id2;
                         req = await connection.delete(key2, `EPP/${element[3]}`, true);
-                        console.log(req);
                     } else {
                         let key = {}
                         key[element[2]] = element[0].querySelector(`#${element[1]}`).value;
-                        console.log(element[0].querySelector(`#${element[1]}`).value);
                         req = await connection.delete(key, `EPP/${element[3]}`, true);
-                        console.log(req);
                     }
                 }
             }
@@ -640,7 +630,6 @@ export default function Registry() {
         try {
             if (controllerTable == false) {
                 const headProduct = tHeadProduct.map((item) => [item].join('; ')).join('; ') + '\n';
-                console.log(headProduct);
                 const tableProduct = tempTableProduct.map(row =>
                     [row.id_product, row.description, row.category, row.measure, row.status_prod === "1" ? 'Ativo' : 'Inativo'].join('; ')).join('\n');
                 result = [headProduct, tableProduct];
@@ -750,7 +739,6 @@ export default function Registry() {
                 setIdProduct(selectedProduct.id_product);
                 setDescProduct(selectedProduct.description);
                 setCategory(selectedProduct.id_category);
-                console.log(selectedProduct.category)
                 setMeasure(selectedProduct.measure);
                 setStatusProduct(selectedProduct.status_prod);
                 setPriceProduct(selectedProduct.price = await priceStores(productId));

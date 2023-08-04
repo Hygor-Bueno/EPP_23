@@ -11,6 +11,7 @@ import AddItems from '../AddItems';
 import OrderCardList from '../OrderCardList';
 import LogSales from '../../Class/LogSale';
 import ModalDefault from '../Modal/ModalDefault';
+import './Home.css';
 
 export default function Home() {
     const util = new Util();
@@ -21,7 +22,14 @@ export default function Home() {
     const [ordersList, setOrdersList] = useState([]);
     const [storeList, setStoreList] = useState([]);
     const [logsMenusList, setLogsMenusList] = useState([]);
-    const [isOpenMenu,setIsOpenMenu] = useState(!false)
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [paramsModal, setParamsModal] = useState({
+        type: "",
+        message: "",
+        title: "",
+        isConfirmation: isOpenModal,
+        onConfirm: () => console.log('Confirm')
+    });
 
     //Valores selecionados no formulário:
     const [orderCod, setOrderCod] = useState("");
@@ -63,7 +71,7 @@ export default function Home() {
                     if (value[1].error) throw new Error(value[1].message);
                     if (value[2].error && !value[2].message.toUpperCase().includes('NO DATA')) throw new Error(value[2].message);
                     setStoreList(sortArrayStores(value[0].data));
-                    value[1].data.unshift({ idMenu: "", description: "Avulso", status: "1" })
+                    value[1].data.unshift({ idMenu: "0", description: "Avulso", status: "1" })
                     setMenusList(value[1].data);
                     setOrdersList(value[2].data || [])
                     setLogsMenusList(value[3].data);
@@ -91,15 +99,15 @@ export default function Home() {
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
             <ModalDefault
-                isOpen={isOpenMenu}
-                type="success"
-                message="Operação realizada com sucesso!"
-                title="Erro!"
-                isConfirmation={!true}
-                onConfirm={()=>console.log('Confirm')}
-                onCancel={setIsOpenMenu}
-                onClose={setIsOpenMenu}
-            />
+                isOpen={isOpenModal}
+                {...paramsModal}
+                onCancel={setIsOpenModal}
+                onClose={setIsOpenModal}
+            >
+                <div>
+                    <p>{paramsModal.message}</p>
+                </div>
+            </ModalDefault>
             {modAdditional &&
                 <AddItems
                     itemForm={itemForm}
@@ -153,6 +161,9 @@ export default function Home() {
                     setRice={setRice}
                     dessert={dessert}
                     setDessert={setDessert}
+                    cleanOrder={cleanOrder}
+                    setParamsModal={setParamsModal}
+                    setIsOpenModal={setIsOpenModal}
                 />
                 <DeliveryField
                     itemForm={itemForm}
@@ -214,7 +225,7 @@ export default function Home() {
         }
     }
     async function postOrder() {
-        let order = new Order(null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, '0', localStorage.getItem('store'), localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
+        let order = new Order(null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, '0', localStorage.getItem('num_store'), localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
         let req = await connection.post(order, "EPP/Order.php");
         return req;
     }
@@ -268,9 +279,10 @@ export default function Home() {
         cleanPage();
     }
     function print() {
-        console.log("Imprimir")
+        console.log("Imprimir");
     }
     function delivered() {
+        setIsOpenModal(true);
         console.log("Entregue")
     }
 
@@ -318,12 +330,15 @@ export default function Home() {
         setDateDelivery("");
         setHoursDelivery("");
         setLocalDelivery("");
+        cleanOrder();
+        setLogSales([]);
+        setModAdditional(false);
+    }
+    function cleanOrder(){
         setPluMenu("");
         setMenu("");
         setRice("");
         setDessert("");
-        setLogSales([]);
-        setModAdditional(false);
     }
     async function load() {
         let value = ordersList.filter(i => i.idOrder === '2354')[0]
@@ -354,9 +369,8 @@ export default function Home() {
         array.forEach(item => {
             let sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
             sale.requestItem();
-            result.push(sale); 
+            result.push(sale);
         })
-        console.log(result);
         return result;
     }
 }
