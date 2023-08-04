@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Order } from '../../Class/Order';
 import OrderCardList from '../OrderCardList';
 import LogSales from '../../Class/LogSale';
+import ModalDefault from '../Modal/ModalDefault';
 
 export default function Home() {
     const util = new Util();
@@ -21,6 +22,7 @@ export default function Home() {
     const [ordersList, setOrdersList] = useState([]);
     const [storeList, setStoreList] = useState([]);
     const [logsMenusList, setLogsMenusList] = useState([]);
+    const [isOpenMenu,setIsOpenMenu] = useState(!false)
 
 
     //Valores selecionados no formulário:
@@ -64,7 +66,7 @@ export default function Home() {
                     setStoreList(sortArrayStores(value[0].data));
                     value[1].data.unshift({ idMenu: "", description: "Avulso", status: "1" })
                     setMenusList(value[1].data);
-                    setOrdersList(value[2].data)
+                    setOrdersList(value[2].data || [])
                     setLogsMenusList(value[3].data);
                 });
             } catch (err) {
@@ -89,6 +91,16 @@ export default function Home() {
 
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
+            <ModalDefault
+                isOpen={isOpenMenu}
+                type="success"
+                message="Operação realizada com sucesso!"
+                title="Erro!"
+                isConfirmation={!true}
+                onConfirm={()=>console.log('Confirm')}
+                onCancel={setIsOpenMenu}
+                onClose={setIsOpenMenu}
+            />
             {modAdditional &&
                 <AddItems
                     itemForm={itemForm}
@@ -318,7 +330,7 @@ export default function Home() {
     async function load() {
         let value = ordersList.filter(i => i.idOrder === '2354')[0]
 
-        console.log(value);
+        console.error(value);
         let log = await connection.get(`&epp_id_order=${value.idOrder}`, "EPP/LogSale.php");
         setOrderCod(value.idOrder);
         setNameClient(value.nameClient);
@@ -339,10 +351,10 @@ export default function Home() {
         setLogSales(loadLogSale(log.data));
         setModAdditional(false);
     }
-    function loadLogSale(array){
+    function loadLogSale(array) {
         let result = [];
-        array.forEach(item=>{
-            let sale = new LogSales(item.eppIdLog,item.eppIdProduct,item.eppIdOrder,item.quantity,item.price,item.menu ,null,null,item.menu === '1'?true:false);
+        array.forEach(item => {
+            let sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
             sale.requestItem();
             result.push(sale);
         })

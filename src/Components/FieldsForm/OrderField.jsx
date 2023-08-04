@@ -116,6 +116,7 @@ export default function OrderField(props) {
             let items = props.logsMenusList.filter(itemMenu => (itemMenu.logMenu.eppIdMenu === props.menu && (itemMenu.logMenu.eppIdProduct === props.rice || itemMenu.logMenu.eppIdProduct === props.dessert)) && itemMenu);
             let plu = equalsItems(items, "pluMenu");
             props.setPluMenu(plu.pluMenu);
+            // console.error(plu);
             await addItemLogSale(plu);
             reloadTotal();
         }

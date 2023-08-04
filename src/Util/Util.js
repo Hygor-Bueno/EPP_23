@@ -8,6 +8,7 @@ export default class Util {
     loadLocalStorage(user) {
         localStorage.setItem("token", user.session);
         localStorage.setItem("id", user.id);
+        console.log(user);
     }
     async validateAccess() {
         let connection = new Connection();
