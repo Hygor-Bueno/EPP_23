@@ -1,0 +1,64 @@
+#divDetailsContainer {
+    width: 100%;
+    min-height: 10vh;
+    display: flex;
+    justify-content: center;
+    border: solid 0.2vmin black;
+    border-radius: 8px;
+    padding: 1%;
+}
+
+#divDetails {
+    width: 80vmin;
+    height: 60vmin;
+}
+
+.divStyleCod {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 1%;
+}
+
+.rowHeader {
+    font-size: 100%;
+    font-weight: bold;
+}
+
+.rowItem {
+    white-space: nowrap;
+    max-width: 16vmax;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#divStyleDescription {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 1%;
+}
+
+#divStyleCategory {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+}
+
+#divStyleEdit {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+}
+
+#rowButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#formProdMenu {
+    display: flex;
+    height: 40%;
+}

@@ -26,7 +26,7 @@ div.login{
     border-bottom: 1px solid #fff;
 }
 
-#password-login>span {
+#password-login > span {
     font-size: 35px;
 }
 
@@ -43,7 +43,7 @@ div.login{
     text-align: inherit;
 }
 
-#content-login>#section-login>button {
+#content-login > #section-login > button {
     width: 150px;
     height: 40px;
     margin-top: 40px;
@@ -54,25 +54,25 @@ div.login{
     font-size: 25px;
 }
 
-div.head-password>p{
+div.head-password > p {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 30px;
 }
 
-div.head-password>form>label{
+div.head-password > form > label {
     font-size: 20px;
 }
 
 
 /* Estilo do modal */
-#modalPasswordDefault{
+#modalPasswordDefault {
     width: 250px;
     height: 370px;
 }
 
-#modalPasswordDefault >header >button{
+#modalPasswordDefault > header > button {
     background-color: #B5001A;
     font-weight: bold;
     color: #fff;
@@ -83,10 +83,10 @@ div.head-password>form>label{
     margin-top: -20px;
     margin-right: -20px;
 }
-#modalPasswordDefault >form{
+#modalPasswordDefault > form {
     height:230px;
 }
-#modalPasswordDefault >form >button{
+#modalPasswordDefault > form > button {
     width: 150px;
     height: 40px;
     background-color: #006549;

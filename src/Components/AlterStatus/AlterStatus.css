@@ -1,0 +1,51 @@
+#divStatusContainer {
+    width: 100vmin;
+    height: 80vmin;
+}
+
+#divStatus {
+    display: flex;
+    justify-content: center;
+    width: 100vmin;
+    height: 75vmin;
+    overflow-y: auto;
+}
+
+#divStatusButtons {
+    display: flex;
+    width: 100%;
+    height: 5.5vmin;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#divStatusButtons button:hover {
+    box-shadow: 0px 0px 0.6vmin #222 inset;
+}
+
+#divStatusButtons button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.8vmin;
+    width: 10%;
+    height: 90%;
+    color:aliceblue;
+    border: 0.2vmin solid #ced4da;
+    border-radius: 8px; 
+}
+
+.spanStatus {
+    font-size: 2.2vmin;
+    color: var(--bg-dark);
+    cursor: pointer;
+    padding: 10% 0 0 35%;
+}
+
+.trHeadStatus {
+    font-size: 1.7vmin;
+}
+
+.tdStatus {
+    font-size: 1.7vmin;
+}
