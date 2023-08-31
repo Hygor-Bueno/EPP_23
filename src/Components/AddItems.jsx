@@ -19,7 +19,6 @@ export default function AddItems(props) {
     useEffect(() => {
         let connection = new Connection();
         let localUtil = new Util();
-
         async function init() {
             try {
                 const result = await connection.get('', "EPP/Product.php");
@@ -192,7 +191,6 @@ export default function AddItems(props) {
         let result = util.addItemLogSale(logSales, log);
         setLogSales([...result]);
         setSubtotal(util.reloadTotal(result, 'price'));
-
     }
     function checkedItem(element, item) {
         let result = validateQuantity(element.target.value, item.measure);

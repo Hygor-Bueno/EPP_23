@@ -13,7 +13,7 @@ export default function OrderCardList(props) {
             <div >
                 <span className="d-flex align-items-center col-3">
                     <input placeholder="Cód. do Pedido" value={idOrder} onChange={(element)=>setIdOrder(element.target.value)} className="form-control" type='text' />
-                    <button type="button" onClick={() =>{props.load()}}><FontAwesomeIcon icon={"fa-search"} /></button>
+                    <button type="button" onClick={() =>{props.load(idOrder)}}><FontAwesomeIcon icon={"fa-search"} /></button>
                 </span>
             </div>
             <article>

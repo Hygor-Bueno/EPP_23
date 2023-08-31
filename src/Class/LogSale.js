@@ -1,4 +1,5 @@
 import { Connection } from "../Util/RestApi";
+import Util from "../Util/Util";
 
 export default class LogSales {
     epp_id_log = "";
@@ -17,7 +18,7 @@ export default class LogSales {
         this.epp_id_product = eppIdProduct;
         this.epp_id_order = eppIdOrder;
         this.quantity = quantity;
-        this.price = price;
+        this.price = parseFloat(price);
         this.menu = menu.toString();
         this.#description = description;
         this.#measure = measure;
@@ -25,31 +26,32 @@ export default class LogSales {
     }
     async addItem() {
         let result = {error: false,message:''}
-        let price = await this.getConsincoPrice(this.epp_id_product);
+        let util = new Util();
+        let item = await util.getConsincoProduct(this.epp_id_product);
+        let price= item ? item.PRECO : 0;
+        // let price = await this.getConsincoPrice(this.epp_id_product)
         if(price > 0){
             this.#price_base = price;
             this.price = price * this.quantity;
         }else{
             this.#price_base = 0;
-            this.price = 0 * this.quantity;
+            this.price = 0;
             result.error=true;
             result.message = 'Falha ao buscar item...'
         }
         return result;
     }
     async requestItem() {
+        let result = {error: false,message:''}
         try {
             let req = await this.#conn.get(`&id_product=${this.epp_id_product}&id_shop=${localStorage.getItem('num_store')}`,'EPP/Product.php');
-            console.log(req);
+            if(req.length<1) throw new Error('Dados não encontrados');
+            this.#price_base = req[0].PRECO;
+            this.#description = req[0].DESCREDUZIDA;
         } catch (error) {
-            console.log(error)
+            result = {error: true,message:error}
         }
-    }
-    async getConsincoPrice(id_product) {
-        let price = 0;
-            let itemConsinco = await this.#conn.get(`&id_product='${id_product}'&id_shop=${localStorage.getItem('num_store')}`, "EPP/Product.php");
-            if (itemConsinco.length > 0) price = itemConsinco[0].PRECO;
-        return price;
+        return result;
     }
     setDescription(description) {
         this.#description = description;

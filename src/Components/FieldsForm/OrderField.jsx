@@ -22,19 +22,21 @@ export default function OrderField(props) {
                     </button>
                 </div>
                 <div id="divAdditionalItems" className='border rounded my-1 p-1'>
-                    {props.logSales.map((item, index) => !item.getBase_item() && (
-                        <div className="d-flex flex-column" key={index}>
-                            <span className='d-flex justify-content-between'>
-                                <div><b>Cód: </b>{item.epp_id_product}</div>
-                            </span>
-                            <span>
-                                <b>Descrição: </b>{item.getDescription()}. {item.quantity} {item.getMeasure()} (Preço Un/Kg R$ {item.getPrice_base()})
-                            </span>
-                            <span>
-                                <b>SubTotal: </b>{item.price.toLocaleString('pt-br', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' })}
-                            </span>
-                        </div>
-                    ))}
+                    {
+                        props.logSales.map((item, index) => !item.getBase_item() && (
+                            <div className="d-flex flex-column" key={index}>
+                                <span className='d-flex justify-content-between'>
+                                    <div><b>Cód: </b>{item.epp_id_product}</div>
+                                </span>
+                                <span>
+                                    <b>Descrição: </b>{item.getDescription()}. {item.quantity} {item.getMeasure()} (Preço Un/Kg R$ {item.getPrice_base()})
+                                </span>
+                                <span>
+                                    <b>SubTotal: </b>{item.price.toLocaleString('pt-br', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' })}
+                                </span>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
             <div id="txtareaObservation" className={"col-12 my-1"}>
@@ -168,7 +170,7 @@ export default function OrderField(props) {
             if (validate === 0) {
                 let log = new LogSales(null, item.pluMenu, null, 1, null, 1, item.description, 'Un', true);
                 let req = await log.addItem();
-                if(req.error) throw new Error(req.message);
+                if (req.error) throw new Error(req.message);
                 let exist = existItem(list);
                 if (exist.exist) {
                     list[exist.position] = log;

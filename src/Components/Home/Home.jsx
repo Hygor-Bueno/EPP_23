@@ -95,6 +95,7 @@ export default function Home() {
         }
         loadInit();
     }, []);
+    useEffect(() => { console.log(riceList) }, [riceList]);
 
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
@@ -334,43 +335,85 @@ export default function Home() {
         setLogSales([]);
         setModAdditional(false);
     }
-    function cleanOrder(){
+    function cleanOrder() {
         setPluMenu("");
         setMenu("");
         setRice("");
         setDessert("");
     }
-    async function load() {
-        let value = ordersList.filter(i => i.idOrder === '2354')[0]
+    async function load(idItem) {
+        try {
+            let log = idItem.trim() && await connection.get(`&epp_id_order=${idItem}`, "EPP/LogSale.php");
+            let order = idItem.trim() && await connection.get(`&id_order=${idItem}`, "EPP/Order.php");
+            let logSales = idItem.trim() && await loadLogSale(log.data || []);
+            // util.formatJsonForSelect(props.riceList, "idProduct", "description")
+            loadRiceDessert(order.data[0].typeRice, order.data[0].dessert);
+            if (!log || log.error) throw new Error(log.message);
+            if (!order || order.error) throw new Error(order.message);
+            if (!logSales || logSales.error) throw new Error(logSales.message);
 
-        console.error(value);
-        let log = await connection.get(`&epp_id_order=${value.idOrder}`, "EPP/LogSale.php");
-        setOrderCod(value.idOrder);
-        setNameClient(value.nameClient);
-        setFoneClient(value.fone || "");
-        setEmail(value.email || "");
-        setDateOrder(value.dateOrder || "");
-        setObservation(value.obs || "");
-        setSignal(parseFloat(value.signalValue).toFixed(2) || "");
-        setTotal(util.maskMoney(value.total) || "");
-        setPedding(util.maskMoney(value.total - value.signalValue) || '');
-        setDateDelivery(value.deliveryDate || "");
-        setHoursDelivery(value.deliveryHour || "");
-        setLocalDelivery(value.deliveryStore || "");
-        setPluMenu(value.pluMenu || "");
-        setMenu(value.idMenu || "");
-        setRice("");
-        setDessert("");
-        setLogSales(loadLogSale(log.data));
-        setModAdditional(false);
+            setOrderCod(order.data[0].idOrder);
+            setNameClient(order.data[0].nameClient);
+            setFoneClient(order.data[0].fone || "");
+            setEmail(order.data[0].email || "");
+            setDateOrder(order.data[0].dateOrder || "");
+            setObservation(order.data[0].obs || "");
+            setSignal(parseFloat(order.data[0].signalValue).toFixed(2) || "");
+            setTotal(util.maskMoney(order.data[0].total) || "");
+            setPedding(util.maskMoney(order.data[0].total - order.data[0].signalValue) || '');
+            setDateDelivery(order.data[0].deliveryDate || "");
+            setHoursDelivery(order.data[0].deliveryHour || "");
+            setLocalDelivery(order.data[0].deliveryStore || "");
+            setPluMenu(order.data[0].pluMenu || "");
+            setMenu(order.data[0].idMenu || "");
+
+            setLogSales(logSales.data);
+            setModAdditional(false);
+        } catch (error) {
+            setIsOpenModal(true);
+            setParamsModal({
+                type: "Error",
+                message: error.toString(),
+                title: "Erro!",
+                isConfirmation: false,
+                onConfirm: ""
+            });
+            cleanOrder();
+        }
     }
-    function loadLogSale(array) {
-        let result = [];
-        array.forEach(item => {
-            let sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
-            sale.requestItem();
-            result.push(sale);
-        })
+    async function loadRiceDessert(idRice, idDessert) {
+        let rice = await util.getConsincoProduct(idRice);
+        let dessert = await util.getConsincoProduct(idDessert);
+        let listRice = [], listDessert = [];
+
+        if (rice) {
+            listRice.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCREDUZIDA"] });
+        } else {
+            listRice.push({ idProduct: idRice, description: 'Não possui.'});
+        }
+
+        if (dessert) {
+            listDessert.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCREDUZIDA"] });
+        } else {
+            listDessert.push({ idProduct: idDessert, description: 'Não possui.'});
+        }
+
+        setRice(idRice);
+        setDessert(idDessert);
+        setRiceList(listRice);
+        setDessertsList(listDessert);
+    }
+    async function loadLogSale(array) {
+        let result = { error: false, message: '', data: [] };
+        for await (const item of array) {
+            const sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
+            let getItem = await sale.requestItem();
+            if (getItem.error) {
+                result.error = true;
+                result.message += `  Cód. Produto: ${item.eppIdProduct};`;
+            }
+            result.data.push(sale);
+        }
         return result;
     }
 }

@@ -50,6 +50,13 @@ export default class Util {
         });
         return result;
     }
+    async getConsincoProduct(id_product) {
+        let conn = new Connection();
+        let item = null;
+            let itemConsinco = await conn.get(`&id_product='${id_product}'&id_shop=${localStorage.getItem('num_store')}`, "EPP/Product.php");
+            if (itemConsinco.length > 0) item = itemConsinco[0];
+        return item;
+    }
     addItemLogSale(logSales, item) {
         const list = logSales;
         let exist = this.existItem(list, item.epp_id_product);
