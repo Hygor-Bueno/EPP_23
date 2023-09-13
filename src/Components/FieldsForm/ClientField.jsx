@@ -2,9 +2,9 @@ import React from 'react';
 import { useEffect } from 'react';
 
 export default function ClientField(props) {
-    useEffect(() => {
-        console.log( props.orderCod, props.nameClient);
-    }, [props]);
+    // useEffect(() => {
+    //     console.log( props.orderCod, props.nameClient);
+    // }, [props]);
     return (
         <fieldset className='form-group row border-bottom border-dark'>
             <legend>Dados do cliente</legend>

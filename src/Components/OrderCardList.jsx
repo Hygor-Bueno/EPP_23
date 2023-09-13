@@ -4,16 +4,16 @@ import './OrderCardList.css'
 import Util from '../Util/Util';
 
 export default function OrderCardList(props) {
-    const [idOrder,setIdOrder] = useState('');
-    useEffect(() => {
-        
-    }, []);
+    const [idOrder, setIdOrder] = useState('');
+    // useEffect(() => {
+    //     console.log(props.ordersList);
+    // }, [props.ordersList]);
     return (
         <div id="divOrderCard">
             <div >
                 <span className="d-flex align-items-center col-3">
-                    <input placeholder="Cód. do Pedido" value={idOrder} onChange={(element)=>setIdOrder(element.target.value)} className="form-control" type='text' />
-                    <button type="button" onClick={() =>{props.load(idOrder)}}><FontAwesomeIcon icon={"fa-search"} /></button>
+                    <input placeholder="Cód. do Pedido" value={idOrder} onChange={(element) => setIdOrder(element.target.value)} className="form-control" type='text' />
+                    <button type="button" onClick={() => { props.load(idOrder); setIdOrder(''); }}><FontAwesomeIcon icon={"fa-search"} /></button>
                 </span>
             </div>
             <article>
@@ -24,7 +24,7 @@ export default function OrderCardList(props) {
     function cardTemplate(item) {
         let util = new Util();
         return (
-            <div onClick={()=>setIdOrder(item.idOrder)} className="px-2 m-1" key={`order_${item.idOrder}`}>
+            <div onClick={() => { props.load(item.idOrder); }} className="px-2 m-1" key={`order_${item.idOrder}`}>
                 <div className="row">
                     {itemsComponent("Nº", item.idOrder, 'col-2')}
                     {itemsComponent("Nome", item.nameClient, 'col-6')}
@@ -51,15 +51,14 @@ export default function OrderCardList(props) {
     }
     function iconsStatus(value) {
         let result;
-
-        switch (value) {
-            case "0":
+        switch (parseInt(value)) {
+            case 0:
                 result = <FontAwesomeIcon title="Pendente" className="text-warning" icon={'fa-circle-exclamation'} />
                 break;
-            case "1":
+            case 1:
                 result = <FontAwesomeIcon title="Entregue" className="text-success" icon={'fa-circle-check'} />
                 break;
-            case "2":
+            case 2:
                 result = <FontAwesomeIcon title="cancelado" className="text-danger" icon={'fa-circle-xmark'} />
                 break;
             default:

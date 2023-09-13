@@ -41,6 +41,17 @@ export default class LogSales {
         }
         return result;
     }
+    async getProductEPP(){
+        let result;
+        try {
+            let req = await this.#conn.get(`&id_product=${this.epp_id_product}&eppProduct=1`,'EPP/Product.php');
+            if(req.error) throw new Error(req.message);
+            result = req;
+        } catch (error) {
+            result = {error: true,message:error}
+        }
+        return result;
+    }
     async requestItem() {
         let result = {error: false,message:''}
         try {
@@ -67,5 +78,8 @@ export default class LogSales {
     }
     getMeasure(){
         return this.#measure;
+    }
+    setMeasure(measure){
+        this.#measure = measure;
     }
 }

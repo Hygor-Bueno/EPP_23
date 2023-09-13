@@ -12,6 +12,7 @@ import OrderCardList from '../OrderCardList';
 import LogSales from '../../Class/LogSale';
 import ModalDefault from '../Modal/ModalDefault';
 import './Home.css';
+import PrintOrder from '../PrintOrder';
 
 export default function Home() {
     const util = new Util();
@@ -23,14 +24,15 @@ export default function Home() {
     const [storeList, setStoreList] = useState([]);
     const [logsMenusList, setLogsMenusList] = useState([]);
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [paramsModal, setParamsModal] = useState({
-        type: "",
-        message: "",
-        title: "",
-        isConfirmation: isOpenModal,
-        onConfirm: () => console.log('Confirm')
-    });
-
+    const [paramsModal, setParamsModal] = useState(
+        {
+            type: "",
+            message: "",
+            title: "",
+            isConfirmation: isOpenModal,
+            onConfirm: () => console.log('Confirm')
+        }
+    );
     //Valores selecionados no formulário:
     const [orderCod, setOrderCod] = useState("");
     const [nameClient, setNameClient] = useState("");
@@ -42,7 +44,6 @@ export default function Home() {
     const [signal, setSignal] = useState("");
     const [total, setTotal] = useState("");
     const [pending, setPedding] = useState('');
-
 
     const [dateDelivery, setDateDelivery] = useState("");
     const [hoursDelivery, setHoursDelivery] = useState("");
@@ -95,7 +96,7 @@ export default function Home() {
         }
         loadInit();
     }, []);
-    useEffect(() => { console.log(riceList) }, [riceList]);
+    // useEffect(() => { console.log(logSales) }, [logSales]);
 
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
@@ -197,17 +198,31 @@ export default function Home() {
         return (
             <div id="divGroupButton">
                 <div id="divGroupButtonLeft">
-                    <button type="button" onClick={() => { create() }} title="salvar pedido.">Inserir</button>
+                    <button className={orderCod ? "opacity-25" : "opacity-100"} disabled={orderCod ? true : false} type="button" onClick={() => { create() }} title="salvar pedido.">Inserir</button>
                     <button type="button" onClick={() => { update() }} title="salvar Alteração.">Alterar</button>
                     <button type="button" onClick={() => { del() }} title="Excluir pedido.">Excluir</button>
                     <button type="button" onClick={() => { clean() }} title="Limpar formulário.">Limpar</button>
                 </div>
                 <div id="divGroupButtonRigth">
                     <button type="button" onClick={() => { delivered() }}><FontAwesomeIcon icon="fa-truck" /></button>
-                    <button type="button" onClick={() => { print() }}><FontAwesomeIcon icon="fa-print" /></button>
+                    <PrintOrder
+                        orderCod={orderCod}
+                        nameClient={nameClient}
+                        dateOrder={dateOrder}
+                        signal={signal}
+                        total={total}
+                        menu={menu}
+                        pluMenu={pluMenu}
+                        rice={rice}
+                        dessert={dessert}
+                        dateDelivery={dateDelivery}
+                        hoursDelivery={hoursDelivery}
+                        localDelivery={localDelivery}
+                        logSales={logSales}
+                    />
                 </div>
             </div>
-        )
+        );
     }
 
     async function create() {
@@ -221,9 +236,25 @@ export default function Home() {
             if (order.error) throw new Error(order.message);
             await postLogs(order.last_id);
             cleanPage();
+            let newListOrder = ordersList;
+            newListOrder.push(maskItem(order.last_id));
+            setOrdersList([...newListOrder]);
         } catch (error) {
-            alert(error);
+            startModalError(error);
         }
+    }
+    function maskItem(idOrder) {
+        let item = {};
+        item.delivered = 0;
+        item.deliveryDate = dateDelivery;
+        item.deliveryHour = hoursDelivery;
+        item.deliveryStore = localDelivery;
+        item.fone = foneClient;
+        item.idOrder = idOrder;
+        item.nameClient = nameClient;
+        item.signalValue = signal;
+        item.total = parseFloat(total);
+        return item;
     }
     async function postOrder() {
         let order = new Order(null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, '0', localStorage.getItem('num_store'), localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
@@ -235,23 +266,21 @@ export default function Home() {
         logSales.forEach(log => {
             log.epp_id_order = id_order;
             req.push(postsFast(log, "EPP/LogSale.php"))
-        })
-        await Promise.all(req).then(value => {
-            console.log(value);
         });
-        console.log(logSales, id_order);
+        // await Promise.all(req).then(value => {
+        //     console.log(value);
+        // });
     }
     function postsFast(params, path) {
         const connection = new Connection();
         let result = connection.post(params, path);
         return result;
     }
-
     function validiteValues() {
         let result = { error: false, message: '' };
-        if (signal <= 0) result.message += "O valor do sinal, não pode estar negativos ou zerados. \n";
+        if (signal <= 0) result.message += "O valor do sinal não pode estar negativos ou zerados. \n";
         if (pending < 0) result.message += "O valor pendente de pagamento não pode ser negativo. \n";
-        if (total <= 0) result.message += "O valor total, não pode estar negativos ou zerados. \n";
+        if (total <= 0) result.message += "O valor total não pode estar negativos ou zerados. \n";
         if (result.message !== '') result.error = true;
         return result;
     }
@@ -274,19 +303,58 @@ export default function Home() {
         console.log("Atualizar")
     }
     async function del() {
-        console.log("Deletar/Inativar")
+        try {
+            let cancel = await connection.put({ id_order: orderCod, delivered: 2 }, "EPP/Order.php");
+            if (cancel.error) throw new Error(cancel.message);
+            let index = ordersList.findIndex((item) => parseInt(item.idOrder) === parseInt(orderCod));
+            if (index === -1) throw new Error('Item não encontrado!');
+            ordersList.splice(index, 1);
+            let newList = ordersList;
+            setOrdersList([...newList]);
+        } catch (error) {
+            startModalError(error);
+        }
+        clean();
+    }
+    function startModalError(error) {
+        setIsOpenModal(true);
+        setParamsModal({
+            type: "Error",
+            message: error.toString(),
+            title: "Erro!",
+            isConfirmation: false,
+            onConfirm: ""
+        });
     }
     function clean() {
         cleanPage();
     }
-    function print() {
-        console.log("Imprimir");
-    }
-    function delivered() {
+    async function delivered() {
         setIsOpenModal(true);
-        console.log("Entregue")
+        setParamsModal({
+            type: "Alert",
+            message: 'Deseja mesmo realizar essa ação?',
+            title: "Atenção!",
+            isConfirmation: true,
+            onConfirm: setStatusDelivered
+        });
     }
 
+    async function setStatusDelivered() {
+        try {
+            let deliver = await connection.put({ id_order: orderCod, delivered: 1 }, "EPP/Order.php");
+            if (deliver.error) throw new Error(deliver.message);
+            let index = ordersList.findIndex((item) => parseInt(item.idOrder) === parseInt(orderCod));
+            if (index === -1) throw new Error('Item não encontrado!');
+            ordersList.splice(index, 1);
+            let newList = ordersList;
+            setOrdersList([...newList]);
+        } catch (error) {
+            startModalError(error);
+        }
+        clean();
+
+    }
     function selectForm(label, divLength, list, defaultValue, funSetValue, funAssistant, mandatory) {
         return (
             <div className={`col-${divLength} my-1 d-flex flex-column`}>
@@ -359,7 +427,7 @@ export default function Home() {
             setDateOrder(order.data[0].dateOrder || "");
             setObservation(order.data[0].obs || "");
             setSignal(parseFloat(order.data[0].signalValue).toFixed(2) || "");
-            setTotal(util.maskMoney(order.data[0].total) || "");
+            setTotal(order.data[0].total || "");
             setPedding(util.maskMoney(order.data[0].total - order.data[0].signalValue) || '');
             setDateDelivery(order.data[0].deliveryDate || "");
             setHoursDelivery(order.data[0].deliveryHour || "");
@@ -370,14 +438,7 @@ export default function Home() {
             setLogSales(logSales.data);
             setModAdditional(false);
         } catch (error) {
-            setIsOpenModal(true);
-            setParamsModal({
-                type: "Error",
-                message: error.toString(),
-                title: "Erro!",
-                isConfirmation: false,
-                onConfirm: ""
-            });
+            startModalError(error);
             cleanOrder();
         }
     }
@@ -389,13 +450,13 @@ export default function Home() {
         if (rice) {
             listRice.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCREDUZIDA"] });
         } else {
-            listRice.push({ idProduct: idRice, description: 'Não possui.'});
+            listRice.push({ idProduct: idRice, description: 'Não possui.' });
         }
 
         if (dessert) {
             listDessert.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCREDUZIDA"] });
         } else {
-            listDessert.push({ idProduct: idDessert, description: 'Não possui.'});
+            listDessert.push({ idProduct: idDessert, description: 'Não possui.' });
         }
 
         setRice(idRice);
@@ -408,6 +469,10 @@ export default function Home() {
         for await (const item of array) {
             const sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
             let getItem = await sale.requestItem();
+            if(!sale.getMeasure()){
+                let product = await sale.getProductEPP();
+                sale.setMeasure(product.data[0].measure);
+            }
             if (getItem.error) {
                 result.error = true;
                 result.message += `  Cód. Produto: ${item.eppIdProduct};`;

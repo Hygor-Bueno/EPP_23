@@ -28,6 +28,9 @@ export default function Skeleton({ children }) {
                     <button type="button" title="Realizar logoff." onClick={() => {
                         navigate("/login");
                         localStorage.removeItem('token');
+                        localStorage.removeItem('num_store');
+                        localStorage.removeItem('id');
+                        localStorage.removeItem('store');
                     }}><FontAwesomeIcon icon="fa-solid fa-right-from-bracket" /></button>
                 </div>
             </aside>

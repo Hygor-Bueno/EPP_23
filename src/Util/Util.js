@@ -5,10 +5,18 @@ export default class Util {
         let newValue = value;
         setOrigin(newValue);
     }
-    loadLocalStorage(user) {
-        localStorage.setItem("token", user.session);
-        localStorage.setItem("id", user.id);
-        console.log(user);
+    async loadLocalStorage(user) {
+        try {
+            localStorage.setItem("token", user.session);
+            localStorage.setItem("id", user.id);
+            let conn = new Connection();
+            let req = await conn.get(`&id=${user.id}&all_data`, 'CCPP/Employee.php');
+            if(req['error']) throw new Error(req['message']);
+            localStorage.setItem("num_store",req.data[0].number_shop)
+            localStorage.setItem("store",req.data[0].shop)
+        } catch (e) {
+            console.error(e.toString());
+        }
     }
     async validateAccess() {
         let connection = new Connection();
@@ -32,7 +40,7 @@ export default class Util {
         const result = text.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
         return result;
     }
-    maskMoney(value){
+    maskMoney(value) {
         return parseFloat(value).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
     }
     loadsFast(params, path) {
@@ -53,8 +61,8 @@ export default class Util {
     async getConsincoProduct(id_product) {
         let conn = new Connection();
         let item = null;
-            let itemConsinco = await conn.get(`&id_product='${id_product}'&id_shop=${localStorage.getItem('num_store')}`, "EPP/Product.php");
-            if (itemConsinco.length > 0) item = itemConsinco[0];
+        let itemConsinco = await conn.get(`&id_product='${id_product}'&id_shop=${localStorage.getItem('num_store')}`, "EPP/Product.php");
+        if (itemConsinco.length > 0) item = itemConsinco[0];
         return item;
     }
     addItemLogSale(logSales, item) {
@@ -77,7 +85,7 @@ export default class Util {
         })
         return result;
     }
-    reloadTotal(array,key) {
+    reloadTotal(array, key) {
         let items = array;
         let reloadTotal = 0.0;
         items.forEach(lSale => {
@@ -86,10 +94,10 @@ export default class Util {
         return reloadTotal;
     }
 
-    filterArray(array,key,valueCheck) {
-        let result=null;
+    filterArray(array, key, valueCheck) {
+        let result = null;
         array.forEach(item => {
-            if(item[key]===valueCheck){
+            if (item[key] === valueCheck) {
                 result = item;
             }
         })

@@ -68,7 +68,6 @@ export default function OrderField(props) {
     function selectMenu(value) {
         props.setMenu(value);
         riceAndDessertClean();
-        console.log(props.logSales.length);
         props.logSales.length > 0 && deleteMenuLog();
         reloadTotal();
         let list = props.logsMenusList;
@@ -117,7 +116,6 @@ export default function OrderField(props) {
             let items = props.logsMenusList.filter(itemMenu => (itemMenu.logMenu.eppIdMenu === props.menu && (itemMenu.logMenu.eppIdProduct === props.rice || itemMenu.logMenu.eppIdProduct === props.dessert)) && itemMenu);
             let plu = equalsItems(items, "pluMenu");
             props.setPluMenu(plu.pluMenu);
-            // console.error(plu);
             await addItemLogSale(plu);
             reloadTotal();
         }
@@ -204,7 +202,6 @@ export default function OrderField(props) {
     }
 
     function reloadTotal() {
-        console.log(props.logSales);
         let items = props.logSales;
         let relTotal = 0.0;
         items.forEach(lSale => {

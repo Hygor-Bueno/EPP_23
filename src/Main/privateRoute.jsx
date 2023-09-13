@@ -12,4 +12,4 @@ export default function PrivateRoute({ children }) {
         validateData();
     }, []);
     return !user["error"] ? children : <Navigate to="/login" />;
-} 
+}
