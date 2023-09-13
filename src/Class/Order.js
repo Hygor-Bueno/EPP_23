@@ -21,6 +21,7 @@ export class Order {
 
     constructor(id_order, fone, email, signal_value, plu_menu, id_menu, type_rice, dessert, name_client, logSales, delivered, store, user_id, date_order, delivery_date, delivery_hour, delivery_store, total, observation) {
         this.id_order = id_order;
+        console.error(fone)
         this.fone = fone;
         this.email = email;
         this.signal_value = signal_value;

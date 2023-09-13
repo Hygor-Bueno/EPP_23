@@ -43,7 +43,7 @@ export default function Login() {
         const user = { user: username, password: password }
         let response = await connection.postLogin(user, "CCPP/Login.php");
         if (!response.error) {
-            util.loadLocalStorage(response.data);
+            await util.loadLocalStorage(response.data);
             navigate("/");
         } else {
             let verify = response.message.includes('Default password');

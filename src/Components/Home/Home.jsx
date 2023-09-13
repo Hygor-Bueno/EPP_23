@@ -17,6 +17,7 @@ import PrintOrder from '../PrintOrder';
 export default function Home() {
     const util = new Util();
     const connection = new Connection();
+    const storeUser = `${localStorage.getItem('store')}_${localStorage.getItem('num_store')}`;
     const [menusList, setMenusList] = useState([]);
     const [riceList, setRiceList] = useState([]);
     const [dessertsList, setDessertsList] = useState([]);
@@ -60,10 +61,7 @@ export default function Home() {
     useEffect(() => {
         async function loadInit() {
             try {
-                // let loja = "Santo Andre";
-                // console.log(loja.replace(/ /g, "-"));
-                // `&deliveryStore=${'Interlagos_1'}`
-                let orderList = loadsFast("", 'EPP/Order.php');
+                let orderList = loadsFast(`&deliveryStore=${storeUser}`, 'EPP/Order.php');
                 let storeLists = loadsFast('&company_id=1', 'CCPP/Shop.php');
                 let menuList = loadsFast(null, 'EPP/Menu.php');
                 let logMenu = loadsFast(null, 'EPP/LogMenu.php');
@@ -95,8 +93,8 @@ export default function Home() {
             return result;
         }
         loadInit();
-    }, []);
-    // useEffect(() => { console.log(logSales) }, [logSales]);
+    }, [storeUser]);
+    useEffect(() => { console.log(foneClient) }, [foneClient]);
 
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
@@ -128,7 +126,7 @@ export default function Home() {
                     nameClient={nameClient}
                     setNameClient={formatName}
                     foneClient={foneClient}
-                    setFoneClient={setFoneClient}
+                    setFoneClient={changeFone}
                     email={email}
                     setEmail={setEmail}
                     dateOrder={dateOrder}
@@ -194,6 +192,11 @@ export default function Home() {
         )
     }
 
+    function changeFone(fone) {
+        // Remove todos os caracteres que não sejam dígitos
+        const numbersOnly = fone.replace(/[^0-9]/g, '');
+        setFoneClient(numbersOnly);
+      }
     function buttonsForm() {
         return (
             <div id="divGroupButton">
@@ -257,7 +260,7 @@ export default function Home() {
         return item;
     }
     async function postOrder() {
-        let order = new Order(null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, '0', localStorage.getItem('num_store'), localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
+        let order = new Order(null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, '0', storeUser, localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
         let req = await connection.post(order, "EPP/Order.php");
         return req;
     }
