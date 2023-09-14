@@ -94,7 +94,7 @@ export default function Home() {
         }
         loadInit();
     }, [storeUser]);
-    useEffect(() => { console.log(foneClient) }, [foneClient]);
+    // useEffect(() => { console.log(foneClient) }, [foneClient]);
 
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
@@ -196,7 +196,7 @@ export default function Home() {
         // Remove todos os caracteres que não sejam dígitos
         const numbersOnly = fone.replace(/[^0-9]/g, '');
         setFoneClient(numbersOnly);
-      }
+    }
     function buttonsForm() {
         return (
             <div id="divGroupButton">
@@ -417,7 +417,6 @@ export default function Home() {
             let log = idItem.trim() && await connection.get(`&epp_id_order=${idItem}`, "EPP/LogSale.php");
             let order = idItem.trim() && await connection.get(`&id_order=${idItem}`, "EPP/Order.php");
             let logSales = idItem.trim() && await loadLogSale(log.data || []);
-            // util.formatJsonForSelect(props.riceList, "idProduct", "description")
             loadRiceDessert(order.data[0].typeRice, order.data[0].dessert);
             if (!log || log.error) throw new Error(log.message);
             if (!order || order.error) throw new Error(order.message);
@@ -430,7 +429,8 @@ export default function Home() {
             setDateOrder(order.data[0].dateOrder || "");
             setObservation(order.data[0].obs || "");
             setSignal(parseFloat(order.data[0].signalValue).toFixed(2) || "");
-            setTotal(order.data[0].total || "");
+            setTotal(util.maskMoney(order.data[0].total) || "");
+            //setTotal(parseFloat(order.data[0].total).toFixed(2) || ""); // validar caso a maskara de erro temos que mudar.
             setPedding(util.maskMoney(order.data[0].total - order.data[0].signalValue) || '');
             setDateDelivery(order.data[0].deliveryDate || "");
             setHoursDelivery(order.data[0].deliveryHour || "");
@@ -449,7 +449,6 @@ export default function Home() {
         let rice = await util.getConsincoProduct(idRice);
         let dessert = await util.getConsincoProduct(idDessert);
         let listRice = [], listDessert = [];
-
         if (rice) {
             listRice.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCREDUZIDA"] });
         } else {
@@ -469,19 +468,74 @@ export default function Home() {
     }
     async function loadLogSale(array) {
         let result = { error: false, message: '', data: [] };
-        for await (const item of array) {
+        let req = [];
+        let sales = [];
+        array.forEach(item => {
             const sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
-            let getItem = await sale.requestItem();
-            if(!sale.getMeasure()){
-                let product = await sale.getProductEPP();
-                sale.setMeasure(product.data[0].measure);
-            }
-            if (getItem.error) {
-                result.error = true;
-                result.message += `  Cód. Produto: ${item.eppIdProduct};`;
-            }
-            result.data.push(sale);
-        }
+            req.push(sale.requestItem());
+            sales.push(sale);
+        })
+        await Promise.all(req);
+        result = await includeMeasure(sales)
         return result;
     }
+
+    async function includeMeasure(array) {
+        let response = { error: false }
+        try {
+            let req = [];
+            let sales = [];
+            array.forEach(sale => {
+                if (!sale.getMeasure()) {
+                    req.push(sale.getProductEPP());
+                }
+            })
+            let result = await Promise.all(req);
+            result.forEach(item => {
+                if (!item.error) {
+                    array.forEach(sale => {
+                        if (parseInt(sale.epp_id_product) === parseInt(item.data[0].id_product)) {
+                            sale.setMeasure(item.data[0].measure);
+                            sales.push(sale)
+                        }
+                    });
+                }
+            });
+            let error = errorMeasure(result);
+            if (error.error) throw new Error(error.message);
+            response.data = sales;
+            return response;
+        } catch (error) {
+            response.error = true;
+            response.message = error.toString();
+            return response;
+        }
+    }
+    function errorMeasure(array) {
+        let error = { error: false, message: '' };
+        array.forEach(item => {
+            if (item.error) {
+                error.error = true;
+                error.message = 'Um ou mais itens não carregaram as Uniades de medida corretamente!'
+            }
+        });
+        return error;
+    }
+    // async function loadLogSale(array) {
+    //     let result = { error: false, message: '', data: [] };
+    //     for await (const item of array) {
+    //         const sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
+    //         let getItem = await sale.requestItem();
+    //         if(!sale.getMeasure()){
+    //             let product = await sale.getProductEPP();
+    //             sale.setMeasure(product.data[0].measure);
+    //         }
+    //         if (getItem.error) {
+    //             result.error = true;
+    //             result.message += `  Cód. Produto: ${item.eppIdProduct};`;
+    //         }
+    //         result.data.push(sale);
+    //     }
+    //     return result;
+    // }
 }
