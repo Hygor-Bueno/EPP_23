@@ -17,7 +17,7 @@ import PrintOrder from '../PrintOrder';
 export default function Home() {
     const util = new Util();
     const connection = new Connection();
-    const storeUser = `${localStorage.getItem('store')}_${localStorage.getItem('num_store')}`;
+    const storeUser = (localStorage.store && localStorage.num_store) ? `${localStorage.getItem('store').replace(/ /g, '-')}_${localStorage.getItem('num_store')}` : null;
     const [menusList, setMenusList] = useState([]);
     const [riceList, setRiceList] = useState([]);
     const [dessertsList, setDessertsList] = useState([]);
@@ -94,7 +94,7 @@ export default function Home() {
         }
         loadInit();
     }, [storeUser]);
-    // useEffect(() => { console.log(foneClient) }, [foneClient]);
+    // useEffect(() => { console.log(ordersList) }, [ordersList]);
 
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
@@ -222,6 +222,7 @@ export default function Home() {
                         hoursDelivery={hoursDelivery}
                         localDelivery={localDelivery}
                         logSales={logSales}
+                        observation={observation}
                     />
                 </div>
             </div>
@@ -429,8 +430,8 @@ export default function Home() {
             setDateOrder(order.data[0].dateOrder || "");
             setObservation(order.data[0].obs || "");
             setSignal(parseFloat(order.data[0].signalValue).toFixed(2) || "");
-            setTotal(util.maskMoney(order.data[0].total) || "");
-            //setTotal(parseFloat(order.data[0].total).toFixed(2) || ""); // validar caso a maskara de erro temos que mudar.
+            // setTotal(util.maskMoney(order.data[0].total) || "");
+            setTotal(parseFloat(order.data[0].total).toFixed(2) || ""); // validar caso a maskara de erro temos que mudar.
             setPedding(util.maskMoney(order.data[0].total - order.data[0].signalValue) || '');
             setDateDelivery(order.data[0].deliveryDate || "");
             setHoursDelivery(order.data[0].deliveryHour || "");

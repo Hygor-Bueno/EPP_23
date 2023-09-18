@@ -15,7 +15,6 @@ export default function AddItems(props) {
     const [logSales, setLogSales] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
 
-
     useEffect(() => {
         let connection = new Connection();
         let localUtil = new Util();
