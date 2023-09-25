@@ -97,6 +97,7 @@ export class Connection {
         this.validationParams(params, pathFile, err);
         await this.settingUrl(`/Controller/${this.pathFile}?app_id=14&AUTH=`);
         let req;
+        console.log(this.URL)
         await fetch(this.URL, {
             method: "DELETE",
             body: JSON.stringify(this.params)

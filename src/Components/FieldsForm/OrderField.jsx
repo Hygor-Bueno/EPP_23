@@ -113,7 +113,12 @@ export default function OrderField(props) {
     }
     async function getPluMenu() {
         if (props.menu !== "" && props.rice !== "" && props.dessert !== "") {
-            let items = props.logsMenusList.filter(itemMenu => (itemMenu.logMenu.eppIdMenu === props.menu && (itemMenu.logMenu.eppIdProduct === props.rice || itemMenu.logMenu.eppIdProduct === props.dessert)) && itemMenu);
+            let items = props.logsMenusList.filter(
+                itemMenu => (
+                    itemMenu.logMenu.eppIdMenu === props.menu && 
+                    (itemMenu.logMenu.eppIdProduct === props.rice || itemMenu.logMenu.eppIdProduct === props.dessert)
+                ) && itemMenu
+            );
             let plu = equalsItems(items, "pluMenu");
             props.setPluMenu(plu.pluMenu);
             await addItemLogSale(plu);
@@ -170,11 +175,7 @@ export default function OrderField(props) {
                 let req = await log.addItem();
                 if (req.error) throw new Error(req.message);
                 let exist = existItem(list);
-                if (exist.exist) {
-                    list[exist.position] = log;
-                } else {
-                    list.push(log);
-                }
+                exist.exist ? list[exist.position] = log : list.push(log);
                 props.setLogSales([...list]);
             }
         } catch (error) {

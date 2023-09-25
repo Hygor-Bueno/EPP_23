@@ -107,6 +107,7 @@ export default function AddItems(props) {
                                     if (resp.error) throw new Error(resp.message);
                                     props.setLogSales(logSales);
                                     props.setModAdditional(false);
+                                    props.setUpProductLogs(true);
                                 } catch (error) {
                                     alert(error)
                                 }

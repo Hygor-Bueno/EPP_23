@@ -107,4 +107,14 @@ export default class Util {
     isEquals(objJsonOne, objJsonTwo) {
         return JSON.stringify(objJsonOne) === JSON.stringify(objJsonTwo);
     }
+
+    changeItemList(list,keyItem,idItem,newItem) { 
+        let response = list;
+        response.forEach((item, index) => {
+            if (item[keyItem] == idItem) {
+                response[index] = newItem;
+            }
+        });
+        return response;
+    }
 }

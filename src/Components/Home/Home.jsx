@@ -25,6 +25,7 @@ export default function Home() {
     const [storeList, setStoreList] = useState([]);
     const [logsMenusList, setLogsMenusList] = useState([]);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [upProductLogs, setUpProductLogs] = useState(false);
     const [paramsModal, setParamsModal] = useState(
         {
             type: "",
@@ -57,6 +58,7 @@ export default function Home() {
 
     const [logSales, setLogSales] = useState([]);
     const [modAdditional, setModAdditional] = useState(false);
+    const [deliveredOrder, setDeliveredOrder] = useState('0');
 
     useEffect(() => {
         async function loadInit() {
@@ -95,7 +97,6 @@ export default function Home() {
         loadInit();
     }, [storeUser]);
     // useEffect(() => { console.log(ordersList) }, [ordersList]);
-
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
             <ModalDefault
@@ -116,6 +117,7 @@ export default function Home() {
                     setModAdditional={setModAdditional}
                     logSales={logSales}
                     signal={signal}
+                    setUpProductLogs={setUpProductLogs}
                 />
             }
             <form className="col-5 p-1">
@@ -182,7 +184,7 @@ export default function Home() {
                 <OrderCardList ordersList={ordersList} load={load} />
             </section>
         </div>
-    )
+    );
     function itemForm(label, placInput, titleInput, typeInput, divLength, value, funSetValue, enabled, funAssistant, mandatory) {
         return (
             <div className={`col-${divLength} my-1 d-flex flex-column`}>
@@ -202,12 +204,12 @@ export default function Home() {
             <div id="divGroupButton">
                 <div id="divGroupButtonLeft">
                     <button className={orderCod ? "opacity-25" : "opacity-100"} disabled={orderCod ? true : false} type="button" onClick={() => { create() }} title="salvar pedido.">Inserir</button>
-                    <button type="button" onClick={() => { update() }} title="salvar Alteração.">Alterar</button>
-                    <button type="button" onClick={() => { del() }} title="Excluir pedido.">Excluir</button>
+                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { update() }} title="salvar Alteração.">Alterar</button>
+                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { del() }} title="Excluir pedido.">Excluir</button>
                     <button type="button" onClick={() => { clean() }} title="Limpar formulário.">Limpar</button>
                 </div>
                 <div id="divGroupButtonRigth">
-                    <button type="button" onClick={() => { delivered() }}><FontAwesomeIcon icon="fa-truck" /></button>
+                    <button className={orderCod ? "opacity-100" : "opacity-50"} disabled={orderCod ? false : true} type="button" onClick={() => { delivered() }}><FontAwesomeIcon icon="fa-truck" /></button>
                     <PrintOrder
                         orderCod={orderCod}
                         nameClient={nameClient}
@@ -261,9 +263,19 @@ export default function Home() {
         return item;
     }
     async function postOrder() {
-        let order = new Order(null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, '0', storeUser, localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
+        let order = assembleOrder();
         let req = await connection.post(order, "EPP/Order.php");
         return req;
+    }
+    async function updateOrder() {
+        let order = assembleOrder();
+        let req = await connection.put(order, "EPP/Order.php");
+        cleanPage();
+        return req;
+    }
+    function assembleOrder() {
+        let order = new Order(orderCod ? orderCod : null, foneClient, email, signal, pluMenu, menu, rice, dessert, nameClient, logSales, deliveredOrder, storeUser, localStorage.getItem('id'), dateOrder, dateDelivery, hoursDelivery, localDelivery, total, observation);
+        return order;
     }
     async function postLogs(id_order) {
         let req = [];
@@ -274,6 +286,8 @@ export default function Home() {
         // await Promise.all(req).then(value => {
         //     console.log(value);
         // });
+        let result = await Promise.all(req);
+        return result;
     }
     function postsFast(params, path) {
         const connection = new Connection();
@@ -304,7 +318,28 @@ export default function Home() {
         })
     }
     async function update() {
-        console.log("Atualizar")
+        try {
+            let reqOrder = await updateOrder();
+            // if (reqOrder.error) throw new Error(reqOrder.message);
+            console.log(`Pedido => `,reqOrder);
+            if (upProductLogs) {
+                let delLogOrder = await connection.delete({epp_id_order:orderCod}, 'EPP/LogSale.php');
+                if (!delLogOrder.error) { 
+                    let addLosg = await postLogs(orderCod); 
+                    console.warn(addLosg);
+                }
+                console.warn(delLogOrder);
+            }
+
+            let order = maskItem(orderCod);
+            let newOrdersList = util.changeItemList(ordersList, 'idOrder', orderCod, order);
+            setOrdersList([...newOrdersList]);
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    async function deleteSaleLogs() {
+
     }
     async function del() {
         try {
@@ -357,7 +392,6 @@ export default function Home() {
             startModalError(error);
         }
         clean();
-
     }
     function selectForm(label, divLength, list, defaultValue, funSetValue, funAssistant, mandatory) {
         return (
@@ -406,6 +440,8 @@ export default function Home() {
         cleanOrder();
         setLogSales([]);
         setModAdditional(false);
+        setUpProductLogs(false);
+        setDeliveredOrder('0');
     }
     function cleanOrder() {
         setPluMenu("");
@@ -422,7 +458,6 @@ export default function Home() {
             if (!log || log.error) throw new Error(log.message);
             if (!order || order.error) throw new Error(order.message);
             if (!logSales || logSales.error) throw new Error(logSales.message);
-
             setOrderCod(order.data[0].idOrder);
             setNameClient(order.data[0].nameClient);
             setFoneClient(order.data[0].fone || "");
@@ -430,15 +465,14 @@ export default function Home() {
             setDateOrder(order.data[0].dateOrder || "");
             setObservation(order.data[0].obs || "");
             setSignal(parseFloat(order.data[0].signalValue).toFixed(2) || "");
-            // setTotal(util.maskMoney(order.data[0].total) || "");
-            setTotal(parseFloat(order.data[0].total).toFixed(2) || ""); // validar caso a maskara de erro temos que mudar.
+            setTotal(parseFloat(order.data[0].total).toFixed(2) || "");
             setPedding(util.maskMoney(order.data[0].total - order.data[0].signalValue) || '');
             setDateDelivery(order.data[0].deliveryDate || "");
             setHoursDelivery(order.data[0].deliveryHour || "");
             setLocalDelivery(order.data[0].deliveryStore || "");
             setPluMenu(order.data[0].pluMenu || "");
             setMenu(order.data[0].idMenu || "");
-
+            setDeliveredOrder(order.data[0].delivered);
             setLogSales(logSales.data);
             setModAdditional(false);
         } catch (error) {
@@ -522,21 +556,4 @@ export default function Home() {
         });
         return error;
     }
-    // async function loadLogSale(array) {
-    //     let result = { error: false, message: '', data: [] };
-    //     for await (const item of array) {
-    //         const sale = new LogSales(item.eppIdLog, item.eppIdProduct, item.eppIdOrder, item.quantity, item.price, item.menu, null, null, item.menu === '1' ? true : false);
-    //         let getItem = await sale.requestItem();
-    //         if(!sale.getMeasure()){
-    //             let product = await sale.getProductEPP();
-    //             sale.setMeasure(product.data[0].measure);
-    //         }
-    //         if (getItem.error) {
-    //             result.error = true;
-    //             result.message += `  Cód. Produto: ${item.eppIdProduct};`;
-    //         }
-    //         result.data.push(sale);
-    //     }
-    //     return result;
-    // }
 }

@@ -21,7 +21,6 @@ export class Order {
 
     constructor(id_order, fone, email, signal_value, plu_menu, id_menu, type_rice, dessert, name_client, logSales, delivered, store, user_id, date_order, delivery_date, delivery_hour, delivery_store, total, observation) {
         this.id_order = id_order;
-        console.error(fone)
         this.fone = fone;
         this.email = email;
         this.signal_value = signal_value;
@@ -43,7 +42,6 @@ export class Order {
     }
     formateAdditional(logSales) {
         let result = '';
-        console.log(logSales);
         logSales.forEach(item => {
                 result += `Cód.: ${item.epp_id_product}.\nDescrição: ${item.getDescription()} - ${item.quantity} ${item.getMeasure()}. (Preço unit / kg R$ ${item.getPrice_base()})\nSubtotal:R$ ${item.price}\n\n`
         });
