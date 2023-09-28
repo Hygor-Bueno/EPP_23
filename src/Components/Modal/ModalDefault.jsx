@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './ModalDefault.css';
+import { useEffect } from 'react';
+import Util from '../../Util/Util';
 
-export default function Modal(props) {
+export default function ModalDefault(props) {
+
   return props.isOpen && (
     <div className="modalContainer">
       <div className="modal">
@@ -11,7 +14,9 @@ export default function Modal(props) {
             <FontAwesomeIcon onClick={() => { props.onClose(false) }} icon='fa-circle-xmark' className='text-danger' />
           </header>
           <section>
-            {props.children}
+            <div>
+              <p>{props.message}</p>
+            </div>
           </section>
           {props.isConfirmation ?
             <footer>

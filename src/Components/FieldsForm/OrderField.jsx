@@ -123,6 +123,7 @@ export default function OrderField(props) {
             props.setPluMenu(plu.pluMenu);
             await addItemLogSale(plu);
             reloadTotal();
+            props.setUpProductLogs(true);
         }
     }
 

@@ -13,6 +13,7 @@ import LogSales from '../../Class/LogSale';
 import ModalDefault from '../Modal/ModalDefault';
 import './Home.css';
 import PrintOrder from '../PrintOrder';
+import Loading from '../loading/Loading';
 
 export default function Home() {
     const util = new Util();
@@ -59,9 +60,11 @@ export default function Home() {
     const [logSales, setLogSales] = useState([]);
     const [modAdditional, setModAdditional] = useState(false);
     const [deliveredOrder, setDeliveredOrder] = useState('0');
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        async function loadInit() {
+        async function loadInit() {            
+            setLoading(true);
             try {
                 let orderList = loadsFast(`&deliveryStore=${storeUser}`, 'EPP/Order.php');
                 let storeLists = loadsFast('&company_id=1', 'CCPP/Shop.php');
@@ -80,6 +83,7 @@ export default function Home() {
             } catch (err) {
                 console.log(err);
             }
+            setLoading(false);
         }
         function loadsFast(params, path) {
             const connection = new Connection();
@@ -96,9 +100,12 @@ export default function Home() {
         }
         loadInit();
     }, [storeUser]);
-    // useEffect(() => { console.log(ordersList) }, [ordersList]);
+    useEffect(() => { console.log(logSales) }, [logSales]);
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
+            <Loading
+                isOpen={loading}
+            />
             <ModalDefault
                 isOpen={isOpenModal}
                 {...paramsModal}
@@ -118,6 +125,7 @@ export default function Home() {
                     logSales={logSales}
                     signal={signal}
                     setUpProductLogs={setUpProductLogs}
+                    setLoading={setLoading}
                 />
             }
             <form className="col-5 p-1">
@@ -166,6 +174,7 @@ export default function Home() {
                     cleanOrder={cleanOrder}
                     setParamsModal={setParamsModal}
                     setIsOpenModal={setIsOpenModal}
+                    setUpProductLogs={setUpProductLogs}
                 />
                 <DeliveryField
                     itemForm={itemForm}
@@ -181,7 +190,7 @@ export default function Home() {
                 {buttonsForm()}
             </form>
             <section className="col p-1">
-                <OrderCardList ordersList={ordersList} load={load} />
+                <OrderCardList loading={loading} setLoading={setLoading} ordersList={ordersList} load={load} />
             </section>
         </div>
     );
@@ -204,12 +213,12 @@ export default function Home() {
             <div id="divGroupButton">
                 <div id="divGroupButtonLeft">
                     <button className={orderCod ? "opacity-25" : "opacity-100"} disabled={orderCod ? true : false} type="button" onClick={() => { create() }} title="salvar pedido.">Inserir</button>
-                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { update() }} title="salvar Alteração.">Alterar</button>
-                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { del() }} title="Excluir pedido.">Excluir</button>
+                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal('Alert',"Atenção!",'Você está prestes a editar esse pedido, você tem certeza disso?',update) }} title="salvar Alteração.">Alterar</button>
+                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal('Alert',"Alerta de Exclusão!",'Você está prestes a excluir esse pedido, você tem certeza disso?',deleteOrder)}} title="Excluir pedido.">Excluir</button>
                     <button type="button" onClick={() => { clean() }} title="Limpar formulário.">Limpar</button>
                 </div>
                 <div id="divGroupButtonRigth">
-                    <button className={orderCod ? "opacity-100" : "opacity-50"} disabled={orderCod ? false : true} type="button" onClick={() => { delivered() }}><FontAwesomeIcon icon="fa-truck" /></button>
+                    <button className={orderCod ? "opacity-100" : "opacity-50"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal("Alert","Atenção!",'Deseja mesmo realizar essa ação?',setStatusDelivered) }}><FontAwesomeIcon icon="fa-truck" /></button>
                     <PrintOrder
                         orderCod={orderCod}
                         nameClient={nameClient}
@@ -232,6 +241,7 @@ export default function Home() {
     }
 
     async function create() {
+        setLoading(true);
         try {
             let fields = mandatoryFields();
             borderError(fields);
@@ -245,9 +255,11 @@ export default function Home() {
             let newListOrder = ordersList;
             newListOrder.push(maskItem(order.last_id));
             setOrdersList([...newListOrder]);
+            messageModal('success','Sucesso!','Pedido Inserido com sucesso.')
         } catch (error) {
             startModalError(error);
         }
+        setLoading(false);
     }
     function maskItem(idOrder) {
         let item = {};
@@ -318,30 +330,35 @@ export default function Home() {
         })
     }
     async function update() {
+        setLoading(true);
         try {
+            let fields = mandatoryFields();
+            borderError(fields);
+            let values = validiteValues();
+            if (fields.length > 0) throw new Error("Preencha todos os campos obrigatórios.");
+            if (values.error) throw new Error(values.message);
             let reqOrder = await updateOrder();
-            // if (reqOrder.error) throw new Error(reqOrder.message);
-            console.log(`Pedido => `,reqOrder);
+            if (reqOrder.error) throw new Error(reqOrder.message);
             if (upProductLogs) {
-                let delLogOrder = await connection.delete({epp_id_order:orderCod}, 'EPP/LogSale.php');
-                if (!delLogOrder.error) { 
-                    let addLosg = await postLogs(orderCod); 
-                    console.warn(addLosg);
+                let delLogOrder = await connection.delete({ epp_id_order: orderCod }, 'EPP/LogSale.php');
+                if (!delLogOrder.error) {
+                    let addLosg = await postLogs(orderCod);
+                    if (addLosg.error) throw new Error(addLosg.message);
+                } else {
+                    throw new Error(delLogOrder.message);
                 }
-                console.warn(delLogOrder);
             }
-
             let order = maskItem(orderCod);
             let newOrdersList = util.changeItemList(ordersList, 'idOrder', orderCod, order);
             setOrdersList([...newOrdersList]);
         } catch (error) {
-            console.error(error)
+            startModalError(error);
         }
+        setLoading(false);
     }
-    async function deleteSaleLogs() {
 
-    }
-    async function del() {
+    async function deleteOrder() {
+        setLoading(true);
         try {
             let cancel = await connection.put({ id_order: orderCod, delivered: 2 }, "EPP/Order.php");
             if (cancel.error) throw new Error(cancel.message);
@@ -354,6 +371,7 @@ export default function Home() {
             startModalError(error);
         }
         clean();
+        setLoading(false);
     }
     function startModalError(error) {
         setIsOpenModal(true);
@@ -368,14 +386,24 @@ export default function Home() {
     function clean() {
         cleanPage();
     }
-    async function delivered() {
+
+    async function confirmModal(typeModal,titleModal,messageModal,funcConfirm) {
         setIsOpenModal(true);
         setParamsModal({
-            type: "Alert",
-            message: 'Deseja mesmo realizar essa ação?',
-            title: "Atenção!",
+            type: typeModal,
+            message: messageModal,
+            title: titleModal,
             isConfirmation: true,
-            onConfirm: setStatusDelivered
+            onConfirm: funcConfirm
+        });
+    }
+    async function messageModal(typeModal,titleModal,messageModal) {
+        setIsOpenModal(true);
+        setParamsModal({
+            type: typeModal,
+            message: messageModal,
+            title: titleModal,
+            isConfirmation: false
         });
     }
 
@@ -450,6 +478,7 @@ export default function Home() {
         setDessert("");
     }
     async function load(idItem) {
+        setLoading(true);
         try {
             let log = idItem.trim() && await connection.get(`&epp_id_order=${idItem}`, "EPP/LogSale.php");
             let order = idItem.trim() && await connection.get(`&id_order=${idItem}`, "EPP/Order.php");
@@ -479,6 +508,7 @@ export default function Home() {
             startModalError(error);
             cleanOrder();
         }
+        setLoading(false);
     }
     async function loadRiceDessert(idRice, idDessert) {
         let rice = await util.getConsincoProduct(idRice);

@@ -99,7 +99,14 @@ export class Connection {
         let req;
         console.log(this.URL)
         await fetch(this.URL, {
+            // method: "DELETE",
             method: "DELETE",
+            // headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Max-Age": "86400"
+            },
             body: JSON.stringify(this.params)
         }).then((response) => response.json())
             .then((body) => {

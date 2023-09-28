@@ -19,6 +19,7 @@ export default function AddItems(props) {
         let connection = new Connection();
         let localUtil = new Util();
         async function init() {
+            props.setLoading(true);
             try {
                 const result = await connection.get('', "EPP/Product.php");
                 const cat = await connection.get("&category=1", "EPP/Product.php");
@@ -30,6 +31,7 @@ export default function AddItems(props) {
             } catch (err) {
                 console.log(err);
             }
+            props.setLoading(false);
         }
         function addCheck(array) {
             let result = []
@@ -51,11 +53,11 @@ export default function AddItems(props) {
         }
         init();
     }, [props.logSales]);
-    
+
     // useEffect(() => {
     //     console.log(subtotal, logSales)
     // }, [subtotal, logSales]);
-    
+
     return (
         <div id='divAddItems' className="" role="dialog">
             <div>

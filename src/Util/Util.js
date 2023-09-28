@@ -117,4 +117,13 @@ export default class Util {
         });
         return response;
     }
+
+    readingTime(mensagemErro) {
+        console.log(mensagemErro);
+        const wordsPerMinute = 200;
+        const wordsInMessage = mensagemErro.split(/\s+/).length;
+        const estimatedTime = (wordsInMessage / wordsPerMinute) * 60000;
+        console.log(estimatedTime);
+        return estimatedTime;
+    }
 }
