@@ -60,10 +60,13 @@ export default function Home() {
     const [logSales, setLogSales] = useState([]);
     const [modAdditional, setModAdditional] = useState(false);
     const [deliveredOrder, setDeliveredOrder] = useState('0');
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+
+    const [isPrintOrder, setIsPrintOrder] = useState(false);
+    const [copyNumber, setCopyNumber] = useState(1);
 
     useEffect(() => {
-        async function loadInit() {            
+        async function loadInit() {
             setLoading(true);
             try {
                 let orderList = loadsFast(`&deliveryStore=${storeUser}`, 'EPP/Order.php');
@@ -75,9 +78,9 @@ export default function Home() {
                     if (value[1].error) throw new Error(value[1].message);
                     if (value[2].error && !value[2].message.toUpperCase().includes('NO DATA')) throw new Error(value[2].message);
                     setStoreList(sortArrayStores(value[0].data));
-                    value[1].data.unshift({ idMenu: "0", description: "Avulso", status: "1" })
+                    value[1].data.unshift({ idMenu: "0", description: "Avulso", status: "1" });
                     setMenusList(value[1].data);
-                    setOrdersList(value[2].data || [])
+                    setOrdersList(value[2].data || []);
                     setLogsMenusList(value[3].data);
                 });
             } catch (err) {
@@ -100,9 +103,10 @@ export default function Home() {
         }
         loadInit();
     }, [storeUser]);
-    useEffect(() => { console.log(logSales) }, [logSales]);
+    useEffect(() => { console.log(deliveredOrder) }, [deliveredOrder]);
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
+            {quantityOrder()}
             <Loading
                 isOpen={loading}
             />
@@ -111,11 +115,7 @@ export default function Home() {
                 {...paramsModal}
                 onCancel={setIsOpenModal}
                 onClose={setIsOpenModal}
-            >
-                <div>
-                    <p>{paramsModal.message}</p>
-                </div>
-            </ModalDefault>
+            />
             {modAdditional &&
                 <AddItems
                     itemForm={itemForm}
@@ -126,6 +126,8 @@ export default function Home() {
                     signal={signal}
                     setUpProductLogs={setUpProductLogs}
                     setLoading={setLoading}
+                    startModalError={startModalError}
+                    confirmModal={confirmModal}
                 />
             }
             <form className="col-5 p-1">
@@ -141,6 +143,7 @@ export default function Home() {
                     setEmail={setEmail}
                     dateOrder={dateOrder}
                     setDateOrder={setDateOrder}
+                    deliveredOrder={deliveredOrder}
                 />
                 <OrderField
                     itemForm={itemForm}
@@ -208,17 +211,48 @@ export default function Home() {
         const numbersOnly = fone.replace(/[^0-9]/g, '');
         setFoneClient(numbersOnly);
     }
+    function quantityOrder() {
+        return (
+            isPrintOrder &&
+            <div id='divModalQuantityPrint' className='d-flex align-items-center justify-content-center'>
+                <div className='d-flex flex-column bg-white col-4 rounded h-25'>
+                    <div className='col-12 d-flex flex-row align-items-center justify-content-between px-2'>
+                        <h3 >Quantidade de cópias</h3>
+                        <button type='button' className='btn m-2' title='Sair da seleção de números de cópias.' onClick={() => { setIsPrintOrder(false); setCopyNumber(1) }}>
+                            <FontAwesomeIcon icon={'fa fa-right-from-bracket'} size='xl' />
+                        </button>
+                    </div>
+                    <div className='d-flex align-items-center justify-content-around h-100'>
+                        <button type='button' className='btn btn-danger col-2' onClick={() => { let cont = copyNumber; setCopyNumber(cont - 1); }}>-</button>
+                        <div className='col-6'>
+                            <input type='number' step='1' value={copyNumber} disabled={true} className='form-control text-center' />
+                        </div>
+                        <button type='button' className='btn btn-success col-2' onClick={() => { let cont = copyNumber; setCopyNumber(cont + 1); }}>+</button>
+                    </div>
+                    <div className='d-flex align-items-center justify-content-center'>
+                        <button type="button" title='Imprimir' className='btn btn-primary m-2' onClick={() => copyOrder()}>Ok</button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    function copyOrder(){
+        for (let index = 0; index < copyNumber; index++) {
+            document.getElementById('buttonPrintOrder').click();
+        }
+        setCopyNumber(1);
+    }
     function buttonsForm() {
         return (
             <div id="divGroupButton">
                 <div id="divGroupButtonLeft">
                     <button className={orderCod ? "opacity-25" : "opacity-100"} disabled={orderCod ? true : false} type="button" onClick={() => { create() }} title="salvar pedido.">Inserir</button>
-                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal('Alert',"Atenção!",'Você está prestes a editar esse pedido, você tem certeza disso?',update) }} title="salvar Alteração.">Alterar</button>
-                    <button className={orderCod ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal('Alert',"Alerta de Exclusão!",'Você está prestes a excluir esse pedido, você tem certeza disso?',deleteOrder)}} title="Excluir pedido.">Excluir</button>
+                    <button className={orderCod && parseInt(deliveredOrder) === 0 ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal('Alert', "Atenção!", 'Você está prestes a editar esse pedido, você tem certeza disso?', update) }} title="salvar Alteração.">Alterar</button>
+                    <button className={orderCod && parseInt(deliveredOrder) === 0 ? "opacity-100" : "opacity-25"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal('Alert', "Alerta de Exclusão!", 'Você está prestes a excluir esse pedido, você tem certeza disso?', deleteOrder) }} title="Excluir pedido.">Excluir</button>
                     <button type="button" onClick={() => { clean() }} title="Limpar formulário.">Limpar</button>
                 </div>
                 <div id="divGroupButtonRigth">
-                    <button className={orderCod ? "opacity-100" : "opacity-50"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal("Alert","Atenção!",'Deseja mesmo realizar essa ação?',setStatusDelivered) }}><FontAwesomeIcon icon="fa-truck" /></button>
+                    <button className={orderCod && parseInt(deliveredOrder) === 0 ? "opacity-100" : "opacity-50"} disabled={orderCod ? false : true} type="button" onClick={() => { confirmModal("Alert", "Atenção!", 'Deseja mesmo realizar essa ação?', setStatusDelivered) }}><FontAwesomeIcon icon="fa-truck" /></button>
                     <PrintOrder
                         orderCod={orderCod}
                         nameClient={nameClient}
@@ -234,6 +268,11 @@ export default function Home() {
                         localDelivery={localDelivery}
                         logSales={logSales}
                         observation={observation}
+                        deliveredOrder={deliveredOrder}
+                        setIsPrintOrder={setIsPrintOrder}
+                        isPrintOrder={isPrintOrder}
+                        copyNumber={copyNumber}
+
                     />
                 </div>
             </div>
@@ -255,12 +294,14 @@ export default function Home() {
             let newListOrder = ordersList;
             newListOrder.push(maskItem(order.last_id));
             setOrdersList([...newListOrder]);
-            messageModal('success','Sucesso!','Pedido Inserido com sucesso.')
+            messageModal('success', 'Sucesso!', 'Pedido Inserido com sucesso.');
+            document.getElementById('buttonPrintOrder').click();
         } catch (error) {
             startModalError(error);
         }
         setLoading(false);
     }
+
     function maskItem(idOrder) {
         let item = {};
         item.delivered = 0;
@@ -387,7 +428,7 @@ export default function Home() {
         cleanPage();
     }
 
-    async function confirmModal(typeModal,titleModal,messageModal,funcConfirm) {
+    async function confirmModal(typeModal, titleModal, messageModal, funcConfirm) {
         setIsOpenModal(true);
         setParamsModal({
             type: typeModal,
@@ -397,7 +438,7 @@ export default function Home() {
             onConfirm: funcConfirm
         });
     }
-    async function messageModal(typeModal,titleModal,messageModal) {
+    async function messageModal(typeModal, titleModal, messageModal) {
         setIsOpenModal(true);
         setParamsModal({
             type: typeModal,

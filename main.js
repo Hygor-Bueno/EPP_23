@@ -12,7 +12,7 @@ function createWindow() {
       preload: path.join(__dirname, "preloader.js"),
     },
   });
-  win.loadURL("http://localhost:3000");
+  win.loadURL("http://192.168.0.99:71/GLOBAL/View/EPP_XXIII/#/login");
 }
 
 app.whenReady().then(() => {

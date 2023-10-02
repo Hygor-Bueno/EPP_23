@@ -6,7 +6,21 @@ export default function PrintOrder(props) {
     const storeUser = `${localStorage.getItem('store')}_${localStorage.getItem('num_store')}`;
     const util = new Util();
     return (
-        <button className={props.orderCod ? "opacity-100" : "opacity-50"} disabled={props.orderCod ? false : true} type="button" onClick={() => { print() }}><FontAwesomeIcon icon="fa-print" /></button>
+        <button
+            id='buttonPrintOrder'
+            className={props.orderCod && parseInt(props.deliveredOrder) === 0 ? `opacity-100 ${props.classBtn}` : "opacity-50"}
+            type="button"
+            onClick={() => {
+                if (props.isPrintOrder) {
+                    print();
+                    props.setIsPrintOrder(false);
+                } else {
+                    props.setIsPrintOrder(true);
+                };
+            }}
+        >
+            <FontAwesomeIcon icon="fa-print" />
+        </button>
     );
     async function print() {
         let additionalItems = props.logSales.filter(item => parseInt(item.menu) === 0);
@@ -19,7 +33,7 @@ export default function PrintOrder(props) {
             newWindow.document.write(`
                 <html>
                     <head>
-                        <title>Título da Nova Janela</title>
+                        <title>Pedido ${props.orderCod}</title>
                         <style>
                             /* Adicione estilos CSS aqui */
                             body {
@@ -27,58 +41,21 @@ export default function PrintOrder(props) {
                                 display:flex;
                                 align-items: center;
                                 justify-content:center;
+                                flex-direction: column;
                             }
                             body>div{
                                 width:80mm;
                                 background-color: white;
                                 padding: 1.4vw;
                             }
+                            body>.brokenDiv{
+                                page-break-before: always;
+                                margin-bottom: 1vmin;
+                            }
                         </style>
                     </head>
                     <body>
-                        <div>
-                            <strong>ENCOMENDA CEIA PEGPESE</strong><br/>
-                            <hr/>
-                            Loja: ${storeUser.replace(/-/g, ' ').replace(/[_0-9]/g, '')}<br/>
-                            Nº. Documento: ${props.orderCod}<br/>
-                            Cliente: ${props.nameClient}<br/>
-                            Data: ${util.convertDateBR(props.dateOrder)}<br/>
-                            Sinal: R$ ${props.signal}<br/>
-                            Pagar: R$ ${parseFloat(props.total - props.signal).toFixed(2)}<br/>
-                            Total: R$ ${props.total}<br/>
-                            <hr/>
-                            Menu: ${props.menu}<br/>
-                            Código: ${props.pluMenu}<br/>
-                            Tipo do arroz: ${props.rice}<br/>
-                            Sobremesa: ${props.dessert}<br/>
-                            Subtotal: R$ ${parseFloat(menuItem[0].price).toFixed(2)}<br/>
-                            <hr/>
-                            Adicional:<br/>
-                            ${addItems}<br/>
-                            <hr/>
-                            <strong>
-                                Observação:<br/>
-                                ${props.observation}
-                            </strong>
-                            <hr/>
-                            Data Entrega: ${util.convertDateBR(props.dateDelivery)}<br/>
-                            Horario: ${props.hoursDelivery}<br/>
-                            Loja Entrega: ${props.localDelivery.replace(/-/g, ' ').replace(/[_0-9]/g, '')}<br/>
-                            <hr/>
-                            <strong>Atenção:</strong> Caso não venha retirar sua encomenda até a data reservada, 
-                            consideraremos a desistência do seu pedido e não haverá estorno do valor.
-                            <br/>
-                            <br/>
-            
-                            __________________________________<br/>
-                            Assinatura do Cliente<br/>
-                            <br/>
-                            __________________________________<br/>
-                            Assinatura do Responsável<br/>
-                            <br/>
-
-                            Agradecemos a Preferência...<br/>
-                        </div> 
+                        ${bodyOrder(menuItem, addItems)}
                     </body>
                 </html>
             `);
@@ -87,13 +64,60 @@ export default function PrintOrder(props) {
             alert("O bloqueador de pop-ups pode estar impedindo a abertura da nova janela.");
         }
 
-        // Espera um curto período de tempo para garantir que o conteúdo seja carregado na nova janela;
-        setTimeout(() => {
-            // Aciona a caixa de diálogo de impressão na nova janela;
-            newWindow.print();
-            // Fecha a nova janela após a impressão;
-            newWindow.close();
-        }, 1000); // Ajuste o tempo conforme necessário;
+
+
+        // Aciona a caixa de diálogo de impressão na nova janela;
+        newWindow.print();
+        // Fecha a nova janela após a impressão;
+        newWindow.close();
+
+    }
+    function bodyOrder(menuItem, addItems) {
+        return (`
+                    <div class='brokenDiv'>
+                        <strong>ENCOMENDA CEIA PEGPESE</strong><br/>
+                        <hr/>
+                        Loja: ${storeUser.replace(/-/g, ' ').replace(/[_0-9]/g, '')}<br/>
+                        Nº. Documento: ${props.orderCod}<br/>
+                        Cliente: ${props.nameClient}<br/>
+                        Data: ${util.convertDateBR(props.dateOrder)}<br/>
+                        Sinal: R$ ${props.signal}<br/>
+                        Pagar: R$ ${parseFloat(props.total - props.signal).toFixed(2)}<br/>
+                        Total: R$ ${props.total}<br/>
+                        <hr/>
+                        Menu: ${props.menu}<br/>
+                        Código: ${props.pluMenu}<br/>
+                        Tipo do arroz: ${props.rice}<br/>
+                        Sobremesa: ${props.dessert}<br/>
+                        Subtotal: R$ ${parseFloat(menuItem[0].price).toFixed(2)}<br/>
+                        <hr/>
+                        Adicional:<br/>
+                        ${addItems}<br/>
+                        <hr/>
+                        <strong>
+                            Observação:<br/>
+                            ${props.observation}
+                        </strong>
+                        <hr/>
+                        Data Entrega: ${util.convertDateBR(props.dateDelivery)}<br/>
+                        Horario: ${props.hoursDelivery}<br/>
+                        Loja Entrega: ${props.localDelivery.replace(/-/g, ' ').replace(/[_0-9]/g, '')}<br/>
+                        <hr/>
+                        <strong>Atenção:</strong> Caso não venha retirar sua encomenda até a data reservada, 
+                        consideraremos a desistência do seu pedido e não haverá estorno do valor.
+                        <br/>
+                        <br/>
+
+                        __________________________________<br/>
+                        Assinatura do Cliente<br/>
+                        <br/>
+                        __________________________________<br/>
+                        Assinatura do Responsável<br/>
+                        <br/>
+
+                        Agradecemos a Preferência...<br/>
+                    </div> 
+        `)
     }
     function addtionalItems(items) {
         let result = '';

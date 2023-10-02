@@ -29,7 +29,7 @@ export default function AddItems(props) {
                 setProductList(addCheck(result.data));
                 populateSaleLocal();
             } catch (err) {
-                console.log(err);
+                props.startModalError(err.toString());
             }
             props.setLoading(false);
         }
@@ -111,14 +111,16 @@ export default function AddItems(props) {
                                     props.setModAdditional(false);
                                     props.setUpProductLogs(true);
                                 } catch (error) {
-                                    alert(error)
+                                    props.startModalError(error.toString());
                                 }
                             }} type="button">
                                 <FontAwesomeIcon icon="fa-check-square" className='text-success' />
                             </button>
-                            <button type="button" title="Limpar lista" onClick={() => { if (window.confirm("Atenção! todos os itens serão deletados, deseja mesmo continuar? ")) restartLogSales() }}><FontAwesomeIcon icon="fa-trash-alt" className='text-danger' /></button>
+                            <button type="button" title="Limpar lista" onClick={() => { props.confirmModal('alert', 'Limpar Lista.', "Atenção! todos os itens serão deletados, deseja mesmo continuar? ", restartLogSales) /*restartLogSales()*/ }}><FontAwesomeIcon icon="fa-trash-alt" className='text-danger' /></button>
                             <button type="button" title="Sair. (Nenhuma alteração será realizada.)" onClick={() => {
-                                if (window.confirm("Todas as alterações serão perdidas, deseja continuar? ")) props.setModAdditional(false);
+                                !util.isEquals(logSales, props.logSales) ?
+                                    props.confirmModal('alert', 'Sair.', "Todas as alterações serão perdidas, deseja continuar? ", ()=>props.setModAdditional(false)) :
+                                    props.setModAdditional(false);
                             }
                             }>
                                 <FontAwesomeIcon icon="fa-right-from-bracket" />
