@@ -23,7 +23,7 @@ export default function OrderField(props) {
                 </div>
                 <div id="divAdditionalItems" className='border rounded my-1 p-1'>
                     {
-                        props.logSales.map((item, index) => !item.getBase_item() && (
+                        props.logSales.map((item, index) =>(
                             <div className="d-flex flex-column" key={index}>
                                 <span className='d-flex justify-content-between'>
                                     <div><b>Cód: </b>{item.epp_id_product}</div>
@@ -68,7 +68,7 @@ export default function OrderField(props) {
     function selectMenu(value) {
         props.setMenu(value);
         riceAndDessertClean();
-        props.logSales.length > 0 && deleteMenuLog();
+        if(props.logSales.length > 0 && props.pluMenu !== '') deleteMenuLog();
         reloadTotal();
         let list = props.logsMenusList;
 
@@ -145,7 +145,7 @@ export default function OrderField(props) {
     function deleteMenuLog() {
         let items = props.logSales;
         items.forEach(item => {
-            if (parseInt(item.menu) === 1) {
+            if (parseInt(item.epp_id_product) === parseInt(props.pluMenu)) {
                 removeItem(item.epp_id_product);
             }
         });

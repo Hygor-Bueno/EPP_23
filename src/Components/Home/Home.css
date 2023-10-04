@@ -96,7 +96,6 @@
 
 #HomePage>section>#divOrderCard {
     height: 100%;
-    /* background-color: red; */
     display: flex;
     flex-direction: column;
 }
@@ -109,7 +108,6 @@
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     overflow-y: auto;
-    /* flex-grow: 1; */
 }
 
 #divModalQuantityPrint{

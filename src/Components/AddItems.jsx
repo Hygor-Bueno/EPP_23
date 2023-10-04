@@ -15,6 +15,7 @@ export default function AddItems(props) {
     const [logSales, setLogSales] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
 
+
     useEffect(() => {
         let connection = new Connection();
         let localUtil = new Util();
@@ -52,11 +53,7 @@ export default function AddItems(props) {
             setLogSales([...sale])
         }
         init();
-    }, [props.logSales]);
-
-    // useEffect(() => {
-    //     console.log(subtotal, logSales)
-    // }, [subtotal, logSales]);
+    }, []);
 
     return (
         <div id='divAddItems' className="" role="dialog">
@@ -81,7 +78,7 @@ export default function AddItems(props) {
                         </div>
                     </div>
                     <article>
-                        {logSales.map((item, index) => !item.getBase_item() && (
+                        {logSales.map((item, index) => (
                             <div className="d-flex flex-column" key={index}>
                                 <span className='d-flex justify-content-between'>
                                     <div><b>Cód: </b>{item.epp_id_product}</div>
@@ -107,6 +104,7 @@ export default function AddItems(props) {
                                 try {
                                     let resp = validateVoidProduct();
                                     if (resp.error) throw new Error(resp.message);
+                                    validateBaseItem(logSales) && props.cleanOrder();
                                     props.setLogSales(logSales);
                                     props.setModAdditional(false);
                                     props.setUpProductLogs(true);
@@ -119,7 +117,7 @@ export default function AddItems(props) {
                             <button type="button" title="Limpar lista" onClick={() => { props.confirmModal('alert', 'Limpar Lista.', "Atenção! todos os itens serão deletados, deseja mesmo continuar? ", restartLogSales) /*restartLogSales()*/ }}><FontAwesomeIcon icon="fa-trash-alt" className='text-danger' /></button>
                             <button type="button" title="Sair. (Nenhuma alteração será realizada.)" onClick={() => {
                                 !util.isEquals(logSales, props.logSales) ?
-                                    props.confirmModal('alert', 'Sair.', "Todas as alterações serão perdidas, deseja continuar? ", ()=>props.setModAdditional(false)) :
+                                    props.confirmModal('alert', 'Sair.', "Todas as alterações serão perdidas, deseja continuar? ", () => props.setModAdditional(false)) :
                                     props.setModAdditional(false);
                             }
                             }>
@@ -131,19 +129,23 @@ export default function AddItems(props) {
             </div>
         </div>
     );
-
+    function validateBaseItem(array){
+        let result = true;
+        array.forEach(item=>{
+            if(parseInt(item.epp_id_product) === parseInt(props.pluMenu)) result = false;
+        });
+        return result;
+    }
     function restartLogSales() {
         let list = []
         logSales.forEach((product) => {
-            if (!product.getBase_item()) {
-                let result = util.filterArray(productList, "id_product", product.epp_id_product);
-                result && list.push(result);
-            }
+            let result = util.filterArray(productList, "id_product", product.epp_id_product);
+            result && list.push(result);
         });
         list.forEach(item => {
             setValueProduct(item.id_product, "checked", false);
             clearValue(item);
-        })
+        });
     }
     function productComponent() {
         let result = filterCtl ?
@@ -190,7 +192,7 @@ export default function AddItems(props) {
         };
 
         setValueProduct(item.id_product, "quantity", value);
-        let log = new LogSales(null, item.id_product, null, item.quantity, null, 0, item.description, item.measure);
+        let log = new LogSales(null, item.id_product, null, item.quantity, null, parseInt(item.id_category_fk) === 1 ? 1 : 0, item.description, item.measure);
         await log.addItem();
         let result = util.addItemLogSale(logSales, log);
         setLogSales([...result]);

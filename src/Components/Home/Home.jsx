@@ -26,6 +26,7 @@ export default function Home() {
     const [storeList, setStoreList] = useState([]);
     const [logsMenusList, setLogsMenusList] = useState([]);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenErrorModal, setIsOpenErrorModal] = useState(false);
     const [upProductLogs, setUpProductLogs] = useState(false);
     const [paramsModal, setParamsModal] = useState(
         {
@@ -33,7 +34,7 @@ export default function Home() {
             message: "",
             title: "",
             isConfirmation: isOpenModal,
-            onConfirm: () => console.log('Confirm')
+            onConfirm: () => null
         }
     );
     //Valores selecionados no formulário:
@@ -84,7 +85,14 @@ export default function Home() {
                     setLogsMenusList(value[3].data);
                 });
             } catch (err) {
-                console.log(err);
+                setIsOpenErrorModal(true);
+                setParamsModal({
+                    type: "Error",
+                    message: err.toString(),
+                    title: "Erro!",
+                    isConfirmation: false,
+                    onConfirm: ""
+                });
             }
             setLoading(false);
         }
@@ -103,7 +111,6 @@ export default function Home() {
         }
         loadInit();
     }, [storeUser]);
-    useEffect(() => { console.log(deliveredOrder) }, [deliveredOrder]);
     return (
         <div id="HomePage" className='d-flex h-100 flex-direction-colum '>
             {quantityOrder()}
@@ -115,6 +122,12 @@ export default function Home() {
                 {...paramsModal}
                 onCancel={setIsOpenModal}
                 onClose={setIsOpenModal}
+            />
+            <ModalDefault
+                isOpen={isOpenErrorModal}
+                {...paramsModal}
+                onCancel={setIsOpenErrorModal}
+                onClose={setIsOpenErrorModal}
             />
             {modAdditional &&
                 <AddItems
@@ -128,6 +141,8 @@ export default function Home() {
                     setLoading={setLoading}
                     startModalError={startModalError}
                     confirmModal={confirmModal}
+                    cleanOrder={cleanOrder}
+                    pluMenu={pluMenu}
                 />
             }
             <form className="col-5 p-1">
@@ -236,10 +251,11 @@ export default function Home() {
             </div>
         );
     }
-    function copyOrder(){
+    function copyOrder() {
         for (let index = 0; index < copyNumber; index++) {
             document.getElementById('buttonPrintOrder').click();
         }
+        // cleanPage();
         setCopyNumber(1);
     }
     function buttonsForm() {
@@ -272,7 +288,7 @@ export default function Home() {
                         setIsPrintOrder={setIsPrintOrder}
                         isPrintOrder={isPrintOrder}
                         copyNumber={copyNumber}
-
+                        cleanPage={cleanPage}
                     />
                 </div>
             </div>
@@ -290,12 +306,13 @@ export default function Home() {
             let order = await postOrder();
             if (order.error) throw new Error(order.message);
             await postLogs(order.last_id);
-            cleanPage();
+
+            document.getElementById('buttonPrintOrder').click();
+
             let newListOrder = ordersList;
             newListOrder.push(maskItem(order.last_id));
             setOrdersList([...newListOrder]);
             messageModal('success', 'Sucesso!', 'Pedido Inserido com sucesso.');
-            document.getElementById('buttonPrintOrder').click();
         } catch (error) {
             startModalError(error);
         }
@@ -331,6 +348,7 @@ export default function Home() {
         return order;
     }
     async function postLogs(id_order) {
+        setOrderCod(id_order);
         let req = [];
         logSales.forEach(log => {
             log.epp_id_order = id_order;
@@ -415,7 +433,7 @@ export default function Home() {
         setLoading(false);
     }
     function startModalError(error) {
-        setIsOpenModal(true);
+        setIsOpenErrorModal(true);
         setParamsModal({
             type: "Error",
             message: error.toString(),
@@ -511,6 +529,7 @@ export default function Home() {
         setModAdditional(false);
         setUpProductLogs(false);
         setDeliveredOrder('0');
+        cleanMandatory();
     }
     function cleanOrder() {
         setPluMenu("");
@@ -518,16 +537,27 @@ export default function Home() {
         setRice("");
         setDessert("");
     }
+    function cleanMandatory(){
+        let fields = document.querySelectorAll('*[data-mandatory="1"]');
+        fields.forEach(field => {
+            resetClass(field);
+        });
+    }
     async function load(idItem) {
         setLoading(true);
         try {
+            cleanPage();
             let log = idItem.trim() && await connection.get(`&epp_id_order=${idItem}`, "EPP/LogSale.php");
             let order = idItem.trim() && await connection.get(`&id_order=${idItem}`, "EPP/Order.php");
             let logSales = idItem.trim() && await loadLogSale(log.data || []);
-            loadRiceDessert(order.data[0].typeRice, order.data[0].dessert);
             if (!log || log.error) throw new Error(log.message);
             if (!order || order.error) throw new Error(order.message);
             if (!logSales || logSales.error) throw new Error(logSales.message);
+            if (order.data[0].idMenu && parseInt(order.data[0].idMenu) !== 0) {
+                loadRiceDessert(order.data[0].typeRice, order.data[0].dessert);
+            } else {
+
+            }
             setOrderCod(order.data[0].idOrder);
             setNameClient(order.data[0].nameClient);
             setFoneClient(order.data[0].fone || "");
@@ -585,7 +615,6 @@ export default function Home() {
         result = await includeMeasure(sales)
         return result;
     }
-
     async function includeMeasure(array) {
         let response = { error: false }
         try {

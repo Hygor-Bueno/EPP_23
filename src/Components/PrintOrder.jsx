@@ -14,6 +14,7 @@ export default function PrintOrder(props) {
                 if (props.isPrintOrder) {
                     print();
                     props.setIsPrintOrder(false);
+                    props.cleanPage();
                 } else {
                     props.setIsPrintOrder(true);
                 };
@@ -64,13 +65,10 @@ export default function PrintOrder(props) {
             alert("O bloqueador de pop-ups pode estar impedindo a abertura da nova janela.");
         }
 
-
-
         // Aciona a caixa de diálogo de impressão na nova janela;
         newWindow.print();
         // Fecha a nova janela após a impressão;
         newWindow.close();
-
     }
     function bodyOrder(menuItem, addItems) {
         return (`
@@ -85,12 +83,16 @@ export default function PrintOrder(props) {
                         Pagar: R$ ${parseFloat(props.total - props.signal).toFixed(2)}<br/>
                         Total: R$ ${props.total}<br/>
                         <hr/>
-                        Menu: ${props.menu}<br/>
-                        Código: ${props.pluMenu}<br/>
-                        Tipo do arroz: ${props.rice}<br/>
-                        Sobremesa: ${props.dessert}<br/>
-                        Subtotal: R$ ${parseFloat(menuItem[0].price).toFixed(2)}<br/>
-                        <hr/>
+                        ${
+                            props.pluMenu && `
+                                Menu: ${props.menu}<br/>
+                                Código: ${props.pluMenu}<br/>
+                                Tipo do arroz: ${props.rice}<br/>
+                                Sobremesa: ${props.dessert}<br/>
+                                Subtotal: R$ ${parseFloat(menuItem[0].price).toFixed(2)}<br/>
+                                <hr/>
+                            `
+                        }
                         Adicional:<br/>
                         ${addItems}<br/>
                         <hr/>
