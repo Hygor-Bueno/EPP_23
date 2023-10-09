@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Connection } from '../Util/RestApi'
 import './AddItems.css';
@@ -129,10 +129,10 @@ export default function AddItems(props) {
             </div>
         </div>
     );
-    function validateBaseItem(array){
+    function validateBaseItem(array) {
         let result = true;
-        array.forEach(item=>{
-            if(parseInt(item.epp_id_product) === parseInt(props.pluMenu)) result = false;
+        array.forEach(item => {
+            if (parseInt(item.epp_id_product) === parseInt(props.pluMenu)) result = false;
         });
         return result;
     }
