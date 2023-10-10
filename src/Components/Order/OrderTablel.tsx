@@ -8,7 +8,7 @@ export default function OrderTable() {
     const util = new Util();
 
     return (
-        <table className="table table-striped">
+        <table className="table ">
             <thead>
                 <tr>
                     <th>ID do Produto</th>
@@ -28,8 +28,8 @@ export default function OrderTable() {
                 </tr>
             </thead>
             <tbody>
-                {listOrder.map((order, index) => (
-                    <tr key={index}>
+                {listOrder.map((order:any, index:number) => (
+                    <tr key={index} onClick={(element) =>fixedTableRow(element)}>
                         <td>{order.eppIdProduct}</td>
                         <td>{order.eppIdOrder}</td>
                         <td>{order.store}</td>
@@ -51,5 +51,12 @@ export default function OrderTable() {
             </tbody>
         </table>
     );
+    function fixedTableRow(element){
+        if(element.currentTarget.classList.contains('fixedTableRow')){
+            element.currentTarget.classList.remove('fixedTableRow');
+        }else{
+            element.currentTarget.classList.add('fixedTableRow');
+        }
+    }
 
 }

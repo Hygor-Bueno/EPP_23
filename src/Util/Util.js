@@ -126,4 +126,11 @@ export default class Util {
         console.log(estimatedTime);
         return estimatedTime;
     }
+
+    storeNameForDB(name){
+        return name.replace(/[-_]\d+/g, '').replace(/-/g, ' ');
+    }
+    storeNameForUser(name){
+        return name.replace(/[-_]\d+/g, '').replace(/-/g, ' ');
+    }
 }

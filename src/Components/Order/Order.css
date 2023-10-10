@@ -5,6 +5,9 @@
     justify-content: center;
     background-color:var(--bg-dark);
 }
+#containerFormCtrl>div{
+    overflow-y: auto;
+}
 
 #containerFormCtrl>form>fieldset>legend,
 #containerFormCtrl>form>fieldset>div>label{
@@ -49,4 +52,18 @@
 #ordersContainer>section>div>table>tbody>tr>td,
 #ordersContainer>section>div>table>thead>tr>th{
     white-space: nowrap;
+    font-size: 1vw;
+}
+
+
+#ordersContainer>section>div>table>tbody>tr:hover{
+    background-color: var(--bg-dark);
+}
+#ordersContainer>section>div>table>tbody>tr:hover td{
+    color:white;
+}
+
+.fixedTableRow{
+    background-color: var(--bg-dark);
+    color: white!important;
 }

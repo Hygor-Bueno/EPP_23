@@ -8,10 +8,12 @@ import { Connection } from "../../Util/RestApi.js";
 import Buttons from "../Buttons/Buttons";
 import SettingButtons from "../Buttons/SettingButtons.ts";
 import { useOrderContext } from "./OrderContext.jsx";
+import OrderList from "../QrCode/GenerateQRCodes.jsx";
 export default function OrderForm() {
     const toDay = new Util().dateCurrent();
 
-    const { updateListOrder } = useOrderContext();
+    const { updateListOrder,listOrder } = useOrderContext();
+    const [printQrcode,setPrintQrcode] = useState(false);
 
     //Área dos Inpust:
     const productCode = new SettingInputsField({ label: "Cód. produto:", value: "", type: "text" });
@@ -24,7 +26,6 @@ export default function OrderForm() {
     dateInit.classInput='form-control';
     const dateFinal = new SettingInputsField({ label: "Data final:", value: toDay, type: "date" });
     dateFinal.classInput='form-control';
-
 
     const hourInit = new SettingInputsField({ label: "Hora inicial:", value: "", type: "time" });
     hourInit.classContainer = 'col-6';
@@ -41,8 +42,8 @@ export default function OrderForm() {
     //Área dos botões:
     const buttonGet = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-success col-2', buttonIcon: 'fa-search', buttonClick: () => console.log("Buscando os valores...") })
     const buttonClean = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-danger col-2', buttonIcon: 'fa-trash-alt', buttonClick: () =>{ console.log("Limpar valores do formulário..."); }})
-    const buttonQrCode = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-qrcode', buttonClick: () => console.log("Gerando QrCodes...") })
-    const buttonTable = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-table', buttonClick: () => console.log("Baixar planilha...") })
+    const buttonQrCode = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-qrcode', buttonClick: () => setPrintQrcode(true)})
+    const buttonTable = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-table', buttonClick: () => {downloadtable()} })
 
     useEffect(() => {
         async function loadStores() {
@@ -57,6 +58,34 @@ export default function OrderForm() {
         }
         loadStores();
     }, []);
+
+    function downloadtable(){
+        const tsvData = [];
+        
+        // Adicione cabeçalhos
+        const headers = Object.keys(listOrder[0]);
+        tsvData.push(headers.join('\t'));
+    
+        // Adicione linhas de dados
+        listOrder.forEach((row) => {
+          const rowData = headers.map((header) => row[header]);
+          tsvData.push(rowData.join('\t'));
+        });
+    
+        // Crie um blob TSV e gere um link de download
+        const tsvContent = tsvData.join('\n');
+        const blob = new Blob([tsvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+    
+        // Crie um link de download e clique nele
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'tabela.csv';
+        a.click();
+    
+        // Limpe o objeto URL criado
+        window.URL.revokeObjectURL(url);
+      };
 
     return (
         <div id='containerFormCtrl' className="container w-25">
@@ -88,6 +117,9 @@ export default function OrderForm() {
                     </div>
                 </fieldset>
             </form>
+            <div>
+                <OrderList setPrintQrcode={setPrintQrcode} printQrcode={printQrcode} orders={listOrder}/>
+            </div>
         </div>
     );
 }
