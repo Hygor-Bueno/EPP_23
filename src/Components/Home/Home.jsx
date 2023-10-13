@@ -18,7 +18,7 @@ import Loading from '../loading/Loading';
 export default function Home() {
     const util = new Util();
     const connection = new Connection();
-    const storeUser = (localStorage.store && localStorage.num_store) ? `${localStorage.getItem('store').replace(/ /g, '-')}_${localStorage.getItem('num_store')}` : null;
+    const storeUser = (localStorage.store && localStorage.num_store) ? util.storeNameForDB(localStorage.getItem('store'),localStorage.getItem('num_store')) : null;
     const [menusList, setMenusList] = useState([]);
     const [riceList, setRiceList] = useState([]);
     const [dessertsList, setDessertsList] = useState([]);

@@ -27,12 +27,13 @@ export function OrderProvider({ children }) {
     }
     fetchOrderData();
   }, []);
-    const updateListOrder = (newListOrder) => {
+
+  const updateListOrder = (newListOrder) => {
     setListOrder(newListOrder);
   };
 
   return (
-    <OrderContext.Provider value={{ listOrder,updateListOrder  }}>
+    <OrderContext.Provider value={{ listOrder, updateListOrder }}>
       {children}
     </OrderContext.Provider>
   );

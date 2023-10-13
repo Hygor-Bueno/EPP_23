@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SettingInputsField from "./SettingInputsField";
 
 interface Props {
@@ -6,7 +6,6 @@ interface Props {
 }
 
 export default function InputsField(props: Props): JSX.Element {
-  const [values, setValues] = useState(props.object.value);
 
   function filterInputs(): JSX.Element {
     let result: JSX.Element;
@@ -30,18 +29,12 @@ export default function InputsField(props: Props): JSX.Element {
         id={props.object.idInput}
         type="text"
         className={`form-control ${props.object.classInput || ''}`}
-        value={values}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          changeValue(event.target.value);
+          props.object.value = props.object.value = event.target.value;
         }}
         disabled={false}
       />
     );
-  }
-
-  function changeValue(value: string) {
-    setValues(value);
-    props.object.value = value;
   }
 
   function inputNumber(): JSX.Element {
@@ -49,6 +42,9 @@ export default function InputsField(props: Props): JSX.Element {
       <input
         id={props.object.idInput}
         type="number"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          props.object.value = props.object.value = event.target.value;
+        }}
         className={`form-control ${props.object.classInput || ''}`}
         min={props.object.min}
         max={props.object.max}
@@ -64,9 +60,8 @@ export default function InputsField(props: Props): JSX.Element {
         id={props.object.idInput}
         type={props.object.type}
         className={`${props.object.classInput || ''}`}
-        // value={values}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          changeValue(event.target.value);
+          props.object.value = props.object.value = event.target.value;
         }}
         name={props.object.name}
         disabled={false}

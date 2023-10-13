@@ -7,10 +7,11 @@ interface Props {
 
 export default function SelectField(props: Props): JSX.Element {
     const [value,setValue]=useState<string>(props.select.selectValue);
+
     return (
         <div className={props.select.containerClass}>
             <label className={props.select.labelClass}>{props.select.label}</label>
-            <select value={value} className={`form-control ${props.select.selectClass}`} onChange={(element) => { setValue(element.target.value); props.select.clickAction() }}>
+            <select className={`form-control ${props.select.selectClass}`} onChange={(element) => { props.select.selectValue = element.target.value; props.select.clickAction && props.select.clickAction() }}>
                 <option value="" hidden={true}>selecione</option>
                 {props.select.options.map(item => (buildOptions(item)))}
             </select>

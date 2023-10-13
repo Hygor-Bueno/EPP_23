@@ -5,13 +5,13 @@ import PrivateRoute from "./privateRoute";
 import Login from '../Components/Login/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation, faPen, faTrash, faPlus, faEraser, faCopy, faHome, faSave, faUndoAlt, faSquare, faQrcode,faTable} from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation, faPen, faTrash, faPlus, faEraser, faCopy, faHome, faSave, faUndoAlt, faSquare, faQrcode,faTable,faDownload} from '@fortawesome/free-solid-svg-icons'
 import Home from '../Components/Home/Home.jsx';
 import Skeleton from '../Components/Skeleton/Skeleton.jsx';
 import Registry from '../Components/Registry/Registry.jsx';
 import Order from '../Components/Order/Order';
 
-library.add(faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation, faPen, faTrash, faPlus, faEraser, faCopy, faHome, faSave, faUndoAlt, faSquare, faQrcode,faTable)
+library.add(faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation, faPen, faTrash, faPlus, faEraser, faCopy, faHome, faSave, faUndoAlt, faSquare, faQrcode,faTable,faDownload)
 
 export default function App() {
     return (

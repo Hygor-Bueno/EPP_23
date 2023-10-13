@@ -11,6 +11,7 @@ export default class SettingInputsField {
     classContainer:string;
     name:string;
     checked:boolean;
+
     constructor(object: { label: string, value: string, type: string }) {
         this.label = object.label;
         this.value = object.value;

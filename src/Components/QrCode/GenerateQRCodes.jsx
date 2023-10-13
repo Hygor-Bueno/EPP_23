@@ -15,7 +15,6 @@ const OrderList = (props) => {
       let listCode = [];
       array.forEach(item => {
         if (tempCode !== item.eppIdOrder) {
-          console.log(item);
           tempCode = item.eppIdOrder;
           listCode.push({
             eppIdOrder: item.eppIdOrder,
@@ -26,10 +25,8 @@ const OrderList = (props) => {
           });
         }
       });
-
       return listCode;
     }
-
   }, [props]);
 
   const generateQRCodes = (orders) => {
@@ -116,8 +113,8 @@ const OrderList = (props) => {
         ))}
       </div>
       <div className='d-flex'>
-        <button className='btn btn-success' onClick={() => { printQrcode() }}>Imprimir</button>
-        <button className='btn btn-danger' onClick={() => {
+        <button className='btn btn-success mx-1' onClick={() => { printQrcode() }}>Imprimir</button>
+        <button className='btn btn-danger mx-1' onClick={() => {
           props.setPrintQrcode(false);
         }}>Fechar</button>
       </div>

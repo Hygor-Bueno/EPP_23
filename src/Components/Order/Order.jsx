@@ -37,5 +37,5 @@ export default function Order() {
                 </section>
             </div>
         </OrderProvider>
-    )
+    );
 }

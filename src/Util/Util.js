@@ -127,10 +127,38 @@ export default class Util {
         return estimatedTime;
     }
 
-    storeNameForDB(name){
-        return name.replace(/[-_]\d+/g, '').replace(/-/g, ' ');
+    storeNameForDB(name,number){
+        return `${name.replace(/ /g, '-')}_${number}`;
     }
     storeNameForUser(name){
         return name.replace(/[-_]\d+/g, '').replace(/-/g, ' ');
     }
+    downloadtable(array,name){
+        const tsvData = [];
+        
+        // Adicione cabeçalhos
+        const headers = Object.keys(array[0]);
+        tsvData.push(headers.join('\t'));
+    
+        // Adicione linhas de dados
+        array.forEach((row) => {
+          const rowData = headers.map((header) => row[header]);
+          tsvData.push(rowData.join('\t'));
+        });
+    
+        // Crie um blob TSV e gere um link de download
+        const tsvContent = tsvData.join('\n');
+        const blob = new Blob([tsvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+    
+        // Crie um link de download e clique nele
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${name?name:'tabela'}.csv`;
+        a.click();
+    
+        // Limpe o objeto URL criado
+        window.URL.revokeObjectURL(url);
+      };
+
 }
