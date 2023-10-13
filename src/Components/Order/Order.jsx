@@ -16,7 +16,7 @@ export default function Order() {
     const selectedTable = new SettingSelectField({ selectValue: '1', label: 'Visuzalização:', options: options });
     selectedTable.containerClass = 'd-flex flex-row align-items-center';
     selectedTable.selectClass = 'm-2';
-    selectedTable.clickAction = () => { setStepTable(!stepTable) };
+    selectedTable.clickAction = () => { setStepTable(selectedTable.selectValue === '1' ? false:true) };
 
     return (
         <OrderProvider>

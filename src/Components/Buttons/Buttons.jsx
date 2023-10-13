@@ -9,6 +9,7 @@ export default function Buttons(props = { ...SettingButtons }) {
             className={props.buttonClass}
             title={props.buttonTitle}
             onClick={()=>props.buttonClick()}
+            type='button'
         >
             <FontAwesomeIcon icon={props.buttonIcon } />
         </button>

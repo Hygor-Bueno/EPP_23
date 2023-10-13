@@ -32,8 +32,19 @@ export function OrderProvider({ children }) {
     setListOrder(newListOrder);
   };
 
+  async function restartListOrder(){
+    try {
+      const connection = new Connection();
+      let reqOrderList = await connection.get(`&controllerEPP=1&delivered=0`, 'EPP/LogSale.php')
+      if (reqOrderList.error) throw new Error(reqOrderList.message);
+      setListOrder(reqOrderList.data);
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+
   return (
-    <OrderContext.Provider value={{ listOrder, updateListOrder }}>
+    <OrderContext.Provider value={{ listOrder, updateListOrder,restartListOrder }}>
       {children}
     </OrderContext.Provider>
   );

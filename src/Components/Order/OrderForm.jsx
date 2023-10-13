@@ -12,7 +12,7 @@ import OrderList from "../QrCode/GenerateQRCodes.jsx";
 export default function OrderForm() {
     const util = new Util();
     const toDay = util.dateCurrent();
-    const { listOrder, updateListOrder } = useOrderContext();
+    const { listOrder, updateListOrder,restartListOrder } = useOrderContext();
     const [printQrcode, setPrintQrcode] = useState(false);
     const [changeForm, setChangeForm] = useState(false);
 
@@ -42,7 +42,7 @@ export default function OrderForm() {
 
     //Área dos botões:
     const buttonGet = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-success col-2', buttonIcon: 'fa-search', buttonClick: () => queryForm() })
-    const buttonClean = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-danger col-2', buttonIcon: 'fa-trash-alt', buttonClick: () => { cleanForm(); } })
+    const buttonClean = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-danger col-2', buttonIcon: 'fa-trash-alt', buttonClick: async () => { cleanForm(); await restartListOrder();} })
     const buttonQrCode = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-qrcode', buttonClick: () => setPrintQrcode(true) })
     const buttonTable = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-table', buttonClick: () => { util.downloadtable(listOrder) } })
 
@@ -132,7 +132,7 @@ export default function OrderForm() {
         }
         return response;
     }
-    function cleanForm() {
+    async function cleanForm() {
         cleanVaribles();
         cleanElement();
     };
@@ -143,8 +143,6 @@ export default function OrderForm() {
         dateFinal.value = '';
         hourInit.value = '';
         hourFinal.value = '';
-        dateType.value = '';
-        orderStatus.value = '';
         dateType.selectValue = '';
         orderStatus.selectValue = '';
         stores.selectValue = '';
@@ -153,8 +151,8 @@ export default function OrderForm() {
         setChangeForm(false);
     }
     function cleanElement() {
-        let listInput = document.querySelectorAll('input');
-        let listSelects = document.querySelectorAll('select');
+        let listInput = document.querySelectorAll('#containerFormCtrl input');
+        let listSelects = document.querySelectorAll('#containerFormCtrl select');
         let listFixedRow = document.querySelectorAll('.fixedTableRow');
 
         listInput.forEach(element => {

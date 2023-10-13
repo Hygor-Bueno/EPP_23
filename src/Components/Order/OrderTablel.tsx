@@ -6,7 +6,6 @@ import { useOrderContext } from "./OrderContext.jsx";
 export default function OrderTable() {
     const { listOrder } = useOrderContext();
     const util = new Util();
-
     return (
         <table className="table ">
             <thead>
@@ -32,9 +31,9 @@ export default function OrderTable() {
                     <tr key={index} onClick={(element) =>fixedTableRow(element)}>
                         <td>{order.eppIdProduct}</td>
                         <td>{order.eppIdOrder}</td>
-                        <td>{order.store}</td>
+                        <td>{util.storeNameForUser(order.store)}</td>
                         <td>{order.nameClient}</td>
-                        <td>{order.deliveryStore}</td>
+                        <td>{util.storeNameForUser(order.deliveryStore)}</td>
                         <td>{order.fone || "-"}</td>
                         <td>{util.convertDateBR(order.dateOrder)}</td>
                         <td>{util.convertDateBR(order.deliveryDate)}</td>
@@ -44,14 +43,14 @@ export default function OrderTable() {
                         <td>{order.quantity}</td>
                         <td>{order.observation || "-"}</td>
                         <td>
-                            {order.delivered === 2 ? "Cancelado" : order.delivered === 1 ? "Entregue" : "Pendente"}
+                            {parseInt(order.delivered) === 2 ? "Cancelado" : parseInt(order.delivered) === 1 ? "Entregue" : "Pendente"}
                         </td>
                     </tr>
                 ))}
             </tbody>
         </table>
     );
-    function fixedTableRow(element){
+    function fixedTableRow(element:any){
         if(element.currentTarget.classList.contains('fixedTableRow')){
             element.currentTarget.classList.remove('fixedTableRow');
         }else{

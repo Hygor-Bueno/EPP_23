@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import SettingSelectField from "./SettingSelectField";
 
 interface Props {
@@ -6,8 +6,6 @@ interface Props {
 }
 
 export default function SelectField(props: Props): JSX.Element {
-    const [value,setValue]=useState<string>(props.select.selectValue);
-
     return (
         <div className={props.select.containerClass}>
             <label className={props.select.labelClass}>{props.select.label}</label>

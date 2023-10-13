@@ -104,7 +104,7 @@ const OrderList = (props) => {
             <div>
               <div><strong>Nº:</strong> {order.eppIdOrder}</div>
               <div>{order.nameClient && order.nameClient.slice(0, 15)}.</div>
-              <div>{order.deliveryStore && util.storeNameForDB(order.deliveryStore)}</div>
+              <div>{order.deliveryStore && util.storeNameForUser(order.deliveryStore)}</div>
               <div>{order.deliveryDate && util.convertDateBR(order.deliveryDate)}</div>
               <div>{order.deliveryHour && order.deliveryHour}</div>
             </div>
