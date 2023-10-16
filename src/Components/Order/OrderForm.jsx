@@ -11,38 +11,36 @@ import { useOrderContext } from "./OrderContext.jsx";
 import OrderList from "../QrCode/GenerateQRCodes.jsx";
 export default function OrderForm() {
     const util = new Util();
-    const toDay = util.dateCurrent();
-    const { listOrder, updateListOrder,restartListOrder } = useOrderContext();
+    const { listOrder, updateListOrder, restartListOrder } = useOrderContext();
     const [printQrcode, setPrintQrcode] = useState(false);
-    const [changeForm, setChangeForm] = useState(false);
 
     //Área dos Inpust:
-    const productCode = new SettingInputsField({ label: "Cód. produto:", value: "", type: "text" });
+    const productCode = new SettingInputsField({ label: "Cód. produto:", type: "text" });
     productCode.classContainer = 'col-6';
 
-    const orderNumber = new SettingInputsField({ label: "Nº do pedido:", value: "", type: "number" });
+    const orderNumber = new SettingInputsField({ label: "Nº do pedido:", type: "number" });
     orderNumber.classContainer = 'col-6';
 
-    const dateInit = new SettingInputsField({ label: "Data inicial:", value: toDay, type: "date" });
+    const dateInit = new SettingInputsField({ label: "Data inicial:", type: "date" });
     dateInit.classInput = 'form-control';
-    const dateFinal = new SettingInputsField({ label: "Data final:", value: toDay, type: "date" });
+    const dateFinal = new SettingInputsField({ label: "Data final:", type: "date" });
     dateFinal.classInput = 'form-control';
 
-    const hourInit = new SettingInputsField({ label: "Hora inicial:", value: "", type: "time" });
+    const hourInit = new SettingInputsField({ label: "Hora inicial:", type: "time" });
     hourInit.classContainer = 'col-6';
     hourInit.classInput = 'form-control';
-    const hourFinal = new SettingInputsField({ label: "Hora final:", value: "", type: "time" });
+    const hourFinal = new SettingInputsField({ label: "Hora final:", type: "time" });
     hourFinal.classContainer = 'col-6';
     hourFinal.classInput = 'form-control';
 
     //Área dos Selects:
-    const [stores, setStores] = useState(new SettingSelectField({ selectValue: '', label: '', options: [{ code: '', name: '' }] }));
-    const dateType = new SettingSelectField({ selectValue: '', label: 'Ref. Data:', options: [{ code: 'Pedido', name: 'Pedido' }, { code: 'Entrega', name: 'Entrega' }] });
-    const orderStatus = new SettingSelectField({ selectValue: '', label: 'Status:', options: [{ code: '0', name: 'Pendentes' }, { code: '1', name: 'Entregues' }, { code: '2', name: 'Cancelados' }] });
+    const [stores, setStores] = useState(new SettingSelectField({ label: '', options: [{ code: '', name: '' }] }));
+    const dateType = new SettingSelectField({ label: 'Ref. Data:', options: [{ code: 'Pedido', name: 'Pedido' }, { code: 'Entrega', name: 'Entrega' }] });
+    const orderStatus = new SettingSelectField({ label: 'Status:', options: [{ code: '0', name: 'Pendentes' }, { code: '1', name: 'Entregues' }, { code: '2', name: 'Cancelados' }] });
 
     //Área dos botões:
     const buttonGet = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-success col-2', buttonIcon: 'fa-search', buttonClick: () => queryForm() })
-    const buttonClean = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-danger col-2', buttonIcon: 'fa-trash-alt', buttonClick: async () => { cleanForm(); await restartListOrder();} })
+    const buttonClean = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-danger col-2', buttonIcon: 'fa-trash-alt', buttonClick: async () => { cleanForm(); await restartListOrder(); } })
     const buttonQrCode = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-qrcode', buttonClick: () => setPrintQrcode(true) })
     const buttonTable = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-table', buttonClick: () => { util.downloadtable(listOrder) } })
 
@@ -53,34 +51,33 @@ export default function OrderForm() {
             if (!reqStore.error) {
                 let listStore = [];
                 reqStore.data.forEach(store => listStore.push({ code: `${store.description.replace(/ /g, '-')}_${store.number}`, name: store.description }));
-                let newTeste = new SettingSelectField({ selectValue: '', label: 'Lojas', options: listStore });
+                let newTeste = new SettingSelectField({ label: 'Lojas', options: listStore });
                 setStores(newTeste);
             };
         }
         loadStores();
     }, []);
 
-
     return (
         <div id='containerFormCtrl' className="container w-25">
             <form id='formOrderCtrl'>
                 <fieldset className="row">
                     <legend>Pedidos</legend>
-                    <InputsField changeForm={changeForm} object={productCode} />
-                    <InputsField changeForm={changeForm} object={orderNumber} />
-                    <SelectField changeForm={changeForm} select={stores} />
-                    <SelectField changeForm={changeForm} select={orderStatus} />
+                    <InputsField object={productCode} />
+                    <InputsField object={orderNumber} />
+                    <SelectField select={stores} />
+                    <SelectField select={orderStatus} />
                 </fieldset>
                 <fieldset className="row">
                     <legend>Datas</legend>
-                    <InputsField changeForm={changeForm} object={dateInit} />
-                    <InputsField changeForm={changeForm} object={dateFinal} />
-                    <SelectField changeForm={changeForm} select={dateType} />
+                    <InputsField object={dateInit} />
+                    <InputsField object={dateFinal} />
+                    <SelectField select={dateType} />
                 </fieldset>
                 <fieldset className="row">
                     <legend>Horários</legend>
-                    <InputsField changeForm={changeForm} object={hourInit} />
-                    <InputsField changeForm={changeForm} object={hourFinal} />
+                    <InputsField object={hourInit} />
+                    <InputsField object={hourFinal} />
                 </fieldset>
                 <fieldset className="row my-2">
                     <div className="d-flex justify-content-between">
@@ -99,6 +96,8 @@ export default function OrderForm() {
 
     async function queryForm() {
         try {
+            let testFields = multipleValidation();
+            if (testFields.error) throw new Error(testFields.message || 'Compos irrgulares...');
             let connection = new Connection();
             let req = await connection.get(prepareURL(), "EPP/LogSale.php");
             if (req.error) throw new Error(req.message);
@@ -110,23 +109,23 @@ export default function OrderForm() {
     }
     function prepareURL() {
         let response = "&controllerEPP";
-        if (productCode.value !== "") {
+        if (productCode.value) {
             response += `&epp_id_product=${productCode.value}`;
         }
-        if (orderNumber.value !== "") {
+        if (orderNumber.value) {
             response += `&epp_id_order=${orderNumber.value}`;
         }
-        if (stores.selectValue !== '') {
+        if (stores.selectValue) {
             let select = stores.selectValue;
             response += `&delivery_store=${select}`;
         }
-        if (dateType.selectValue !== '') {
+        if (dateType.selectValue) {
             response += `&${dateType.selectValue === "Pedido" ? "&date_order" : "&delivery_date"}='${dateInit.value}'_'${dateFinal.value}'`;
         }
-        if (hourInit.value !== "") {
+        if (hourInit.value) {
             response += `&delivery_hour='${hourInit.value}'_'${hourFinal.value}'`;
         }
-        if (orderStatus.selectValue !== "") {
+        if (orderStatus.selectValue) {
             let select = orderStatus.selectValue;
             response += `&delivered=${select}`;
         }
@@ -146,9 +145,7 @@ export default function OrderForm() {
         dateType.selectValue = '';
         orderStatus.selectValue = '';
         stores.selectValue = '';
-        setStores(new SettingSelectField({...stores}))
-        setChangeForm(true);
-        setChangeForm(false);
+        setStores(new SettingSelectField({ ...stores }))
     }
     function cleanElement() {
         let listInput = document.querySelectorAll('#containerFormCtrl input');
@@ -164,5 +161,61 @@ export default function OrderForm() {
         listFixedRow.forEach(element => {
             element.classList.remove('fixedTableRow');
         });
+    }
+    function multipleValidation() {
+        let result = { error: false, message: '' }
+        let validations = [
+            allNullFields(),
+            dateValidation(),
+            timeValidation()
+        ];
+        validations.forEach(validate => {
+            if (validate.error) {
+                result.error = true;
+                result.message += validate.message;
+            }
+        })
+        return result;
+    }
+    function allNullFields() {
+        let result = { error: true, message: 'Atenção! para realizar a busca será necessário preencher ao menos um dos campos.\n' };
+        let allFields = [
+            productCode.value,
+            orderNumber.value,
+            dateInit.value,
+            dateFinal.value,
+            dateType.selectValue,
+            hourInit.value,
+            hourFinal.value,
+            orderStatus.selectValue,
+            stores.selectValue
+        ];
+        allFields.forEach(field => {
+            if (field) {
+                result = { error: false };
+            }
+        });
+        return result;
+    }
+
+    function dateValidation() {
+        let result = { error: false, message: '' };
+        if (dateType.selectValue && (!dateInit.value || !dateFinal.value)) {
+            result.error = true;
+            result.message += 'Ao selecionar o tipo de data, se torna obrigatória a seleção da data inicial e data final.\n';
+        }
+        if ((!dateInit.value && dateFinal.value) || (dateInit.value && !dateFinal.value)) {
+            result.error = true;
+            result.message += 'Ao selecionar uma data, ambas se tornam obrigatórias.\n';
+        }
+        return result;
+    }
+    function timeValidation() {
+        let result = { error: false };
+        if ((!hourInit.value && hourFinal.value) || (hourInit.value && !hourFinal.value)) {
+            result.error = true;
+            result.message = 'Ao selecionar um dos campos de horário, ambos se tornam obrigatórios.\n';
+        }
+        return result;
     }
 }

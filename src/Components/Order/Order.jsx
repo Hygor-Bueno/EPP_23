@@ -11,12 +11,12 @@ import { OrderProvider } from "./OrderContext.jsx";
 
 export default function Order() {
     const [stepTable, setStepTable] = useState(false);
-    
+
     const options = [{ code: '1', name: 'Pedidos' }, { code: '2', name: 'itens' }];
     const selectedTable = new SettingSelectField({ selectValue: '1', label: 'Visuzalização:', options: options });
     selectedTable.containerClass = 'd-flex flex-row align-items-center';
     selectedTable.selectClass = 'm-2';
-    selectedTable.clickAction = () => { setStepTable(selectedTable.selectValue === '1' ? false:true) };
+    selectedTable.clickAction = () => { setStepTable(selectedTable.selectValue === '1' ? false : true) };
 
     return (
         <OrderProvider>
@@ -31,7 +31,7 @@ export default function Order() {
                             stepTable ?
                                 <OrderTableItems />
                                 :
-                                <OrderTablel/>
+                                <OrderTablel />
                         }
                     </div>
                 </section>

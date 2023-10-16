@@ -57,9 +57,11 @@
 
 #ordersContainer>section>div>table>tbody>tr:hover{
     background-color: var(--bg-dark);
+    opacity: .7;
 }
 #ordersContainer>section>div>table>tbody>tr:hover td{
     color:white;
+    opacity: 1;
 }
 
 .fixedTableRow{
