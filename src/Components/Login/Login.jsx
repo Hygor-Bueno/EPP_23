@@ -69,7 +69,7 @@ export default function Login() {
     async function login() {
         setLoading(true);
         let connection = new Connection();
-        const user = { user: username, password: password }
+        const user = { user: username, password: password };
         let response = await connection.postLogin(user, "CCPP/Login.php");
         if (!response.error) {
             await util.loadLocalStorage(response.data);

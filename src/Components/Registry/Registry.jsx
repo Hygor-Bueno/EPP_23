@@ -78,7 +78,7 @@ export default function Registry() {
             }
             renderInit();
         } catch (error) {
-            alert(error);
+            console.error(error);
         }
     }, []);
 
@@ -359,7 +359,7 @@ export default function Registry() {
                     loadProducts.push(registerProduct);
                     setLoadProducts([...loadProducts]);
                 } catch (error) {
-                    alert(error);
+                    console.error(error);
                     // console.error(e.toString());
                 }
             } else if (value === 'fieldMenu') {
@@ -370,7 +370,7 @@ export default function Registry() {
                     loadMenus.push({ idMenu: postMenu.last_id, description: descMenu, status: statusMenu });
                     setLoadMenus([...loadMenus]);
                 } catch (error) {
-                    alert(error);
+                    console.error(error);
                     // console.error(e.toString());
                 }
             } else if (value === 'fieldProdMenu') {
@@ -386,7 +386,7 @@ export default function Registry() {
                 setLoadProdMenus([...loadProdMenus]);
             }
         } catch (error) {
-            alert(error);
+            showAlert(2,"Erro!",error.toString());
         }
     }
 
@@ -404,7 +404,7 @@ export default function Registry() {
                 showAlert(2, "Atenção!", register.message);
             }
         } catch (error) {
-            alert(error);
+            showAlert(2,"Erro!",error.toString());
         }
     }
 
@@ -537,7 +537,7 @@ export default function Registry() {
             }
             return result;
         } catch (error) {
-            alert(error);
+            showAlert(2,'Erro!',error.toString());
         }
     }
 

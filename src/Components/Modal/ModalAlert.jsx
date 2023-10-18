@@ -6,7 +6,7 @@ import Translator from "../../Class/Translator";
 
 export default function ModalAlert(props) {
   const [translator] = useState(new Translator(props.jAlert.message))
-  console.log(translator.getMessagePT())
+
   return (
     <div id='ModalAlertContainer'>
       <div className='d-flex flex-column' id={styleModal(props.jAlert.type)}>

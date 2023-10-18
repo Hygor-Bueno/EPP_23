@@ -14,7 +14,7 @@ export default function OrderTableItems() {
     const { listOrder } = useOrderContext();
     const [newListItems, setNewListItems] = useState<OrderItem[]>([]);
     const util = new Util();
-
+    //new Intl.NumberFormat('pt-BR').format(numero)
     useEffect(() => {
         function createOrderItems(list: any) {
             const uniqueOrders: Record<number, OrderItem> = {};

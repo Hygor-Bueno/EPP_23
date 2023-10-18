@@ -145,6 +145,7 @@ export default function OrderField(props) {
     function deleteMenuLog() {
         let items = props.logSales;
         items.forEach(item => {
+            console.log(parseInt(item.epp_id_product) === parseInt(props.pluMenu),parseInt(item.epp_id_product) , parseInt(props.pluMenu))
             if (parseInt(item.epp_id_product) === parseInt(props.pluMenu)) {
                 removeItem(item.epp_id_product);
             }
@@ -175,9 +176,10 @@ export default function OrderField(props) {
                 let log = new LogSales(null, item.pluMenu, null, 1, null, 1, item.description, 'Un', true);
                 let req = await log.addItem();
                 if (req.error) throw new Error(req.message);
-                let exist = existItem(list);
-                exist.exist ? list[exist.position] = log : list.push(log);
+                list.push(log);
                 props.setLogSales([...list]);
+            }else{
+                throw new Error('O item já foi inserido nos adicionais, mude a quatidade clicando no botão "+".')
             }
         } catch (error) {
             props.setIsOpenModal(true);
@@ -190,17 +192,6 @@ export default function OrderField(props) {
             });
             props.cleanOrder();
         }
-    }
-
-    function existItem(array) {
-        let result = { exist: false, position: 0 }
-        array.forEach((item, index) => {
-            if (item.getBase_item()) {
-                result.exist = true;
-                result.position = index;
-            }
-        })
-        return result;
     }
 
     function reloadTotal() {

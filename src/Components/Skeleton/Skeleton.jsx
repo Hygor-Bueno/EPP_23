@@ -1,13 +1,26 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
-import { Connection } from '../../Util/RestApi';
+import React, { useEffect, useState } from 'react';
+
 import Util from '../../Util/Util';
 import './Skeleton.css';
-import { Navigate, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 export default function Skeleton({ children }) {
-    const [menu, setMenu] = useState(false)
+    const [menu, setMenu] = useState(false);
+    const [publicUser, setPublicUser] = useState(true);
     const navigate = useNavigate();
+    useEffect(() => {
+        (async () => {
+            try {
+                const util = new Util();
+                let validation = await util.validateAccess();
+                if (validation.error) throw new Error(validation.message);
+                setPublicUser(validation.data[0].public_user);
+            } catch (e) {
+                console.error(e)
+            }
+        })();
+    }, [])
     return (
         <div id="skeleton">
             <section>
@@ -22,9 +35,9 @@ export default function Skeleton({ children }) {
                     }
                 </div>
                 <div id="verticalMenuDiv" className={menu ? 'd-flex' : "d-none"}>
-                    <button type="button" title="Tela de produção." onClick={() => navigate("/order")}><FontAwesomeIcon icon="fa-boxes-packing" /></button>
+                    <button type="button" className={publicUser ? 'disabledStyle' : ''} disabled={publicUser} title="Tela de produção." onClick={() => navigate("/order")}><FontAwesomeIcon icon="fa-boxes-packing" /></button>
                     <button type="button" title="Tela de vendas." onClick={() => navigate("/")}><FontAwesomeIcon icon="fa-money-check-dollar" /></button>
-                    <button type="button" title="Tela de Cadastro (Menu e Produtos)." onClick={() => navigate("/registry")}><FontAwesomeIcon icon="fa-computer" /></button>
+                    <button type="button" className={publicUser ? 'disabledStyle' : ''} disabled={publicUser} title="Tela de Cadastro (Menu e Produtos)." onClick={() => navigate("/registry")}><FontAwesomeIcon icon="fa-computer" /></button>
                     <button type="button" title="Realizar logoff." onClick={() => {
                         navigate("/login");
                         localStorage.removeItem('token');
