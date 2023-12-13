@@ -52,6 +52,10 @@ export default function PrintOrder(props) {
                             body>.brokenDiv{
                                 page-break-before: always;
                                 margin-bottom: 1vmin;
+                                padding:0mm 20mm;
+                            }
+                            *{
+                                font-size:6mm;
                             }
                         </style>
                     </head>
@@ -71,6 +75,7 @@ export default function PrintOrder(props) {
         newWindow.close();
     }
     function bodyOrder(menuItem, addItems) {
+        console.log(menuItem,props.pluMenu)
         return (`
                     <div class='brokenDiv'>
                         <strong>ENCOMENDA CEIA PEGPESE</strong><br/>
@@ -79,13 +84,13 @@ export default function PrintOrder(props) {
                         Nº. Documento: ${props.orderCod}<br/>
                         Cliente: ${props.nameClient}<br/>
                         Data: ${util.convertDateBR(props.dateOrder)}<br/>
-                        Sinal: R$ ${props.signal}<br/>
+                        Sinal: R$ ${parseFloat(props.signal).toFixed(2)}<br/>
                         Pagar: R$ ${parseFloat(props.total - props.signal).toFixed(2)}<br/>
-                        Total: R$ ${props.total}<br/>
+                        Total: R$ ${parseFloat(props.total).toFixed(2)}<br/>
                         <hr/>
                         ${
                             props.pluMenu && `
-                                Menu: ${props.menu}<br/>
+                                Menu: ${props.menu} - ${util.maskName(menuItem[0].getDescription())}<br/>
                                 Código: ${props.pluMenu}<br/>
                                 Tipo do arroz: ${props.rice}<br/>
                                 Sobremesa: ${props.dessert}<br/>
@@ -110,10 +115,10 @@ export default function PrintOrder(props) {
                         <br/>
                         <br/>
 
-                        __________________________________<br/>
+                        ______________________________<br/>
                         Assinatura do Cliente<br/>
                         <br/>
-                        __________________________________<br/>
+                        ______________________________<br/>
                         Assinatura do Responsável<br/>
                         <br/>
 
@@ -123,12 +128,11 @@ export default function PrintOrder(props) {
     }
     function addtionalItems(items) {
         let result = '';
-        console.log(items);
         items.forEach((item) => {
             result += `
                 Cód.: ${item.epp_id_product}.<br/>            
-                Descrição: ${item.description} - ${item.quantity} ${item.getMeasure()}. (Preço unit/kg R$ ${parseFloat(item.price / item.quantity).toFixed(2)})<br/>
-                Subtotal:R$ ${item.price}<br/>
+                Descrição: ${util.maskName(item.description)} - ${item.quantity} ${item.getMeasure()}. (Preço unit/kg R$ ${parseFloat(item.price / item.quantity).toFixed(2)})<br/>
+                Subtotal:R$ ${parseFloat(item.price).toFixed(2)}<br/>
                 <br/>
         `});
         return result;

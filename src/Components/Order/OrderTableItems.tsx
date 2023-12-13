@@ -11,7 +11,7 @@ interface OrderItem {
 }
 
 export default function OrderTableItems() {
-    const { listOrder } = useOrderContext();
+    const { listOrder,setLoading } = useOrderContext();
     const [newListItems, setNewListItems] = useState<OrderItem[]>([]);
     const util = new Util();
     //new Intl.NumberFormat('pt-BR').format(numero)
@@ -37,6 +37,7 @@ export default function OrderTableItems() {
 
         async function decomposeMenus(list: OrderItem[]) {
             let result: any = [];
+            setLoading(true);
             try {
                 let menus = list.filter((item: any) => item.menu);
                 let listReq: any = [];
@@ -50,6 +51,7 @@ export default function OrderTableItems() {
             } catch (error) {
                 console.error(error);
             }
+            setLoading(false);
             return result;
         }
 
@@ -82,15 +84,16 @@ export default function OrderTableItems() {
             let plusItems = await decomposeMenus(menus);
             let fullItems = items.concat(plusItems);
             setNewListItems([...createOrderItems(fullItems)]);
+
         }
         initialize();
 
-    }, [listOrder]);
+    }, [listOrder,setLoading]);
 
 
     return (
         <div id='orderTableItems' className='d-flex flex-column container'>
-            <button type='button' className='btn btn-outline-success my-2 p-1 col-2 text-center' onClick={() => { util.downloadtable(newListItems, 'Itens') }}>Download</button>
+            <button type='button' className='btn btn-outline-success my-2 p-1 col-2 text-center' onClick={() => { util.downloadtable(newListItems, 'Itens','quantity') }}>Download</button>
             <div>
                 <div className='d-flex flex-row'>
                     <div className='col-2 border px-2'><b>Código:</b></div>
@@ -101,7 +104,7 @@ export default function OrderTableItems() {
                     <div className='d-flex flex-row' key={`newItem_${newItem.eppIdProduct}`}>
                         <div className='col-2 border px-2'>{newItem.eppIdProduct}</div>
                         <div className='col-8 border px-2'>{newItem.description.toUpperCase()}</div>
-                        <div className='col-2 border px-2'>{newItem.quantity.toFixed(3)}</div>
+                        <div className='col-2 border px-2'>{parseFloat(newItem.quantity.toString()).toFixed(3)}</div>
                     </div>
                 ))}
             </div>

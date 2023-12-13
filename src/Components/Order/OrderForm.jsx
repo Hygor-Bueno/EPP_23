@@ -11,7 +11,7 @@ import { useOrderContext } from "./OrderContext.jsx";
 import OrderList from "../QrCode/GenerateQRCodes.jsx";
 export default function OrderForm() {
     const util = new Util();
-    const { listOrder, updateListOrder, restartListOrder } = useOrderContext();
+    const { listOrder, updateListOrder, restartListOrder, setLoading, setParamsModal, setIsOpenModal } = useOrderContext();
     const [printQrcode, setPrintQrcode] = useState(false);
 
     //Área dos Inpust:
@@ -42,10 +42,11 @@ export default function OrderForm() {
     const buttonGet = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-success col-2', buttonIcon: 'fa-search', buttonClick: () => queryForm() })
     const buttonClean = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-danger col-2', buttonIcon: 'fa-trash-alt', buttonClick: async () => { cleanForm(); await restartListOrder(); } })
     const buttonQrCode = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-qrcode', buttonClick: () => setPrintQrcode(true) })
-    const buttonTable = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-table', buttonClick: () => { util.downloadtable(listOrder) } })
+    const buttonTable = new SettingButtons({ buttonType: 'button', buttonTitle: 'Buscar', buttonClass: 'btn btn-primary col-2', buttonIcon: 'fa-table', buttonClick: () => { util.downloadtable(listOrder,'Pedidos','quantity') } })
 
     useEffect(() => {
         async function loadStores() {
+            setLoading(true);
             let connection = new Connection();
             let reqStore = await connection.get('&company_id=1', 'CCPP/Shop.php');
             if (!reqStore.error) {
@@ -53,10 +54,20 @@ export default function OrderForm() {
                 reqStore.data.forEach(store => listStore.push({ code: `${store.description.replace(/ /g, '-')}_${store.number}`, name: store.description }));
                 let newTeste = new SettingSelectField({ label: 'Lojas', options: listStore });
                 setStores(newTeste);
+            } else {
+                setIsOpenModal(true);
+                setParamsModal({
+                    type: "Error",
+                    message: 'Erro ao carregar a loja, por favor recarregar a página!',
+                    title: "Erro!",
+                    isConfirmation: false,
+                    onConfirm: ""
+                });
             };
+            setLoading(false);
         }
         loadStores();
-    }, []);
+    }, [setLoading, setParamsModal, setIsOpenModal]);
 
     return (
         <div id='containerFormCtrl' className="container w-25">
@@ -95,6 +106,7 @@ export default function OrderForm() {
     );
 
     async function queryForm() {
+        setLoading(true);
         try {
             let testFields = multipleValidation();
             if (testFields.error) throw new Error(testFields.message || 'Compos irrgulares...');
@@ -104,8 +116,16 @@ export default function OrderForm() {
             updateListOrder(req.data);
             cleanForm();
         } catch (error) {
-            console.error(error);
+            setIsOpenModal(true);
+            setParamsModal({
+                type: "Error",
+                message: error.toString(),
+                title: "Erro!",
+                isConfirmation: false,
+                onConfirm: ""
+            });
         }
+        setLoading(false)
     }
     function prepareURL() {
         let response = "&controllerEPP";

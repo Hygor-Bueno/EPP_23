@@ -184,11 +184,11 @@ export default function AddItems(props) {
     async function calculateSubTotal(item, value) {
         if (item.measure.toUpperCase() !== 'KG' && value && value.includes('.')) {
             value = 0;
-            alert("Este item é vendido apenas por unidade, por favor não utilizar ponto ou vírgula.");
+            props.startModalError("Este item é vendido apenas por unidade, por favor não utilizar ponto ou vírgula.");
         };
         if (parseFloat(value) < 0) {
             value = 0;
-            alert("Não é permitido itens negativos.");
+            props.startModalError("Não é permitido itens negativos.");
         };
 
         setValueProduct(item.id_product, "quantity", value);
@@ -200,7 +200,7 @@ export default function AddItems(props) {
     }
     function checkedItem(element, item) {
         let result = validateQuantity(element.target.value, item.measure);
-        if (result.error) alert(result.message);
+        if (result.error) props.startModalError(result.message);
         if (result.restart) calculateSubTotal(item, 0);
         if (element.target.value === '') calculateSubTotal(item, 0);
     }
