@@ -32,7 +32,7 @@ const OrderList = (props) => {
   const generateQRCodes = (orders) => {
     orders.forEach((order) => {
       const qrCodeData = order.eppIdOrder;
-      const qrCodeSize = 128; // Tamanho do código QR em pixels
+      const qrCodeSize = 113; // Tamanho do código QR em pixels
       const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${qrCodeData}&size=${qrCodeSize}x${qrCodeSize}`;
 
       const qrCodeImg = new Image();
@@ -51,9 +51,13 @@ const OrderList = (props) => {
     printWindow.document.write(`
                   <html>
                     <head>
-                        <title>Pedido QRCode}</title>
+                        <title>Pedido QRCode</title>
                         <style>
-                        body{
+                          body{
+                            display:flex;
+                            justify-content:center;
+                            align-items:center;
+                          }
                           #divQRCodeContainer p {
                             margin: 0.8vh;
                           }
@@ -61,11 +65,7 @@ const OrderList = (props) => {
                               display: flex;
                               flex-direction: column;
                               align-items:center;
-                              width: 100vw;
-                              height: 100vh;
-                              top: 0;
-                              left: 0;
-                              position: absolute; 
+                                                      
                             }
                             .QRCodeContainer{
                               background-color:#f9f9f9;                         
@@ -75,8 +75,9 @@ const OrderList = (props) => {
                               align-items:center;
                               page-break-before: always;
                               margin-bottom: 2vh;
-                              height: 60mm;
-                              width: 60mm;
+                              height: 30mm;
+                              width: 80mm;
+                              
                           }
                           button{
                             display:none;
@@ -88,7 +89,7 @@ const OrderList = (props) => {
                     ${document.getElementById('divQRCodeSubCont').outerHTML}
                   </body>
                   </html>
-         `);
+        `);
     setTimeout(() => {
       printWindow.print();
       printWindow.close();
