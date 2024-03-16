@@ -10,6 +10,7 @@ import Home from '../Components/Home/Home.jsx';
 import Skeleton from '../Components/Skeleton/Skeleton.jsx';
 import Registry from '../Components/Registry/Registry.jsx';
 import Order from '../Components/Order/Order';
+import Supper from '../Components/Registry/Supper.jsx';
 
 library.add(faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation, faPen, faTrash, faPlus, faEraser, faCopy, faHome, faSave, faUndoAlt, faSquare, faQrcode,faTable,faDownload)
 
@@ -23,6 +24,7 @@ export default function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/order" element={<Skeleton><Order /></Skeleton>} />
                 <Route path="/registry" element={<Skeleton><Registry /></Skeleton>} />
+                <Route path="/Supper" element={<Skeleton><Supper /></Skeleton>} />
             </Routes>
         </HashRouter>
     )
