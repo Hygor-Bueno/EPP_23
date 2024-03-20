@@ -11,23 +11,45 @@ const fadeIn = keyframes`
 `;
 
 const Table = styled.table`
-  width: 100%;
+  width: var(--widthInput);
+  font-size: var(--textSize);
+
   border-collapse: collapse;
   border-spacing: 0;
+  border-radius: var(--borderRadius);
+  overflow: hidden;
+`;
+
+const TableHead = styled.thead`
+  background-color: #f2f2f2;
 `;
 
 const TableRow = styled.tr`
   animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
+const TableHeaderCell = styled.th`
+  padding: var(--spaceDefault);
+  border: var(--borderSize) solid #ddd;
+  text-align: left;
+`;
+
 const TableCell = styled.td`
-  padding: 10px;
+  padding: var(--textSize);
+  
   border: 1px solid #ddd;
 `;
 
-const ResponsiveTable = ({ data }) => {
+const ResponsiveTable = ({ data, headers }) => {
   return (
     <Table>
+      <TableHead>
+        <TableRow>
+          {headers.map((header, index) => (
+            <TableHeaderCell key={index}>{header}</TableHeaderCell>
+          ))}
+        </TableRow>
+      </TableHead>
       <tbody>
         {data.map((row, rowIndex) => (
           <TableRow key={rowIndex}>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-    width: 40vw;
+export const Container = styled.section`
+    width: 50vw;
     height: 100vh;
     background-color: #297073;
 
@@ -28,14 +28,33 @@ export const Container = styled.div`
         height: 100%;
         overflow: auto;
     }
+
+    h3 {
+        font-size: var(--textSize);
+    }
+
     
+    h5 {
+        font-size: var(--textSizeP);
+    }
 `;
 
 export const Card = styled.div`
-    width: 35vw;
+    overflow: auto;
+    width: 42vw;
     height: 30vw;
+    
     background-color: white;
     border-radius: 1vw;
     padding: 1vw;
+
+    @media screen and (min-width: 413px) and (max-width: 1025px){
+        height: 40vw;
+    }
+
+    /* display: flex;
+    justify-content: space-between;
+    gap: 1.6vw;
+    align-items: center; */
 `;
 
