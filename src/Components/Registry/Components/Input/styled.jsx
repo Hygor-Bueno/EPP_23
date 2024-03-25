@@ -5,7 +5,7 @@ export const InputContainer = styled.div`
   margin-bottom: 20px;
 
   ${(props) =>
-    props.isRequiredAndEmpty &&
+    props.isrequired &&
     css`
       input {
         border-color: #f00;

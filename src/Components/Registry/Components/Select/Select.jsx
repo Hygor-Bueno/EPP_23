@@ -14,12 +14,8 @@ const Select = ({ name, value, onChange, options, required, ...props }) => {
     }
   };
 
-  const defaultOption = { value: '', label: '', hidden: true };
-
-  const updatedOptions = [defaultOption, ...options];
-
   return (
-    <SelectContainer focused={focused} isRequiredAndEmpty={required && !value.trim()}>
+    <SelectContainer focused={focused} isrequired={required && !value.trim() ? "true" : "false"}>
       <SelectField
         {...props}
         onFocus={handleFocus}
@@ -28,9 +24,10 @@ const Select = ({ name, value, onChange, options, required, ...props }) => {
         value={value}
         required={required}
       >
-        {updatedOptions.map((option, index) => (
-          <option key={index} value={option.value} hidden={option.hidden}>
-            {option.label}
+        <option default hidden value=""></option>
+        {options?.map((option, index) => (
+          <option key={index} value={option.id_category} hidden={option.hidden}>
+            {option.cat_description}
           </option>
         ))}
       </SelectField>
@@ -45,11 +42,11 @@ const SelectContainer = styled.div`
 
 const SelectLabel = styled.label`
   position: absolute;
-  top: ${props => (props.focused || props.isRequiredAndEmpty) ? '-15px' : '50%'};
+  top: ${props => (props.focused || props.isrequired === "true") ? '-16px' : '50%'};
   left: 10px;
-  transform: ${props => (props.focused || props.isRequiredAndEmpty) ? 'translateY(0)' : 'translateY(-50%)'};
-  font-size: ${props => (props.focused || props.isRequiredAndEmpty) ? 'var(--textSizeP)' : 'var(--textSize)'};
-  color: ${props => (props.focused || props.isRequiredAndEmpty) ? '#007bff' : '#333'};
+  transform: ${props => (props.focused || props.isrequired === "true") ? 'translateY(0)' : 'translateY(-50%)'};
+  font-size: ${props => (props.focused || props.isrequired === "true") ? 'var(--textSizeP)' : 'var(--textSize)'};
+  color: ${props => (props.focused || props.isrequired === "true") ? '#007bff' : '#333'};
   transition: all 0.3s ease;
 `;
 

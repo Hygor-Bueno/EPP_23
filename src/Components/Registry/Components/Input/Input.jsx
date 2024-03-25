@@ -15,7 +15,7 @@ const Input = ({ name, value, onChange, required, width, widthBox, ...props }) =
   };
 
   return (
-    <InputContainer widthBox={widthBox} focused={focused} isRequiredAndEmpty={required && !value.trim()}>
+    <InputContainer widthBox={widthBox} focused={focused} isrequired={required && !value.trim()}>
       <InputField
         {...props}
         width={width}
@@ -31,17 +31,16 @@ const Input = ({ name, value, onChange, required, width, widthBox, ...props }) =
 };
 
 const InputContainer = styled.div`
-  /* width: ${props => props.widthBox || 'auto'}; */
   position: relative;
 `;
 
 const InputLabel = styled.label`
   position: absolute;
-  top: ${props => (props.focused || props.isRequiredAndEmpty) ? '-0px' : '50%'};
+  top: ${props => (props.focused || props.isrequired) ? '-0px' : '50%'};
   left: var(--spaceDefault);
-  transform: ${props => (props.focused || props.isRequiredAndEmpty) ? 'translateY(0)' : 'translateY(-50%)'};
-  font-size: ${props => (props.focused || props.isRequiredAndEmpty) ? 'var(--textSizeP)' : 'var(--textSize)'};
-  color: ${props => (props.focused || props.isRequiredAndEmpty) ? '#007bff' : '#333'};
+  transform: ${props => (props.focused || props.isrequired) ? 'translateY(0)' : 'translateY(-50%)'};
+  font-size: ${props => (props.focused || props.isrequired) ? 'var(--textSizeP)' : 'var(--textSize)'};
+  color: ${props => (props.focused || props.isrequired) ? '#007bff' : '#333'};
   transition: all 0.3s ease;
 `;
 

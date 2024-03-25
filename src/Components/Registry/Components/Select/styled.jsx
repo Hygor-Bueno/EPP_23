@@ -5,7 +5,7 @@ export const SelectContainer = styled.div`
   margin-bottom: 20px;
 
   ${(props) =>
-    props.isRequiredAndEmpty &&
+    props.isrequired &&
     css`
       select {
         border-color: #f00;

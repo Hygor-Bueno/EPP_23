@@ -1,46 +1,34 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from './styled';
+import { Connection } from '../../../../Util/RestApi';
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const Table = styled.table`
-  width: var(--widthInput);
-  font-size: var(--textSize);
-
-  border-collapse: collapse;
-  border-spacing: 0;
-  border-radius: var(--borderRadius);
-  overflow: hidden;
-`;
-
-const TableHead = styled.thead`
-  background-color: #f2f2f2;
-`;
-
-const TableRow = styled.tr`
-  animation: ${fadeIn} 0.5s ease-in-out;
-`;
-
-const TableHeaderCell = styled.th`
-  padding: var(--spaceDefault);
-  border: var(--borderSize) solid #ddd;
-  text-align: left;
-`;
-
-const TableCell = styled.td`
-  padding: var(--textSize);
+const ResponsiveTable = ({ data, headers, isConsinco }) => {
+  const [focusedRow, setFocusedRow] = useState(null);
+  const [listSales, setListSales] = useState([]);
+  const [productId, setProductId] = useState(null || '63167');
   
-  border: 1px solid #ddd;
-`;
+  const connection = new Connection();
 
-const ResponsiveTable = ({ data, headers }) => {
+  useEffect(() => {
+    const fetchSales = async () => {
+      if (productId) {
+        try {
+          const reqListSale = await connection.get(`&id_shop=${localStorage.num_store || 0}&id_product=${productId}&fullStore=1`, 'EPP/Product.php');
+          console.log(productId)
+          // const reqListSale = await connection.get(`&id_shop=${localStorage.num_store || 0}&id_product=5000&fullStore=1`, 'EPP/Product.php');
+          setListSales(reqListSale);
+        } catch (error) {
+          console.error('Erro ao buscar vendas:', error);
+        }
+      }
+    };
+    fetchSales();
+  }, [productId]);
+  const handleRowClick = (index) => {
+    setFocusedRow(index);
+    
+  };
+
   return (
     <Table>
       <TableHead>
@@ -51,13 +39,31 @@ const ResponsiveTable = ({ data, headers }) => {
         </TableRow>
       </TableHead>
       <tbody>
-        {data.map((row, rowIndex) => (
-          <TableRow key={rowIndex}>
-            {row.map((cell, cellIndex) => (
-              <TableCell key={cellIndex}>{cell}</TableCell>
-            ))}
-          </TableRow>
-        ))}
+        {isConsinco && (
+          listSales.map((item, index) => (
+            <TableRow key={`table_${index}`}>
+              <TableCell>{item.EMPRESA}</TableCell>
+              <TableCell>{item.DESCCOMPLETA}</TableCell>
+              <TableCell>{item.PRECO}</TableCell>
+            </TableRow>
+          ))
+        )}
+        {!data.error &&
+          data.data?.map((row, rowIndex) => (
+            <TableRow
+              key={`table_${rowIndex}`}
+              className={focusedRow === rowIndex ? 'focused' : ''}
+              onClick={() => {
+                handleRowClick(rowIndex);
+                setProductId(row.id_product);
+              }}
+            >
+              <TableCell>{row.id_product}</TableCell>
+              <TableCell>{row.description}</TableCell>
+              <TableCell>{row.category}</TableCell>
+              <TableCell>{row.measure}</TableCell>
+            </TableRow>
+          ))}
       </tbody>
     </Table>
   );
