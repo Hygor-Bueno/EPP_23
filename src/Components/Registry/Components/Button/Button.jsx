@@ -1,24 +1,24 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import styled, { StyleSheetManager } from 'styled-components';
+import styled from 'styled-components';
 
-const Button = ({ color, bg, onAction, iconImage, children, ...props }) => {
+const Button = ({bg, onAction, iconImage, children, color, isFormRegister, ...rest}) => {
     return (
-        <StyleSheetManager shouldForwardProp={(prop) => prop !== 'bg'}>
-            <ButtonContainer bg={bg} onClick={onAction} {...props}>
-                {iconImage && <FontAwesomeIcon icon={iconImage} />}
-                {children}
-            </ButtonContainer>
-        </StyleSheetManager>
+        <ButtonContainer {...rest} $borderColor={color} $bg={bg} onClick={onAction} >
+            {iconImage && <FontAwesomeIcon icon={iconImage} />}
+            {children}
+        </ButtonContainer>
     )
 }
 
 const ButtonContainer = styled.button`
-    background-color: ${props => props.bg || '#297073'};
+    width: 100%;
+    background-color: ${({$bg}) => $bg || '#297073'};
     color: #fff;
-    padding: var(--spaceDefault) var(--spaceDefaultLL);
+    padding: var(--spaceDefaultP) var(--spaceDefault);
     text-align: center;
-    border: none;
+    border: var(--borderSize) solid;
+    border-color: ${({$borderColor}) => $borderColor || '#fff'};
     border-radius: var(--borderRadius);
     font-size: var(--textSize);
     font-weight: bold;

@@ -12,9 +12,8 @@ export const Card = styled.div`
   overflow: auto;
   width: clamp(1px, 40vw, 800px);
   height: clamp(1px, 30vw, 600px);
-  
+  margin: 0 var(--spaceDefault);
   background-color: white;
-  margin: 0 calc(2.6*var(--spaceDefaultL));
   border-radius: var(--borderRadius);
   padding: var(--spaceDefault);
 
@@ -23,4 +22,9 @@ export const Card = styled.div`
       margin-bottom: var(--spacing-sm);
     }
   }
+`;
+
+export const LimitationBox = styled.div`
+  height: clamp(1vw, 30vh, 200px);
+  overflow-y: auto;
 `;

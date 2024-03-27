@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'; 
 
-const Select = ({ name, value, onChange, options, required, ...props }) => {
+const Select = ({ name, value, onChange, options, required, ...rest }) => {
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
@@ -15,9 +15,10 @@ const Select = ({ name, value, onChange, options, required, ...props }) => {
   };
 
   return (
-    <SelectContainer focused={focused} isrequired={required && !value.trim() ? "true" : "false"}>
+    <SelectContainer $focused={focused} $isrequired={required && !value.trim() ? "true" : "false"}>
+      <label>{name}</label>
       <SelectField
-        {...props}
+        {...rest}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={onChange}
@@ -31,23 +32,16 @@ const Select = ({ name, value, onChange, options, required, ...props }) => {
           </option>
         ))}
       </SelectField>
-      <SelectLabel focused={focused}>{name || 'Select'}</SelectLabel>
     </SelectContainer>
   );
 };
 
 const SelectContainer = styled.div`
   position: relative;
-`;
-
-const SelectLabel = styled.label`
-  position: absolute;
-  top: ${props => (props.focused || props.isrequired === "true") ? '-16px' : '50%'};
-  left: 10px;
-  transform: ${props => (props.focused || props.isrequired === "true") ? 'translateY(0)' : 'translateY(-50%)'};
-  font-size: ${props => (props.focused || props.isrequired === "true") ? 'var(--textSizeP)' : 'var(--textSize)'};
-  color: ${props => (props.focused || props.isrequired === "true") ? '#007bff' : '#333'};
-  transition: all 0.3s ease;
+  label {
+    font-size: var(--textSize);
+    font-weight: var(--fontWeight-bold);
+  }
 `;
 
 const SelectField = styled.select`

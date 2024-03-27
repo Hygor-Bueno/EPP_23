@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { InputContainer, InputField } from './styled';
 
-const Input = ({ name, value, onChange, required, width, widthBox, ...props }) => {
+const Input = ({ name, value, onChange, required }) => {
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
@@ -15,50 +15,19 @@ const Input = ({ name, value, onChange, required, width, widthBox, ...props }) =
   };
 
   return (
-    <InputContainer widthBox={widthBox} focused={focused} isrequired={required && !value.trim()}>
+    <InputContainer focused={+focused} $isrequired={required && !value.trim()}>
+      <label>{name}</label>
       <InputField
-        {...props}
-        width={width}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={onChange}
         value={value}
         required={required}
+        placeholder={name}
       />
-      <InputLabel focused={focused}>{name || 'Cod'}</InputLabel>
     </InputContainer>
   );
 };
 
-const InputContainer = styled.div`
-  position: relative;
-`;
-
-const InputLabel = styled.label`
-  position: absolute;
-  top: ${props => (props.focused || props.isrequired) ? '-0px' : '50%'};
-  left: var(--spaceDefault);
-  transform: ${props => (props.focused || props.isrequired) ? 'translateY(0)' : 'translateY(-50%)'};
-  font-size: ${props => (props.focused || props.isrequired) ? 'var(--textSizeP)' : 'var(--textSize)'};
-  color: ${props => (props.focused || props.isrequired) ? '#007bff' : '#333'};
-  transition: all 0.3s ease;
-`;
-
-const InputField = styled.input`
-  width: var(--widthInput);
-  padding: var(--spaceDefault);
-  font-size: var(--textSize);
-  
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  outline: none;
-  position: relative;
-  z-index: 2;
-  background-color: transparent;
-
-  &:focus {
-    border-color: #007bff;
-  }
-`;
 
 export default Input;

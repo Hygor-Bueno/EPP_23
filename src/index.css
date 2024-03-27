@@ -46,6 +46,11 @@ code {
   --textSize:clamp(1.8vmin,4vmin,16px);
   --textSizeP:clamp(1vmin,4vmin,12px);
 
+  --fontWeight-bold: bold;
+  --fontWeight-600: 600;
+  --fontWeight-400: 400;
+  --fontWeight-200: 200;
+
   --textColor:#495057;
 
   /*Configurações do Label.*/
@@ -59,6 +64,7 @@ code {
   --spaceDefaultP:clamp(1px, 1.5vmin, 7.5px);
   --spaceDefault:clamp(1px, 2vmin, 10px);
   --spaceDefaultL:clamp(1.5px, 3vmin, 15px);
+  --spaceDefaultLL:clamp(2px, 3vmin, 20px);
 
   --widthInput: clamp(1vw, 50vw, 100%);
 

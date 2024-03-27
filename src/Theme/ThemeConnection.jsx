@@ -10,9 +10,6 @@ const ThemeContextConnectionProvider = ({ children }) => {
   const [category, setCategory] = useState([]);
   const [logMenu, setlogMenu] = useState([]);
   const [listStore, setListStore] = useState([]);
-  const [store, setStore] = useState([]);
-  const [productId, setProductId] = useState([]);
-  const [listSale, setListSale] = useState([]);
 
   const connection = new Connection();
 
@@ -23,33 +20,23 @@ const ThemeContextConnectionProvider = ({ children }) => {
       let reqCategory = await connection.get('&category=1', 'EPP/Product.php');
       let reqLogMenu = await connection.get(null, 'EPP/LogMenu.php');
       let reqListStore = await connection.get('&company_id=1', 'CCPP/Shop.php');
-      let response = await connection.get(`&id_shop=${store.number}&id_product=${productId}`, 'EPP/Product.php');
-      
 
       setProd(reqProduct);
       setMenu(reqMenu);
       setCategory(reqCategory);
       setlogMenu(reqLogMenu);
       setListStore(reqListStore);
-      setListSale(response);
     }
 
     response();
   },[])
-  
-  
-
 
   const globalConnectionValue = {
     prod,
     menu,
     category,
     logMenu,
-    listSale,
-    listStore,
-
-    setStore,
-    setProductId,
+    listStore
   }
 
   return (

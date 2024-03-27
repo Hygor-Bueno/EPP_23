@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from './styled';
 import { Connection } from '../../../../Util/RestApi';
+import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
 
 const ResponsiveTable = ({ data, headers, isConsinco }) => {
   const [focusedRow, setFocusedRow] = useState(null);
@@ -9,13 +10,21 @@ const ResponsiveTable = ({ data, headers, isConsinco }) => {
   
   const connection = new Connection();
 
+  const {
+    codigo,
+    setCodigo,
+    setDescricao,
+    setEmbalagem,
+    setCategoria,
+    setStatus,
+  } = useContext(ThemeRegisterContexts);
+
   useEffect(() => {
     const fetchSales = async () => {
-      if (productId) {
+      if (codigo) {
         try {
-          const reqListSale = await connection.get(`&id_shop=${localStorage.num_store || 0}&id_product=${productId}&fullStore=1`, 'EPP/Product.php');
-          console.log(productId)
-          // const reqListSale = await connection.get(`&id_shop=${localStorage.num_store || 0}&id_product=5000&fullStore=1`, 'EPP/Product.php');
+          const reqListSale = await connection.get(`&id_shop=${localStorage.num_store || 0}&id_product=${codigo}&fullStore=1`, 'EPP/Product.php');
+          console.log(productId);
           setListSales(reqListSale);
         } catch (error) {
           console.error('Erro ao buscar vendas:', error);
@@ -23,7 +32,7 @@ const ResponsiveTable = ({ data, headers, isConsinco }) => {
       }
     };
     fetchSales();
-  }, [productId]);
+  }, [codigo]);
   const handleRowClick = (index) => {
     setFocusedRow(index);
     
@@ -56,6 +65,10 @@ const ResponsiveTable = ({ data, headers, isConsinco }) => {
               onClick={() => {
                 handleRowClick(rowIndex);
                 setProductId(row.id_product);
+                setCodigo(row.id_product);
+                setDescricao(row.description);
+                setCategoria(row.category);
+                setEmbalagem(row.measure);
               }}
             >
               <TableCell>{row.id_product}</TableCell>

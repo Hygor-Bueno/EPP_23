@@ -26,11 +26,14 @@ export const TableHead = styled.thead`
 export const TableRow = styled.tr`
   animation: ${fadeIn} 0.5s ease-in-out;
   transition: all ease 0.5s;
-  &:hover {
+  &:nth-child(even) {
     background-color: #f9f9f9;
   }
-
-  &.focused {
+  &:hover {
+    background-color: #e0e0e0;
+  }
+  &.focused,
+  &:focus {
     background-color: #297073;
     color: #f9f9f9;
   }

@@ -1,34 +1,27 @@
-import styled, {css} from "styled-components";
+import styled from 'styled-components';
 
 export const InputContainer = styled.div`
   position: relative;
-  margin-bottom: 20px;
 
-  ${(props) =>
-    props.isrequired &&
-    css`
-      input {
-        border-color: #f00;
-      }
-    `}
-`;
-
-export const InputLabel = styled.label`
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  transition: top 0.3s, font-size 0.3s;
-  font-size: 16px;
-  z-index: 1;
-  color: #999;
-
-  ${(props) =>
-    props.focused &&
-    css`
-      top: -6px;
-      font-size: 12px;
-    `}
+  label {
+    font-size: var(--textSize);
+    font-weight: var(--fontWeight-bold);
+  }
 `;
 
 
+export const InputField = styled.input`
+  width: var(--widthInput);
+  padding: var(--spaceDefault);
+  font-size: var(--textSize);
+  
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  position: relative;
+  z-index: 2;
+
+  &:focus {
+    border-color: #007bff;
+  }
+`;

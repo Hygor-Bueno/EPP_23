@@ -1,22 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Input from '../../Input/Input';
 import Select from '../../Select/Select';
 import ResponsiveTable from '../../ViewTable/Table';
 import { Connection } from '../../../../../Util/RestApi';
-import { ThemeConnectionContext } from '../../../../../Theme/ThemeConnection';
-import { Card } from './styled';
+import { Card, LimitationBox } from './styled';
+import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
 
 export const RegisterProd = () => {
-  const [codigo, setCodigo] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [embalagem, setEmbalagem] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [status, setStatus] = useState('');
 
-  const [dados, setDados] = useState([]);
+  const {
+    codigo,
+    setCodigo,
+
+    descricao,
+    setDescricao,
+
+    embalagem,
+    setEmbalagem,
+
+    categoria,
+    setCategoria,
+
+    status,
+    setStatus,
+  } = useContext(ThemeRegisterContexts);
+
   const [headers, setHeaders] = useState(['Loja', 'produto', 'preço']);
-
-  const {} = useContext(ThemeConnectionContext);
 
   const handleChange = (e, setter) => {
     setter(e.target.value);
@@ -29,16 +38,17 @@ export const RegisterProd = () => {
         <div className="container-fluid">
           <h2>Cadastrar Produto</h2>
           <div className="row justify-content-between mt-4">
-            <div className="col-lg-12 col-md-12 col-sm-12">
+            <div className="col-lg-4 col-md-12 col-sm-12">
               <Input
                 width={'100%'}
                 name="Cod"
                 value={codigo}
+                type="number"
                 onChange={(e) => handleChange(e, setCodigo)}
                 required={true}
               />
             </div>
-            <div className="col-lg-12 col-md-12 col-sm-12">
+            <div className="col-lg-8 col-md-12 col-sm-12">
               <Input
                 width={'100%'}
                 name="Descrição"
@@ -79,7 +89,9 @@ export const RegisterProd = () => {
               </div>
             </div>
             <h3>Informações Consinco:</h3>
-           <ResponsiveTable isConsinco={true} data={[]} headers={headers}/>
+            <LimitationBox>
+              <ResponsiveTable isConsinco={true} data={[]} headers={headers}/>
+            </LimitationBox>
           </div>
         </div>
       </Card>

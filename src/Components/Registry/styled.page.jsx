@@ -1,27 +1,48 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const ContainerTableInformation = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
-  max-height: 43vw;
-`
+  max-height: 50vw;
+  margin-bottom: 1vw;
+  
+  @media screen and (max-height: 768px) {
+    max-height: 60vw;
+  }
+
+  @media screen and (max-height: 480px) {
+    max-height: 30vw;
+  }
+`;
 
 export const Flex =  styled.div`
-  width: 100% !important;
+  width: var(--widthInput);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
 `;
 
+export const NavigationBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: var(--spaceDefault);
+`
+
+export const GroupButton = styled(NavigationBox)`
+  gap: 4vw;
+  justify-content: center;
+`;
+
 export const ContainerBackground = styled.section`
-  width: 50vw;
+  width: 60%;
   height: 100vh;
   background-color: #297073;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   overflow: hidden;
 
   input {
