@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from './styled';
 import { Connection } from '../../../../Util/RestApi';
 import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
 
-const ResponsiveTable = ({ data, headers, isConsinco }) => {
+const ResponsiveTable = ({ data, headers, isConsinco, refrashTable }) => {
   const [focusedRow, setFocusedRow] = useState(null);
   const [listSales, setListSales] = useState([]);
   const [productId, setProductId] = useState(null || '63167');
@@ -17,6 +17,8 @@ const ResponsiveTable = ({ data, headers, isConsinco }) => {
     setEmbalagem,
     setCategoria,
     setStatus,
+
+    setRefrashList,
   } = useContext(ThemeRegisterContexts);
 
   useEffect(() => {
@@ -32,14 +34,16 @@ const ResponsiveTable = ({ data, headers, isConsinco }) => {
       }
     };
     fetchSales();
-  }, [codigo]);
+  }, [refrashTable]);
+
+  const tableRef = useRef(null);
+
   const handleRowClick = (index) => {
     setFocusedRow(index);
-    
   };
 
   return (
-    <Table>
+    <Table ref={tableRef}>
       <TableHead>
         <TableRow>
           {headers.map((header, index) => (
@@ -58,7 +62,7 @@ const ResponsiveTable = ({ data, headers, isConsinco }) => {
           ))
         )}
         {!data.error &&
-          data.data?.map((row, rowIndex) => (
+          data.map((row, rowIndex) => (
             <TableRow
               key={`table_${rowIndex}`}
               className={focusedRow === rowIndex ? 'focused' : ''}
@@ -67,14 +71,18 @@ const ResponsiveTable = ({ data, headers, isConsinco }) => {
                 setProductId(row.id_product);
                 setCodigo(row.id_product);
                 setDescricao(row.description);
-                setCategoria(row.category);
+                setCategoria(row.id_category);
                 setEmbalagem(row.measure);
+                setStatus(row.status_prod);
+                setRefrashList(prev => !prev);
               }}
             >
+              {/* {console.log(row)} */}
               <TableCell>{row.id_product}</TableCell>
               <TableCell>{row.description}</TableCell>
               <TableCell>{row.category}</TableCell>
               <TableCell>{row.measure}</TableCell>
+              <TableCell>{row.status_prod == 1 ? 'Ativo' : 'inativo'}</TableCell>
             </TableRow>
           ))}
       </tbody>

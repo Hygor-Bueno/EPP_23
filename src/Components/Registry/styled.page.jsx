@@ -4,15 +4,19 @@ export const ContainerTableInformation = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
-  max-height: 50vw;
+  max-height: 35vh;
   margin-bottom: 1vw;
   
+  @media screen and (max-height: 1024px) {
+    max-height: 80vh;
+  }
+
   @media screen and (max-height: 768px) {
-    max-height: 60vw;
+    max-height: 70vh;
   }
 
   @media screen and (max-height: 480px) {
-    max-height: 30vw;
+    max-height: 60vh;
   }
 `;
 

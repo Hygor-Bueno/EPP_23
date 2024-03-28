@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-
-
 export const BackgroundTable = styled.div`
   width: 50vw;
   height: 15vw;

@@ -1,26 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { InputContainer, InputField } from './styled';
 
-const Input = ({ name, value, onChange, required }) => {
-  const [focused, setFocused] = useState(false);
-
-  const handleFocus = () => {
-    setFocused(true);
-  };
-
-  const handleBlur = () => {
-    if (required && !value.trim()) {
-      setFocused(false);
-    }
-  };
-
+const Input = ({ name, value, onChange, isDisabled, required, onBlur, ...rest }) => {
+  
   return (
-    <InputContainer focused={+focused} $isrequired={required && !value.trim()}>
+    <InputContainer>
       <label>{name}</label>
       <InputField
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        {...rest}
+        disabled={isDisabled}
         onChange={onChange}
+        onBlur={onBlur}
         value={value}
         required={required}
         placeholder={name}

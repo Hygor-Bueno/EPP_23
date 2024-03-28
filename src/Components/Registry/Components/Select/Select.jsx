@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'; 
 
-const Select = ({ name, value, onChange, options, required, ...rest }) => {
+const Select = ({ name, value, onChange, options, valueKey, labelKey, required, includeInactive, includeEmb, ...rest }) => {
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
@@ -12,6 +12,38 @@ const Select = ({ name, value, onChange, options, required, ...rest }) => {
     if (required && !value.trim()) {
       setFocused(false);
     }
+  };
+
+  const renderOptions = () => {
+    let renderedOptions = options?.map((option, index) => (
+      <option key={index} value={option[valueKey]}>
+        {option[labelKey]}
+      </option>
+    ));
+
+    if (includeInactive) {
+      renderedOptions.push(
+        <option key="ativo" value="1">
+          Ativo
+        </option>,
+        <option key="inativo" value="0">
+          Inativo
+        </option>
+      );
+    }
+
+    if (includeEmb) {
+      renderedOptions.push(
+        <option key="Un" value="Un">
+          Un
+        </option>,
+        <option key="Kg" value="Kg">
+          Kg
+        </option>
+      );
+    }
+
+    return renderedOptions;
   };
 
   return (
@@ -26,11 +58,7 @@ const Select = ({ name, value, onChange, options, required, ...rest }) => {
         required={required}
       >
         <option default hidden value=""></option>
-        {options?.map((option, index) => (
-          <option key={index} value={option.id_category} hidden={option.hidden}>
-            {option.cat_description}
-          </option>
-        ))}
+        {renderOptions()}
       </SelectField>
     </SelectContainer>
   );
