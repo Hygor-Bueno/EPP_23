@@ -35,6 +35,8 @@ const ThemeContextRegisterProvider = ({ children }) => {
   const [categoria, setCategoria] = useState('');
   const [status, setStatus] = useState('');
 
+  const [DescriptionConsicon, setDescriptionConsicon] = useState('');
+
   const [refrashList, setRefrashList] = useState(false);
 
   const connection = new Connection();
@@ -45,7 +47,7 @@ const ThemeContextRegisterProvider = ({ children }) => {
    */
   async function setPostRegisterProd() {
     try {
-      let data = { id_product: codigo, status_prod: status, description: descricao, measure: embalagem, category: categoria };
+      let data = { id_product: codigo, status_prod: status, description: descricao, measure: embalagem, category: categoria, price: "0" };
       console.log(data);
       // await connection.post(data, "EPP/Product.php");
     } catch (error) {
@@ -59,7 +61,7 @@ const ThemeContextRegisterProvider = ({ children }) => {
    */
   async function setUpdateRegisterProd() {
     try {
-      let data = { id_product: codigo, status_prod: status, description: descricao, measure: embalagem, category: categoria };
+      let data = { id_product: codigo, status_prod: status, description: descricao, measure: embalagem, category: categoria, price: "0" };
       console.log(data);
       // await connection.put(data, "EPP/Product.php");
     } catch (error) {

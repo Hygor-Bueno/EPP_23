@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { RegisterProd } from "./Components/Register/RegisterProd/RegisterProd";
 import { ThemeConnectionContext } from "../../Theme/ThemeConnection";
-import ResponsiveTable from "./Components/ViewTable/Table";;
+import ResponsiveTable from "./Components/ViewTable/Table";
 import Input from "./Components/Input/Input";
 import Select from "./Components/Select/Select";
 import Button from "./Components/Button/Button";
@@ -13,37 +13,50 @@ import { Connection } from "../../Util/RestApi";
 const Supper = () => {
     const {prod, category} = useContext(ThemeConnectionContext);
     const [searchData, setSearchData] = useState();
+    const [categoryData, setCategoryData] = useState("");
+    const [status, setStatus] = useState('');
+
 
     const {
-        codigo,
-        status,
-        categoria,
-
-        setCodigo,
-        setCategoria,
-        setStatus,
-
+        //status,
+        //categoria,
+        //setCategoria,
+        //setStatus,
         setPostRegisterProd,
         setUpdateRegisterProd,
         setDeleteRegisterProd,
         setClear,
-
     } = useContext(ThemeRegisterContexts);
 
     const handleChange = (e, setter) => {
         setter(e.target.value);
     };
 
-    const KeyDownPress = (event) => {
-        if (event.keyCode == 13) {
-            console.log('click 1')
+    const [filteredData, setFilteredData] = useState(prod.data);
+
+    const handleSearch = () => {
+        if(searchData || categoryData || status) {
+            // const filteredData = searchData ? prod.data?.filter(item => item.id_product === searchData) : prod.data;
+            const filteredData = prod.data?.filter(item => {
+                const searchProdId = item.id_product === searchData;
+                const cateoryDataSearch = item.id_category === categoryData;
+                const statusProd = item.id_product === status;
+
+                // console.log(statusProd);
+
+                // status prod esta funcionando porem tenho que ajeitar algumas coisas antes.
+
+                return searchProdId || cateoryDataSearch;
+            });
+            setFilteredData(filteredData);
+        } else  {
+            setFilteredData(prod?.data);
         }
-    }
+    };
+    
 
     const connection = new Connection();
     const headers = ['Cod', 'Produto', 'Categoria', 'Emb', 'Status'];
-
-    const filteredData = searchData ? prod.data?.filter(item => item.id_product === searchData) : prod.data;
 
     return (
         <React.Fragment>
@@ -74,7 +87,6 @@ const Supper = () => {
                                     <Input
                                         name="Codigo"
                                         type="number"
-                                        onKeyDown={KeyDownPress}
                                         onChange={(e) => setSearchData(e.target.value)}
                                         required={true}
                                     />                                    
@@ -82,8 +94,8 @@ const Supper = () => {
                                 <div className="col-lg-3 col-sm-3">
                                     <Select
                                         name="Categoria"
-                                        value={categoria}
-                                        onChange={(e) => handleChange(e, setCategoria)}
+                                        value={categoryData}
+                                        onChange={(e) => handleChange(e, setCategoryData)}
                                         options={category.data}
                                         valueKey="id_category"
                                         labelKey="cat_description"
@@ -105,17 +117,14 @@ const Supper = () => {
                             <NavigationBox>
                                 <div className="container">
                                     <div className="row justify-content-center p-1">
-                                        <div className="col-3"><Button bg='#297073' iconImage={faSearch} color='#fff' onAction={() => console.log('click 1')} /></div>
-                                        {/* <div className="col-3"><Button bg='#297073' iconImage={faEraser} color='#fff' onAction={() => console.log('click 2')} /></div>
-                                        <div className="col-3"><Button bg='#297073' iconImage={faFileCsv} color='#fff' onAction={() => console.log('click 3')} /></div>
-                                        <div className="col-3"><Button bg='#297073' iconImage={faPencil} color='#fff' onAction={() => console.log('click 4')} /></div> */}
+                                        <div className="col-3"><Button bg='#297073' iconImage={faSearch} color='#fff' onAction={handleSearch} /></div>
                                     </div>
                                 </div>
                             </NavigationBox>
                         </div>
                     </ContainerInput>
                     <ContainerTableInformation>
-                        {filteredData ? <ResponsiveTable data={filteredData} headers={headers} /> : <h2>Não Há dados</h2>}
+                        <ResponsiveTable data={filteredData} headers={headers} />
                     </ContainerTableInformation>
                 </Flex>
             </div>
@@ -125,4 +134,3 @@ const Supper = () => {
 }
 
 export default Supper;
-

@@ -1,33 +1,19 @@
 import React, { createContext, useEffect, useState } from "react";
 import { Connection } from "../Util/RestApi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
+import { Box, Loader } from "../Components/Registry/Components/Loading/Loading";
 
-/**
- * Contexto para conexão com o tema.
- * @type {import("react").Context<{
- *   prod: Array,
- *   menu: Array,
- *   category: Array,
- *   logMenu: Array,
- *   listStore: Array
- * }>}
- */
 export const ThemeConnectionContext = createContext();
 
-/**
- * Provedor de contexto para conexão com o tema.
- * @param {Object} props - Propriedades do componente.
- * @param {React.ReactNode} props.children - Componentes filhos.
- * @returns {React.ReactNode} Componente de provedor de contexto para conexão com o tema.
- */
 const ThemeContextConnectionProvider = ({ children }) => {
   const [prod, setProd] = useState([]);
   const [menu, setMenu] = useState([]);
   const [category, setCategory] = useState([]);
   const [logMenu, setLogMenu] = useState([]);
   const [listStore, setListStore] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const [refrashFlag, setRefrashFlag] = useState(false);
-  // pesquisa
 
   const connection = new Connection();
 
@@ -36,7 +22,7 @@ const ThemeContextConnectionProvider = ({ children }) => {
   }, []);
 
   const handleRefreshFlag = () => {
-    setRefrashFlag(pervFlag => !pervFlag);
+    setRefrashFlag(prevFlag => !prevFlag);
   }
 
   const fetchData = async () => {
@@ -52,8 +38,10 @@ const ThemeContextConnectionProvider = ({ children }) => {
       setCategory(reqCategory);
       setLogMenu(reqLogMenu);
       setListStore(reqListStore);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false);
     }
   };
 
@@ -63,16 +51,23 @@ const ThemeContextConnectionProvider = ({ children }) => {
     category,
     logMenu,
     listStore,
-
     refrashFlag,
     handleRefreshFlag,
   };
 
   return (
     <React.Fragment>
-      <ThemeConnectionContext.Provider value={globalConnectionValue}>
-        {children}
-      </ThemeConnectionContext.Provider>
+      {loading ? (
+        <Loader>
+          <Box> 
+            <FontAwesomeIcon icon={faBoxOpen} color="white"/>
+          </Box>
+        </Loader>
+      ) : (
+        <ThemeConnectionContext.Provider value={globalConnectionValue}>
+          {children}
+        </ThemeConnectionContext.Provider>
+      )}
     </React.Fragment>
   );
 };

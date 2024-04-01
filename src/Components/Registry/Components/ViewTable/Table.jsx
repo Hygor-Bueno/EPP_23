@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from './styled';
 import { Connection } from '../../../../Util/RestApi';
 import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
+import Util from '../../../../Util/Util';
 
 const ResponsiveTable = ({ data, headers, isConsinco, refrashTable }) => {
   const [focusedRow, setFocusedRow] = useState(null);
@@ -53,13 +54,23 @@ const ResponsiveTable = ({ data, headers, isConsinco, refrashTable }) => {
       </TableHead>
       <tbody>
         {isConsinco && (
-          listSales.map((item, index) => (
-            <TableRow key={`table_${index}`}>
-              <TableCell>{item.EMPRESA}</TableCell>
-              <TableCell>{item.DESCCOMPLETA}</TableCell>
-              <TableCell>{item.PRECO}</TableCell>
-            </TableRow>
-          ))
+          listSales.map((item, index) => {
+            if(codigo == '' || codigo == null || codigo == undefined) {
+              setDescricao('');
+            } else {
+              setDescricao(item.DESCCOMPLETA);
+            }
+            
+            if (codigo == '') return <div></div>
+
+            return (
+              <TableRow key={`table_${index}`}>
+                <TableCell>{item.EMPRESA}</TableCell>
+                <TableCell>{item.DESCCOMPLETA}</TableCell>
+                <TableCell>R$ {new Util().convertNumberBR(item.PRECO)}</TableCell>
+              </TableRow>
+            )
+          })
         )}
         {!data.error &&
           data.map((row, rowIndex) => (
@@ -70,14 +81,12 @@ const ResponsiveTable = ({ data, headers, isConsinco, refrashTable }) => {
                 handleRowClick(rowIndex);
                 setProductId(row.id_product);
                 setCodigo(row.id_product);
-                setDescricao(row.description);
                 setCategoria(row.id_category);
                 setEmbalagem(row.measure);
                 setStatus(row.status_prod);
                 setRefrashList(prev => !prev);
               }}
             >
-              {/* {console.log(row)} */}
               <TableCell>{row.id_product}</TableCell>
               <TableCell>{row.description}</TableCell>
               <TableCell>{row.category}</TableCell>

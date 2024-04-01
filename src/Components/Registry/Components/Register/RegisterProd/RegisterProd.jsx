@@ -23,10 +23,9 @@ export const RegisterProd = () => {
       setCategoria,
       status,
       setStatus,
-
+      
       refrashList,
       setRefrashList,
-      
     } = useContext(ThemeRegisterContexts);
 
     const [headers, setHeaders] = useState(['Loja', 'Produto', 'Preço']);
@@ -36,10 +35,21 @@ export const RegisterProd = () => {
     };
 
     const handleKeyPress = (event) => {
-      if (event.keyCode === 13) { // Verifica se a tecla pressionada é Enter
+      if (event.keyCode === 13) {
         setRefrashList(prev => !prev);
       }
     };
+
+    const hendleValue = () => {
+      if(codigo == '') {
+        setCodigo('');
+        setDescricao('');
+        setCategoria('');
+        setEmbalagem('');
+        setStatus('');
+        return '';
+      }
+    }
 
 
   useEffect(() => {
@@ -56,9 +66,6 @@ export const RegisterProd = () => {
           <h2>Cadastrar Produto</h2>
           <div className="row justify-content-between mt-4">
             <div className="col-lg-4 col-md-12 col-sm-12">
-
-
-              {/* Aqui tenho que ver alguma forma de colocar o KeyDown junto com o value */}
               <Input
                 id="input-cod"
                 width={'100%'}
@@ -73,7 +80,8 @@ export const RegisterProd = () => {
               <Input
                 width={'100%'}
                 name="Descrição"
-                value={descricao}
+                isDisabled={true}
+                value={codigo == '' ? hendleValue() : descricao}
                 onChange={(e) => handleChange(e, setDescricao)}
                 required={true}
               />
@@ -83,7 +91,7 @@ export const RegisterProd = () => {
                 <div className="col-lg-4 col-md-12 col-sm-12 mb-4">
                   <Select
                       name="Categoria"
-                      value={categoria}
+                      value={codigo == '' ? hendleValue() : categoria}
                       onChange={(e) => handleChange(e, setCategoria)}
                       options={category.data}
                       valueKey="id_category"
@@ -94,7 +102,7 @@ export const RegisterProd = () => {
                 <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
                   <Select
                     name="Emb"
-                    value={embalagem}
+                    value={codigo == '' ? hendleValue() : embalagem}
                     onChange={(e) => handleChange(e, setEmbalagem)}
                     options={[]}
                     required={true}
@@ -104,13 +112,12 @@ export const RegisterProd = () => {
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <Select
                     name="Status"
-                    value={status}
+                    value={codigo == '' ? hendleValue(): status}
                     onChange={(e) => handleChange(e, setStatus)}
                     options={[]}
                     required={true}
                     includeInactive={true}
                   />
-                  {/* <button type='button' onClick={() => setA(prev => !prev)}>Atualizar</button> */}
                 </div>
               </div>
             </div>
