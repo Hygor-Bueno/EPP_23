@@ -9,6 +9,7 @@ import { faArrowLeft, faArrowRight, faEraser, faFileCsv, faPencil, faPlus, faSea
 import { ContainerBackground, ContainerInput, ContainerTableInformation, Flex, GroupButton, NavigationBox } from "./styled.page";
 import { ThemeRegisterContexts } from "../../Theme/ThemeRegisterProd";
 import { Connection } from "../../Util/RestApi";
+import { CSVGenerator } from "./Components/class/CSV.js";
 
 const Supper = () => {
     const {prod, category} = useContext(ThemeConnectionContext);
@@ -17,15 +18,13 @@ const Supper = () => {
     const [status, setStatus] = useState('');
 
     const {
-        //status,
-        //categoria,
-        //setCategoria,
-        //setStatus,
         setPostRegisterProd,
         setUpdateRegisterProd,
         setDeleteRegisterProd,
         setClear,
     } = useContext(ThemeRegisterContexts);
+
+    console.log('prod', prod.data);
 
     const handleChange = (e, setter) => {
         setter(e.target.value);
@@ -52,9 +51,14 @@ const Supper = () => {
             }
         });
     
-        setFilteredData(filteredData);
+        // Se todos os campos de filtro estiverem vazios, retorne a lista original
+        if (searchData === '' && categoryData === '' && status === '') {
+            setFilteredData(prod.data);
+        } else {
+            setFilteredData(filteredData);
+        }
     };
-
+    
     const handleChangeSearch = (e) => {
         const inputText = e.target.value;
         const numerosApenas = inputText.replace(/\D/g, ''); 
@@ -132,7 +136,19 @@ const Supper = () => {
                                     <div className="row justify-content-center p-1">
                                         <div className="col-3"><Button bg='#297073' iconImage={faSearch} color='#fff' onAction={handleSearch} /></div>
                                         <div className="col-3"><Button bg='#297073' iconImage={faEraser} color='#fff' onAction={henadleClear} /></div>
-                                        <div className="col-3"><Button bg='#297073' iconImage={faFileCsv} color='#fff' onAction={() => console.log('download document-csv.csv .....')} /></div>
+                                        <div className="col-3"><Button bg='#297073' iconImage={faFileCsv} color='#fff' onAction={() => {
+                                            const csv = new CSVGenerator();
+
+                                            const fileJson = prod.data.map(item => ({
+                                                codigo: item.id_product,
+                                                categoria: item.id_category,
+                                                produto: item.description,
+                                                embalagem: item.measure,
+                                                status: item.status_prod, 
+                                            }));
+
+                                            csv.generateCSV(fileJson, 'documento');
+                                        }} /></div>
                                     </div>
                                 </div>
                             </NavigationBox>
