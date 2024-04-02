@@ -5,7 +5,7 @@ import ResponsiveTable from "./Components/ViewTable/Table";
 import Input from "./Components/Input/Input";
 import Select from "./Components/Select/Select";
 import Button from "./Components/Button/Button";
-import { faArrowLeft, faArrowRight, faEraser, faFileCsv, faPencil, faPlus, faSearch, faTrash} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faEdit, faEraser, faFileCsv, faPencil, faPlus, faSearch, faTrash} from "@fortawesome/free-solid-svg-icons";
 import { ContainerBackground, ContainerInput, ContainerTableInformation, Flex, GroupButton, NavigationBox } from "./styled.page";
 import { ThemeRegisterContexts } from "../../Theme/ThemeRegisterProd";
 import { Connection } from "../../Util/RestApi";
@@ -16,6 +16,7 @@ const Supper = () => {
     const [searchData, setSearchData] = useState('');
     const [categoryData, setCategoryData] = useState("");
     const [status, setStatus] = useState('');
+    const [view, setView] = useState('table');
 
     const {
         setPostRegisterProd,
@@ -129,6 +130,16 @@ const Supper = () => {
                                         includeInactive={true}
                                     />
                                 </div>
+                                <div className="col-lg-3 col-sm-3">
+                                    <Select
+                                        name="Exibição"
+                                        value={view}
+                                        onChange={(e) => handleChange(e, setView)}
+                                        options={[]}
+                                        required={true}
+                                        includeView={true}
+                                    />
+                                </div>
                                 </div>
                             </div>
                             <NavigationBox>
@@ -136,15 +147,15 @@ const Supper = () => {
                                     <div className="row justify-content-center p-1">
                                         <div className="col-3"><Button bg='#297073' iconImage={faSearch} color='#fff' onAction={handleSearch} /></div>
                                         <div className="col-3"><Button bg='#297073' iconImage={faEraser} color='#fff' onAction={henadleClear} /></div>
+                                        <div className="col-3"><Button bg='#297073' iconImage={faEdit} color='#fff' onAction={() => console.log('abrindo um modal de edição!')} /></div>
                                         <div className="col-3"><Button bg='#297073' iconImage={faFileCsv} color='#fff' onAction={() => {
                                             const csv = new CSVGenerator();
-
-                                            const fileJson = prod.data.map(item => ({
-                                                Codigo: item.id_product,
-                                                Categoria: item.id_category,
-                                                Produto: item.description,
-                                                Embalagem: item.measure,
-                                                Status: item.status_prod,
+                                            const fileJson = filteredData.map(item => ({
+                                                "Codigo do produto": item.id_product,
+                                                "Categoria do produto": item.id_category,
+                                                "Nome do produto": item.description,
+                                                "Embalagem do produto": item.measure,
+                                                "Status do produto": item.status_prod,
                                             }));
 
                                             csv.generateCSV(fileJson, 'documento');
@@ -155,7 +166,8 @@ const Supper = () => {
                         </div>
                     </ContainerInput>
                     <ContainerTableInformation>
-                        <ResponsiveTable data={filteredData} headers={headers} />
+                        {console.log(view, view == "table")}
+                        {view === 'menu' ? <ResponsiveTable data={[]} headers={['Cód', 'Descrição', 'Status', 'Exibir Pedidos']} /> : <ResponsiveTable data={filteredData} headers={headers} /> }
                     </ContainerTableInformation>
                 </Flex>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'; 
 
-const Select = ({ name, value, onChange, options, valueKey, labelKey, required, includeInactive, includeEmb, ...rest }) => {
+const Select = ({ name, value, onChange, options, valueKey, labelKey, required, includeInactive, includeEmb, includeView, ...rest }) => {
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
@@ -39,6 +39,17 @@ const Select = ({ name, value, onChange, options, valueKey, labelKey, required, 
         </option>,
         <option key="Kg" value="Kg">
           Kg
+        </option>
+      );
+    }
+
+    if (includeView) {
+      renderedOptions.push(
+        <option key="Table" value="menu">
+          Menu
+        </option>,
+        <option key="Menu" value="table">
+          Table
         </option>
       );
     }

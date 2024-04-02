@@ -35,7 +35,7 @@ const ResponsiveTable = ({ data, headers, isConsinco, refrashTable }) => {
       }
     };
     fetchSales();
-  }, [refrashTable]);
+  }, []);
 
   const tableRef = useRef(null);
 
