@@ -5,17 +5,16 @@ import ResponsiveTable from "./Components/ViewTable/Table";
 import Input from "./Components/Input/Input";
 import Select from "./Components/Select/Select";
 import Button from "./Components/Button/Button";
-import { faArrowLeft, faArrowRight, faEraser, faFileCsv, faPencil, faPlus, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faEraser, faFileCsv, faPencil, faPlus, faSearch, faTrash} from "@fortawesome/free-solid-svg-icons";
 import { ContainerBackground, ContainerInput, ContainerTableInformation, Flex, GroupButton, NavigationBox } from "./styled.page";
 import { ThemeRegisterContexts } from "../../Theme/ThemeRegisterProd";
 import { Connection } from "../../Util/RestApi";
 
 const Supper = () => {
     const {prod, category} = useContext(ThemeConnectionContext);
-    const [searchData, setSearchData] = useState();
+    const [searchData, setSearchData] = useState('');
     const [categoryData, setCategoryData] = useState("");
     const [status, setStatus] = useState('');
-
 
     const {
         //status,
@@ -36,23 +35,31 @@ const Supper = () => {
 
     const handleSearch = () => {
         if(searchData || categoryData || status) {
-            // const filteredData = searchData ? prod.data?.filter(item => item.id_product === searchData) : prod.data;
             const filteredData = prod.data?.filter(item => {
                 const searchProdId = item.id_product === searchData;
                 const cateoryDataSearch = item.id_category === categoryData;
-                const statusProd = item.id_product === status;
+                const statusProd = item.status_prod === status;
 
-                // console.log(statusProd);
-
-                // status prod esta funcionando porem tenho que ajeitar algumas coisas antes.
-
-                return searchProdId || cateoryDataSearch;
+                return searchProdId || (statusProd && cateoryDataSearch);
             });
             setFilteredData(filteredData);
         } else  {
             setFilteredData(prod?.data);
         }
     };
+
+    const handleChangeSearch = (e) => {
+        const inputText = e.target.value;
+        const numerosApenas = inputText.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        setSearchData(numerosApenas);
+      };
+
+    const henadleClear = () => {
+        setSearchData('');
+        setCategoryData('');
+        setStatus('');
+    }
+    
     
 
     const connection = new Connection();
@@ -86,8 +93,9 @@ const Supper = () => {
                                 <div className="col-lg-3 col-sm-3">
                                     <Input
                                         name="Codigo"
-                                        type="number"
-                                        onChange={(e) => setSearchData(e.target.value)}
+                                        type="text"
+                                        value={searchData}
+                                        onChange={handleChangeSearch}
                                         required={true}
                                     />                                    
                                 </div>
@@ -118,6 +126,8 @@ const Supper = () => {
                                 <div className="container">
                                     <div className="row justify-content-center p-1">
                                         <div className="col-3"><Button bg='#297073' iconImage={faSearch} color='#fff' onAction={handleSearch} /></div>
+                                        <div className="col-3"><Button bg='#297073' iconImage={faEraser} color='#fff' onAction={henadleClear} /></div>
+                                        <div className="col-3"><Button bg='#297073' iconImage={faFileCsv} color='#fff' onAction={() => console.log('download document-csv.csv .....')} /></div>
                                     </div>
                                 </div>
                             </NavigationBox>
