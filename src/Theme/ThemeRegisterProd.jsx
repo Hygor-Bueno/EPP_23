@@ -63,7 +63,7 @@ const ThemeContextRegisterProvider = ({ children }) => {
     try {
       let data = { id_product: codigo, status_prod: status, description: descricao, measure: embalagem, category: categoria, price: "0" };
       console.log(data);
-      // await connection.put(data, "EPP/Product.php");
+      await connection.put(data, "EPP/Product.php");
     } catch (error) {
       console.log(error.message);
     }

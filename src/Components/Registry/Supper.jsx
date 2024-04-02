@@ -34,23 +34,57 @@ const Supper = () => {
     const [filteredData, setFilteredData] = useState(prod.data);
 
     const handleSearch = () => {
-        if(searchData || categoryData || status) {
+        if(searchData) {
             const filteredData = prod.data?.filter(item => {
                 const searchProdId = item.id_product === searchData;
+                return searchProdId;
+            });
+            setFilteredData(filteredData);
+        }
+
+        if(categoryData) {
+            const filteredData = prod.data?.filter(item => {
+                const cateoryDataSearch = item.id_category === categoryData;
+                return cateoryDataSearch;
+            });
+            setFilteredData(filteredData);
+        }
+
+        if(status) {
+            const filteredData = prod.data?.filter(item => {
+                const statusProd = item.status_prod === status;
+                return statusProd;
+            });
+            setFilteredData(filteredData);
+        }
+
+        if(categoryData && status) {
+            const filteredData = prod.data?.filter(item => {
                 const cateoryDataSearch = item.id_category === categoryData;
                 const statusProd = item.status_prod === status;
 
-                return searchProdId || (statusProd && cateoryDataSearch);
+                return statusProd && cateoryDataSearch;
             });
             setFilteredData(filteredData);
-        } else  {
-            setFilteredData(prod?.data);
         }
-    };
+
+        if(searchData && categoryData && status) {
+            const filteredData = prod.data?.filter(item => {
+                const prodId = item.id_product === searchData;
+                const cateoryDataSearch = item.id_category === categoryData;
+                const statusProd = item.status_prod === status;
+
+                return statusProd && cateoryDataSearch && prodId;
+            });
+            setFilteredData(filteredData);
+        }
+
+        setFilteredData(prod?.data);
+    }
 
     const handleChangeSearch = (e) => {
         const inputText = e.target.value;
-        const numerosApenas = inputText.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        const numerosApenas = inputText.replace(/\D/g, ''); 
         setSearchData(numerosApenas);
       };
 
@@ -59,8 +93,6 @@ const Supper = () => {
         setCategoryData('');
         setStatus('');
     }
-    
-    
 
     const connection = new Connection();
     const headers = ['Cod', 'Produto', 'Categoria', 'Emb', 'Status'];
