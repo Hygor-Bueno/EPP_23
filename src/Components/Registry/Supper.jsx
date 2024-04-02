@@ -140,11 +140,11 @@ const Supper = () => {
                                             const csv = new CSVGenerator();
 
                                             const fileJson = prod.data.map(item => ({
-                                                codigo: item.id_product,
-                                                categoria: item.id_category,
-                                                produto: item.description,
-                                                embalagem: item.measure,
-                                                status: item.status_prod, 
+                                                Codigo: item.id_product,
+                                                Categoria: item.id_category,
+                                                Produto: item.description,
+                                                Embalagem: item.measure,
+                                                Status: item.status_prod,
                                             }));
 
                                             csv.generateCSV(fileJson, 'documento');
