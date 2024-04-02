@@ -16,7 +16,7 @@ const Supper = () => {
     const [searchData, setSearchData] = useState('');
     const [categoryData, setCategoryData] = useState("");
     const [status, setStatus] = useState('');
-    const [view, setView] = useState('table');
+    const [view, setView] = useState('produto');
 
     const {
         setPostRegisterProd,

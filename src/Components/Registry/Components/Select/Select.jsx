@@ -45,11 +45,11 @@ const Select = ({ name, value, onChange, options, valueKey, labelKey, required, 
 
     if (includeView) {
       renderedOptions.push(
-        <option key="Table" value="menu">
+        <option key="Menu" value="menu">
           Menu
         </option>,
-        <option key="Menu" value="table">
-          Table
+        <option key="Produto" value="produto">
+          Produto
         </option>
       );
     }
