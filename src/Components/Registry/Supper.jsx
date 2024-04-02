@@ -34,53 +34,26 @@ const Supper = () => {
     const [filteredData, setFilteredData] = useState(prod.data);
 
     const handleSearch = () => {
-        if(searchData) {
-            const filteredData = prod.data?.filter(item => {
-                const searchProdId = item.id_product === searchData;
-                return searchProdId;
-            });
-            setFilteredData(filteredData);
+        if (!prod || !prod.data) {
+            return;
         }
-
-        if(categoryData) {
-            const filteredData = prod.data?.filter(item => {
-                const cateoryDataSearch = item.id_category === categoryData;
-                return cateoryDataSearch;
-            });
-            setFilteredData(filteredData);
-        }
-
-        if(status) {
-            const filteredData = prod.data?.filter(item => {
-                const statusProd = item.status_prod === status;
-                return statusProd;
-            });
-            setFilteredData(filteredData);
-        }
-
-        if(categoryData && status) {
-            const filteredData = prod.data?.filter(item => {
-                const cateoryDataSearch = item.id_category === categoryData;
-                const statusProd = item.status_prod === status;
-
-                return statusProd && cateoryDataSearch;
-            });
-            setFilteredData(filteredData);
-        }
-
-        if(searchData && categoryData && status) {
-            const filteredData = prod.data?.filter(item => {
-                const prodId = item.id_product === searchData;
-                const cateoryDataSearch = item.id_category === categoryData;
-                const statusProd = item.status_prod === status;
-
-                return statusProd && cateoryDataSearch && prodId;
-            });
-            setFilteredData(filteredData);
-        }
-
-        setFilteredData(prod?.data);
-    }
+    
+        let filteredData = prod.data;
+    
+        const filters = [
+            { key: 'id_product', value: searchData },
+            { key: 'id_category', value: categoryData },
+            { key: 'status_prod', value: status }
+        ];
+    
+        filters.forEach(filter => {
+            if (filter.value) {
+                filteredData = filteredData.filter(item => item[filter.key] === filter.value);
+            }
+        });
+    
+        setFilteredData(filteredData);
+    };
 
     const handleChangeSearch = (e) => {
         const inputText = e.target.value;
