@@ -1,0 +1,120 @@
+#HomePage>form {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    background-color: var(--bg-dark);
+}
+
+#HomePage>form>fieldset {
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 0.6vmin 0px;
+
+}
+
+#HomePage>form>fieldset>div>input {
+    font-size: var(--text);
+}
+
+#HomePage>form>fieldset>div>select {
+    font-size: var(--text);
+}
+
+#HomePage .additionalItem>div {
+    font-size: 1.8vmin
+}
+
+#divAdditionalItems {
+    height: 10vmin;
+    overflow-y: auto;
+}
+
+#orderField {
+    display: flex;
+    flex-grow: 1;
+}
+
+#orderField>div>div>button>svg {
+    font-size: var(--label);
+    color: var(--secondary-color);
+}
+
+#HomePage>form>fieldset>div>div>label>b, #HomePage>form>fieldset>div>label>b {
+    font-size: var(--text);
+}
+
+#divAdditionalItems>div {
+    font-size: var(--subText);
+    margin-bottom: var(--subText);
+}
+
+#txtareaObservation textarea {
+    font-size: var(--subText);
+}
+
+#divGroupButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4.8vmin;
+}
+
+#divGroupButton button {
+    font-size: 2.4vmin;
+    color: aliceblue;
+    border-radius: 1vmin;
+}
+
+#divGroupButtonLeft {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+}
+
+#divGroupButtonLeft>button {
+    border: solid 0.2vmin white;
+}
+
+#divGroupButton button:hover {
+    background-color: var(--secondary-color);
+    border: none;
+}
+
+#divGroupButtonRigth {
+    display: flex;
+    width: 15%;
+    justify-content: space-around;
+}
+
+#HomePage>section input {
+    font-size: var(--text);
+}
+
+#HomePage>section svg {
+    font-size: var(--label);
+}
+
+#HomePage>section>#divOrderCard {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#HomePage>section>#divOrderCard>div {
+    border-bottom: solid 1px #ced4da;
+}
+
+#HomePage>section>#divOrderCard>article {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    overflow-y: auto;
+}
+
+#divModalQuantityPrint{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color:rgba(0, 0, 0, .5);
+    top: 0;
+    z-index: 500;
+}

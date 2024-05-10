@@ -1,0 +1,77 @@
+#containerFormCtrl{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    /* justify-content: center; */
+    background-color:var(--bg-dark);
+}
+#containerFormCtrl>div{
+    overflow-y: auto;
+}
+
+#containerFormCtrl>form>fieldset>legend,
+#containerFormCtrl>form>fieldset>div>label{
+    color:#f1f2f5;
+}
+
+#ordersContainer{
+    height: 100vh;
+    display: flex;
+    font-size: 1vw;
+}
+#ordersContainer>section{
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+    flex-grow: 1;
+}
+.containerInputStyle{
+    display: flex;
+    margin-right:  2vw;
+}
+.inputStyle{
+    order: 1;
+    margin-right:  0.4vw;
+}
+.labelStyle{
+    order: 2;
+}
+
+#ordersContainer>section>article{
+    display: flex;
+    flex-direction: row;
+}
+#ordersContainer>section>div{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+#ordersContainer>section>div>table>tbody>tr>td,
+#ordersContainer>section>div>table>thead>tr>th{
+    white-space: nowrap;
+}
+
+
+#ordersContainer>section>div>table>tbody>tr:hover{
+    background-color: var(--bg-dark);
+    opacity: .7;
+}
+#ordersContainer>section>div>table>tbody>tr:hover td{
+    color:white;
+    opacity: 1;
+}
+
+.fixedTableRow{
+    background-color: var(--bg-dark);
+    color: white!important;
+}
+
+ #orderTableItems{
+    overflow: hidden;
+ }
+#orderTableItems>div{
+    overflow-y: auto;
+}

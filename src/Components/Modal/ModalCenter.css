@@ -1,0 +1,47 @@
+#ModalContainer{
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;    
+}
+
+#ModalContainer > div {
+    overflow-y: auto;
+    width: auto;
+    height: auto;
+    background-color: white;
+    padding: 0.6vmin;
+    border-radius: 0.5vmin;
+}
+
+#ModalContainer > div > button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15vmin;
+    height: 4vmin;
+    border-radius: var(--bd-radius-g);
+}
+
+#ModalContainer > div > span > button{
+    width: 4vmin;
+    height: 4vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#ModalContainer > div > span{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ModalContainer > div > span > h3{
+    font-size: 3.5vmin;
+    margin: 0;
+}

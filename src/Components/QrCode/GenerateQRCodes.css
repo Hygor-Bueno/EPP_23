@@ -1,0 +1,27 @@
+#divQRCodeContainer p {
+    margin: 0.8vh;
+}
+#divQRCodeContainer{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+#divQRCodeSubCont{    
+    overflow-y: auto;
+    margin: 1vh 0vh;
+}
+
+.QRCodeContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    page-break-before: always;
+    margin-bottom: 2vh;
+    background-color: white;
+}

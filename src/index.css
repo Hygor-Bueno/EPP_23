@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#appStyle{
+  display: "flex";
+  height: 100vh;
+  width: 100vw;
+}
+.disabledStyle{
+  opacity: 0.5
+}
+/* label{
+  font-weight:bold;
+} */
+
+:root{
+  /*Variáveis do Título principal.*/
+  --MainTitleColor:#606060;
+  /*Função clamp ajuda na responsividade clamp('valor minímo','valor preferido','valor máximo')*/
+  --MainTitleSize:clamp(2vmin,6.2vmin,26px);
+
+  /*Variáveis do Título Secundário.*/
+  --SecondaryTitleColor:#505050;
+  --SecondaryTitleSize:clamp(1.8vmin,5.8vmin,22px);
+
+  /*Váriáveis de bordas.*/
+  --borderSize:clamp(0.2vmin,0.5vmin,1px);
+  --borderSizeL:clamp(0.2vmin,0.5vmin,2px);
+  --borderSizeXL:clamp(0.6vmin,1.5vmin,2px);
+  --borderColor:#ccc;
+  --borderRadius:clamp(1vmin,2vmin,10px);
+
+  /*Configurações de texto*/
+  --textSizeXL:clamp(1.8vmin,7vmin,100px);
+  --textSizeL:clamp(1.8vmin,4vmin,25px);
+  --textSizeM:clamp(1.8vmin,4vmin,18px);
+  --textSize:clamp(1.8vmin,4vmin,16px);
+  --textSizeP:clamp(1vmin,4vmin,12px);
+
+  --fontWeight-bold: bold;
+  --fontWeight-600: 600;
+  --fontWeight-400: 400;
+  --fontWeight-200: 200;
+
+  --textColor:#495057;
+
+  /*Configurações do Label.*/
+  --labelSize:clamp(1.8vmin,4.8vmin,20px);
+  --labelSizeP:clamp(1.2vmin,4.2vmin,14px);
+  --labelColor:#757575;
+
+  /*Outras formatações.*/
+  --spaceDefaultPPP:clamp(1px, 1vmin, 3px);
+  --spaceDefaultPP:clamp(1px, 1vmin, 5px);
+  --spaceDefaultP:clamp(1px, 1.5vmin, 7.5px);
+  --spaceDefault:clamp(1px, 2vmin, 10px);
+  --spaceDefaultL:clamp(1.5px, 3vmin, 15px);
+  --spaceDefaultLL:clamp(2px, 3vmin, 20px);
+
+  --widthInput: clamp(1vw, 90vw, 100%);
+
+  /*Cores*/
+  --pegpeseOrangeColor: #E98D77;
+  --pegpeseGreenColor: #004030;
+  --dangerColor: #DC3545;
+  --infoColor: #007BFF;
+  --warningColor: #ff8b07;
+  --successColor: #28A745;
+  --primaryColor: #FFFF;
+  --simplecardColor: #f2f2f2f2;
+  --scrollColor: #f1f1f1;
+
+  /*Imagens*/
+  --imageSizeP: clamp(1.33vmin,4.8vmin,21.33px);
+  --imageSizeM: clamp(1.33vmin,5.8vmin,23.33px);
+  --imageSize: clamp(2vmin,7.2vmin,32px);
+}
