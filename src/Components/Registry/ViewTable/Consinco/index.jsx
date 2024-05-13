@@ -1,10 +1,15 @@
 import React, { useContext } from "react";
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from "../styled";
-import { ThemeRegisterContexts } from "../../../../../Theme/ThemeRegisterProd";
+import { ThemeRegisterContexts } from "../../../../Theme/ThemeRegisterProd";
+import { formatToPtBr } from "../../../../Util/mockUtil";
 
+/**
+ * Esse componente é a tabela da Consinco aonde vejo as informações de cada loja com seus produtos e determinados preços.
+ * @returns
+ */
 const ConsincoTable = ({headers, listSales}) => {
 
-  const {setDescricao, formatToPtBr} = useContext(ThemeRegisterContexts);
+  const {setDescricao} = useContext(ThemeRegisterContexts);
 
   return (
     <React.Fragment>

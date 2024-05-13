@@ -2,10 +2,15 @@ import React, { useContext } from 'react';
 import { ContainerTableInformation } from '../../../styled.page';
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from '../styled';
 import { faCog, faPowerOff } from '@fortawesome/free-solid-svg-icons';
-import Button from '../../Button/Button';
-import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
+import Button from '../../Components/Button/Button';
+import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
+/**
+ * Tabela dos Menus.
+ * @returns
+ */
 const TableMenu = ({ data, styleLine, rowStyleFunction }) => {
 
   const {

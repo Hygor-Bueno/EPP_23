@@ -1,17 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Card } from "../RegisterProd/styled";
-import Input from "../../Input/Input";
+import Input from "../../Components/Input/Input";
 import styled from "styled-components";
-import { Title } from "../../Title/index";
-import { ThemeRegisterContexts } from "../../../../../Theme/ThemeRegisterProd";
-import Select from "../../Select/Select";
-import { ThemeConnectionContext } from "../../../../../Theme/ThemeConnection";
+import { Title } from "../../Components/Title/index";
+import { ThemeRegisterContexts } from "../../../../Theme/ThemeRegisterProd";
+import Select from "../../Components/Select/Select";
+import { ThemeConnectionContext } from "../../../../Theme/ThemeConnection";
 
 const AddProds = () => {
   const {
-    codInputRef,
-    arrozInputRef,
-    sobremesaInputRef,
 
     // codProdMenu,
     TypeCategory,
@@ -66,8 +63,7 @@ const AddProds = () => {
         <Row>
           <StyledInput
             isReq={true}
-            innerRef={codInputRef}
-            isDisabled={false}
+            isDisabled={true}
             onChange={(e) => {
               changeLogMenu(e.target.value, "rice", "codLog");
               setCodeAddProd(e.target.value);
@@ -92,7 +88,6 @@ const AddProds = () => {
         <Row>
           <StyledInput
             isReq={true}
-            innerRef={arrozInputRef}
             onChange={(e) => {
               changeLogMenu(e.target.value, "rice", "codRice");
               setRice(e.target.value);
@@ -104,7 +99,6 @@ const AddProds = () => {
           />
           <StyledInput
             isReq={true}
-            innerRef={sobremesaInputRef}
             onChange={(e) => {
               changeLogMenu(e.target.value, "dessert", "codDessert");
               setDessert(e.target.value);

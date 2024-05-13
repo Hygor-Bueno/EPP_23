@@ -9,25 +9,7 @@ import React, { createContext, useState } from "react";
 export const ThemeTableProdContexts = createContext();
 
 const ThemeTableProdContextsProvider = ({ children }) => {
-
-    const [codTable, setCodTable] = useState('');
-    const [statusTable, setStatusTable] = useState('');
-    const [categoryTable, setCategoryTable] = useState('');
-    const [embTable, setEmbTable] = useState('');
-
-  const globalConnectionValue = {
-        codTable,
-        setCodTable,
-    
-        statusTable,
-        setStatusTable,
-    
-        categoryTable,
-        setCategoryTable,
-    
-        embTable,
-        setEmbTable,
-  }
+  const globalConnectionValue = {}
 
   return (
     <React.Fragment>

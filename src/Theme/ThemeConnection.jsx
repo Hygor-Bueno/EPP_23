@@ -11,8 +11,6 @@ const ThemeContextConnectionProvider = ({ children }) => {
   const [menu, setMenu] = useState([]);
   const [logMenu, setLogMenu] = useState([]);
   const [category, setCategory] = useState([]);
-
-  /* Carregamentos */
   const [loading, setLoading] = useState(true);
   const [refreshFlag, setRefreshFlag] = useState(false);
 

@@ -1,14 +1,12 @@
-import React, { useContext } from 'react';
-   import Button from '../../Button/Button';
+import React from 'react';
+import Button from '../../Components/Button/Button';
 import { faArrowRotateBack } from '@fortawesome/free-solid-svg-icons/faArrowRotateBack';
 import { faCircleArrowDown } from '@fortawesome/free-solid-svg-icons';
-import { Connection } from '../../../../../Util/RestApi';
-// import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
+import { Connection } from '../../../../Util/RestApi';
 import { Container, Footer, Header, Modal, StyledTable, TableContainer } from './style';
 
+/** Display Orders é onde vamos poder ativar ou desativar um produto a lita. */
 const MutipleCheck = ({ data, ...rest }) => {
-    // const {setRefrashChange} = useContext(ThemeRegisterContexts);
-
     const [listLocal, setListLocal] = React.useState([]);
 
     React.useEffect(() => {

@@ -3,6 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle, faFileCircleCheck, faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { Button, Container, ModalExpetion, ImageExpetion } from "./style";
 
+
+/**
+ * Modelo de erro por resposta do WebServices.
+ *
+ * @param {{ [x: string]: any; error: any; translate: any; isConfirm: any; openException: any; closeException: any; }} param
+ * @param {*} error
+ * @param {*} translate
+ * @param {*} isConfirm
+ * @param {*} openException
+ * @param {*} closeException
+ * @param {{ [x: string]: any; }} param....rest
+ * @returns {*}
+ */
 const Exception = ({error, translate, isConfirm, openException, closeException, ...rest}) => {
   return (
     <React.Fragment>

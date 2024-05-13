@@ -1,23 +1,20 @@
 import React, { useContext } from 'react';
 import {Card} from '../RegisterProd/styled.jsx'
-import Input from '../../Input/Input.jsx';
-import Select from '../../Select/Select.jsx';
+import Input from '../../Components/Input/Input.jsx';
+import Select from '../../Components/Select/Select.jsx';
 import styled from 'styled-components';
-import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd.jsx';
-import {Title} from '../../Title/index.jsx';
+import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd.jsx';
+import {Title} from '../../Components/Title/index.jsx';
 
 export const RegisterMenu = () => {
+
+
   const {
-    // Function:
     handleCode,
     handleStatus,
-    handleDesc,
-    handleCodeProd,
-    // Variables:
     CodeMenu,
     statusMenu,
     DescriptionMenu,
-    codProdMenu,
   } = useContext(ThemeRegisterContexts);
 
   const ContainerBox = styled.div`

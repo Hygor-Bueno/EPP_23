@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Input from '../../Input/Input';
-import Select from '../../Select/Select';
+import Input from '../../Components/Input/Input';
+import Select from '../../Components/Select/Select';
 import ResponsiveTable from '../../ViewTable/Table';
 import { Card, LimitationBox } from './styled';
-import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
-import { ThemeConnectionContext } from '../../../../../Theme/ThemeConnection';
-import {Title, Subtitle} from '../../Title';
+import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
+import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
+import {Title, Subtitle} from '../../Components/Title';
 
 export const RegisterProd = () => {
 

@@ -1,19 +1,17 @@
 import React, { useContext } from "react";
 import { ContainerTableInformation } from "../../../styled.page";
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from "../styled";
-import { ThemeRegisterContexts } from "../../../../../Theme/ThemeRegisterProd";
+import { ThemeRegisterContexts } from "../../../../Theme/ThemeRegisterProd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 
+/**
+ * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
+ * @returns
+ */
 const TableProd = ({data, focusLine, rowClick}) => {
-  const {
-    setCodigo,
-    setCategoryFk,
-    setEmbalagem,
-    setStatus,
-    setPage,
-    setRefrashList,
-  } = useContext(ThemeRegisterContexts);
+  const {} = useContext(ThemeRegisterContexts);
+  const array = ['Cod', 'Descrição', 'Categoria', 'Embalagem', 'Status'];
 
   return (
     <React.Fragment>
@@ -21,11 +19,9 @@ const TableProd = ({data, focusLine, rowClick}) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableHeaderCell>Cod</TableHeaderCell>
-              <TableHeaderCell>Descrição</TableHeaderCell>
-              <TableHeaderCell>Categoria</TableHeaderCell>
-              <TableHeaderCell>Embalagem</TableHeaderCell>
-              <TableHeaderCell>Status</TableHeaderCell>
+              {array.map(h => (
+                <TableHeaderCell>{h}</TableHeaderCell>
+              ))}
             </TableRow>
           </TableHead>
           <tbody>
@@ -36,13 +32,7 @@ const TableProd = ({data, focusLine, rowClick}) => {
                     key={`table_${rowIndex}`}
                     className={focusLine === rowIndex ? 'focused' : ''}
                     onClick={() => {
-                      rowClick(rowIndex, row);
-                      setCodigo(row.id_product);
-                      setCategoryFk(row.id_category_fk);
-                      setEmbalagem(row.measure);
-                      setStatus(row.status_prod);
-                      setPage(1);
-                      setRefrashList(prev => !prev);
+                      console.log(rowIndex, row, row.id_product, row.id_category_fk, row.measure, row.status_prod)
                     }}
                   >
                     <TableCell>{row.id_product}</TableCell>

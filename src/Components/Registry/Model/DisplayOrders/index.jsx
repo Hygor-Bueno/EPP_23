@@ -1,8 +1,12 @@
 import React, { useContext } from 'react';
-import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
-import { ThemeConnectionContext } from '../../../../../Theme/ThemeConnection';
+import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
+import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 import { Container, Modal, ModalRequest, Row, Request } from './style';
 
+/**
+ * Display Orders é aonde vamos ter varias informações conjuntas de 2 ou mais informações dentro desse componente.
+ * @returns
+ */
 const DisplayOrder = ({onAction, data, ...rest}) => {
       const {
         findCategoriesByIds,
@@ -11,11 +15,6 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
         setDessert,
         setMenu,
         setRice,
-
-        // pegar o variavel de ambiente para arroz e sobremesa
-        rice,
-        dessert,
-
         setPage,
         idMenu
       } = useContext(ThemeRegisterContexts);
