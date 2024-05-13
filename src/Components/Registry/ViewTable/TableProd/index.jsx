@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ContainerTableInformation } from "../../../styled.page";
+import { ContainerTableInformation } from "../../styled.page";
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from "../styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
  */
 const TableProd = (props) => {
   const array = ['Cod', 'Descrição', 'Categoria', 'Embalagem', 'Status'];
-  const {data = [], focusLine, rowClick} = props;
+  const {data, focusLine, rowClick} = props;
 
   return (
     <React.Fragment>
