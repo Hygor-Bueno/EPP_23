@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { Req } from '../Input/styled';
 
-const Select = ({ name, value, onChange, options, valueKey, labelKey, isReq, required, includeInactive, includeEmb, includeView, ...rest }) => {
+import PropTypes from 'prop-types';
+import { SelectContainer, SelectField } from './styled';
+
+/** Selecionador */
+const Select = (props) => {
+  const { name, value, onChange, children, valueKey, labelKey, isReq, required, includeInactive, includeEmb, includeView, ...rest } = props;
+
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
@@ -13,53 +18,6 @@ const Select = ({ name, value, onChange, options, valueKey, labelKey, isReq, req
     if (required && !value.trim()) {
       setFocused(false);
     }
-  };
-
-  const renderOptions = () => {
-    let renderedOptions = options?.map((option, index) => {
-      return (
-        <option key={`category_${index}`} value={option[valueKey]}>
-          {option[labelKey]}
-        </option>
-      )
-    }
-
-  );
-
-    if (includeInactive) {
-      renderedOptions.push(
-        <option key="ativo" value="1">
-          Ativo
-        </option>,
-        <option key="inativo" value="0">
-          Inativo
-        </option>
-      );
-    }
-
-    if (includeEmb) {
-      renderedOptions.push(
-        <option key="Un" value="Un">
-          Un
-        </option>,
-        <option key="Kg" value="Kg">
-          Kg
-        </option>
-      );
-    }
-
-    if (includeView) {
-      renderedOptions.push(
-        <option key="Menu" value="menu">
-          Menu
-        </option>,
-        <option key="Produto" value="produto">
-          Produto
-        </option>
-      );
-    }
-
-    return renderedOptions;
   };
 
   return (
@@ -74,43 +32,31 @@ const Select = ({ name, value, onChange, options, valueKey, labelKey, isReq, req
         required={required}
       >
         <option default hidden value=""></option>
-        {renderOptions()}
+        {children}
       </SelectField>
     </SelectContainer>
   );
 };
 
-const SelectContainer = styled.div`
-  position: relative;
-  label {
-    font-size: var(--textSize);
-    font-weight: var(--fontWeight-bold);
-  }
-`;
+Select.defaultProps = {
+  name: "Teste",
+  isReq: true,
+  children: () => (<React.Fragment />),
+  onChange: (e) => console.log(e.target.value),
+  includeInactive: true,
+};
 
-const SelectField = styled.select`
-  width: var(--widthInput);
-  padding: var(--spaceDefault);
-  font-size: var(--textSize);
-
-  border: var(--borderSizeL) solid #ccc;
-  border-radius: var(--borderRadius);
-  appearance: none;
-  outline: none;
-  position: relative;
-  z-index: 2;
-  background-color: transparent;
-
-
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-size: 20px;
-
-  &:focus {
-    border-color: #297073;
-  }
-`;
+Select.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
+  isReq: PropTypes.bool,
+  includeInactive: PropTypes.bool,
+  includeEmb: PropTypes.bool,
+  includeView: PropTypes.bool,
+  labelKey: PropTypes.string,
+  valueKey: PropTypes.string,
+  children: PropTypes.node,
+}
 
 export default Select;

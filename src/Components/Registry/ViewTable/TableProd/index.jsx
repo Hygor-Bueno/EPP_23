@@ -1,17 +1,17 @@
 import React, { useContext } from "react";
 import { ContainerTableInformation } from "../../../styled.page";
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from "../styled";
-import { ThemeRegisterContexts } from "../../../../Theme/ThemeRegisterProd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import PropTypes from 'prop-types';
 
 /**
  * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
  * @returns
  */
-const TableProd = ({data, focusLine, rowClick}) => {
-  const {} = useContext(ThemeRegisterContexts);
+const TableProd = (props) => {
   const array = ['Cod', 'Descrição', 'Categoria', 'Embalagem', 'Status'];
+  const {data = [], focusLine, rowClick} = props;
 
   return (
     <React.Fragment>
@@ -48,6 +48,12 @@ const TableProd = ({data, focusLine, rowClick}) => {
       </ContainerTableInformation>
     </React.Fragment>
   )
+}
+
+TableProd.propTypes = {
+  data: PropTypes.node.isRequired,
+  focusLine: PropTypes.bool,
+  rowClick: PropTypes.func,
 }
 
 export default TableProd;
