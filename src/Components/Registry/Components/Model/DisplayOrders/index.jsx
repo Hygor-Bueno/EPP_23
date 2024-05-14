@@ -29,7 +29,7 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
         items.forEach(item => {
             const key = item.logMenu.pluMenu;
             if (!groupedItems.has(key)) {
-                groupedItems.set(key, { ...item, product: { ...item.product, idProduct: [item.product.idProduct], description: [item.product.description], category: [item.product.idCategoryFk] } });
+                groupedItems.set(key, { ...item, product: { ...item.product, idProduct: [item.product.idProduct], description: [item.product.description], category: [item.product.idCategoryFk] }});
             } else {
                 const existingItem = groupedItems.get(key);
                 existingItem.product.idProduct.push(item.product.idProduct);
@@ -59,6 +59,8 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
                             {itemMenu.length > 0 && itemMenu.map((item, index) => {
                               let CATEGORY1 = findCategoriesByIds(item.product.category[0], menu.data)
                               let CATEGORY2 = findCategoriesByIds(item.product.category[1], menu.data)
+
+                              console.log(item.product);
 
                               return idMenu == item.logMenu.eppIdMenu && (
                                 <Request onClick={() => {

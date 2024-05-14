@@ -50,6 +50,24 @@ const ThemeContextRegisterProvider = ({ children }) => {
     },
   });
 
+  // preciso ver como posso tipar as vindas dos dados porque nem sempre rice pode ser rice e dessert pode ser dessert, preciso fazer uma condicional
+  // caso o tipo base for sobremesa ele vai jogar a informalção de sobremesa para o input sobremesa e assim por diante em cada input.
+  const [update, setUpdate] = useState([
+      {
+        epp_log_id: CodAddProd,
+        epp_id_menu: TypeCategory,
+        epp_id_product: rice,
+        plu_menu: menu,
+        type_base: "rice",
+      },
+      {
+        epp_log_id: CodAddProd,
+        epp_id_menu: TypeCategory,
+        epp_id_product: dessert,
+        plu_menu: menu,
+        type_base: "Dessert",
+      },
+  ])
 
   const [validationInput, setValidationInput] = useState([]);
 
@@ -132,16 +150,22 @@ const ThemeContextRegisterProvider = ({ children }) => {
         setResultError(error)
       }
       if(page == 2) {
-        const {error} = await connection.post(jsonRegistrationMenu, "EPP/Menu.php");
+        const {error} = await connection.put({
+          id_menu: CodeMenu,
+          status: statusMenu,
+          description: DescriptionMenu,
+        }, "EPP/Menu.php");
         setResultError(error)
       }
       if (page == 3) {
-        const {error} = await connection.post({
-          epp_id_menu: TypeCategory,
-          epp_id_product: dessert,
-          plu_menu: menu,
-        }, "EPP/LogMenu.php");
-        setResultError(error);
+        try {
+          for(const item of update) {
+            let {error} = await connection.put(item, "EPP/LogMenu.php");
+            if(!error) console.log('hahahahah');
+          }
+        } catch (error) {
+          console.log('Houve um error aqui no PUT');
+        }
       }
     } catch (error) {
       throw new Error(error.message);
@@ -173,30 +197,14 @@ const ThemeContextRegisterProvider = ({ children }) => {
         setResultError(error)
       }
       if (page == 3) {
-        const {error} = await connection.put({
-          epp_id_menu: TypeCategory,
-          epp_id_product: dessert,
-          plu_menu: menu,
-        }, "EPP/LogMenu.php");
-        Object.keys(updateLogMenu).forEach((key) => {
-          if (updateLogMenu[key]["update"]) {
-            console.log({
-              epp_categoryFk: updateLogMenu[key]["typeCategory"],
-              epp_rice: updateLogMenu[key]["codRice"],
-              epp_dessert: updateLogMenu[key]["codDessert"],
-              epp_menu: updateLogMenu[key]["codMenu"],
-              epp_log: updateLogMenu[key]["codLog"],
-            })
+        try {
+          for(const item of update) {
+            let {error} = await connection.put(item, "EPP/LogMenu.php");
+            if(!error) console.log('hahahahah');
           }
-        });
-
-        setUpdateLogMenu({
-          rice: { cod: "", update: false },
-          dessert: { cod: "", update: false },
-        });
-
-        setClear();
-        setResultError(error);
+        } catch (error) {
+          console.log('Houve um error aqui no PUT');
+        }
       }
     } catch (error) {
       throw new Error(error.message);
@@ -206,7 +214,8 @@ const ThemeContextRegisterProvider = ({ children }) => {
   async function setDeleteRegisterProd() {
     try {
       if(page == 1) {
-        await connection.delete(data, "EPP/Product.php");
+        //await connection.delete(data, "EPP/Product.php");
+        console.log("teste 1")
       } if(page == 2) {
         console.log('enviando delete page 2');
       } if (page == 3) {

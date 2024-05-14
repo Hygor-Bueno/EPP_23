@@ -72,12 +72,22 @@ const AddProds = () => {
         <Row>
           <StyledInput
             isReq={true}
+            onChange={(e) => {
+              changeLogMenu(e.target.value, "rice", "codMenu");
+              setMenu(e.target.value);
+            }}
+            name="Menu"
+            isDisabled={false}
+            value={menu}
+          />
+          <StyledInput
+            isReq={true}
             innerRef={arrozInputRef}
             onChange={(e) => {
               changeLogMenu(e.target.value, "rice", "codRice");
               setRice(e.target.value);
             }}
-            name="Arroz"
+            name="Produto primário"// Arroz
             isDisabled={false}
             placeholder="Arroz"
             value={rice}
@@ -89,21 +99,12 @@ const AddProds = () => {
               changeLogMenu(e.target.value, "dessert", "codDessert");
               setDessert(e.target.value);
             }}
-            name="Sobremesa"
+            name="Produto secundário" // Sobremesa
             isDisabled={false}
             placeholder="Sobremesa"
             value={dessert}
           />
-          <StyledInput
-            isReq={true}
-            onChange={(e) => {
-              changeLogMenu(e.target.value, "rice", "codMenu");
-              setMenu(e.target.value);
-            }}
-            name="Menu"
-            isDisabled={false}
-            value={menu}
-          />
+
         </Row>
       </CardMenu>
     </React.Fragment>
