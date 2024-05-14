@@ -27,7 +27,7 @@ export const arrowAnimation = keyframes`
 
 export const ButtonContainer = styled.button`
     position: relative;
-    width: 100%;
+    width: 20%;
     overflow: hidden;
     background-color: ${({ $bg }) => $bg || 'transparent'};
 
@@ -37,6 +37,7 @@ export const ButtonContainer = styled.button`
     border: var(--borderSize) solid;
     border-color: ${({ $borderColor }) => $borderColor || '#fff'};
     border-radius: var(--borderRadius);
+    flex: 1;
     font-size: var(--textSize);
     font-weight: bold;
     cursor: pointer;

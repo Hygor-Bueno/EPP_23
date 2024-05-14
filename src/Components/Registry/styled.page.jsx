@@ -8,6 +8,19 @@ export const ContainerTableInformation = styled.div`
   margin-bottom: 1vw;
 `;
 
+export const ModelRegister = styled.div`
+  width: clamp(20vw, 100vw, 700px);
+  height: clamp(20vh, 100vh, 500px);
+  background-color: #fff;
+  border-radius: 15px;
+  padding: clamp(1vw, 2vw, 10px);
+
+  .d-flex {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
 export const Flex =  styled.div`
   width: var(--widthInput);
   display: flex;
@@ -28,9 +41,8 @@ export const GroupButton = styled(NavigationBox)`
 `;
 
 export const ContainerBackground = styled.section`
-  width: 80%;
+  width: 100vw;
   height: 100vh;
-
   background-color: #297073;
 
    // Color Gradient Modern
