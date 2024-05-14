@@ -22,7 +22,6 @@ const ThemeContextRegisterProvider = ({ children }) => {
   const [idMenu, setIdMenu] = useState();
   const [dataProdMenu, setDataProdMenu] = useState([]);
 
-  // Preciso desse para fazer o JSON>
   const [CodAddProd, setCodeAddProd] = useState('');
   const [codProdMenu, useCodeProdMenu] = useState('');
   const [TypeCategory, setTypeCategory] = useState('');
@@ -34,27 +33,22 @@ const ThemeContextRegisterProvider = ({ children }) => {
   const [statusMenu, setStatusMenu] = useState('');
   const [DescriptionMenu, setDescriptionMenu] = useState('');
 
-
-  const jsonAddMenu = {
-    epp_id_menu: TypeCategory,
-    epp_id_product: dessert,
-    plu_menu: menu,
-  }
-
-  const jsonRegistrationMenu = {
-    id_menu: CodeMenu,
-    status: statusMenu,
-    description: DescriptionMenu,
-  }
-
-  const jsonRegisterProd = {
-    id_product: codigo,
-    status_prod: status,
-    description: descricao,
-    measure: embalagem,
-    price: "0",
-    id_category_fk: categoryFk,
-  }
+  const [updateLogMenu, setUpdateLogMenu] = useState({
+    rice: {
+      codLog: CodAddProd || "",
+      typeCategory: TypeCategory || "",
+      codMenu: menu || "",
+      codRice: rice || "",
+      update: false,
+    },
+    dessert: {
+      codLog: CodAddProd || "",
+      typeCategory: TypeCategory || "",
+      codMenu: menu || "",
+      codDessert: dessert || "",
+      update: false,
+    },
+  });
 
 
   const [validationInput, setValidationInput] = useState([]);
@@ -105,7 +99,9 @@ const ThemeContextRegisterProvider = ({ children }) => {
     }
   };
 
-
+  /**
+   * Essa funcao faz a busca dos produtos.
+   */
   const getSearchFunction = async (coding, category, statusProd, setter) => {
     try {
       if(setter) {
@@ -119,12 +115,20 @@ const ThemeContextRegisterProvider = ({ children }) => {
     }
   }
 
-
-  // CRUD: menu, register prod
+  /**
+   * Aqui faço o post das informações
+   */
   async function setPostRegisterProd() {
     try {
       if(page == 1) {
-        const {error} = await connection.post(jsonRegisterProd, "EPP/Product.php");
+        const {error} = await connection.post({
+          id_product: codigo,
+          status_prod: status,
+          description: descricao,
+          measure: embalagem,
+          price: "0",
+          id_category_fk: categoryFk,
+        }, "EPP/Product.php");
         setResultError(error)
       }
       if(page == 2) {
@@ -132,7 +136,11 @@ const ThemeContextRegisterProvider = ({ children }) => {
         setResultError(error)
       }
       if (page == 3) {
-        const {error} = await connection.post(jsonAddMenu, "EPP/LogMenu.php");
+        const {error} = await connection.post({
+          epp_id_menu: TypeCategory,
+          epp_id_product: dessert,
+          plu_menu: menu,
+        }, "EPP/LogMenu.php");
         setResultError(error);
       }
     } catch (error) {
@@ -140,18 +148,54 @@ const ThemeContextRegisterProvider = ({ children }) => {
     }
   }
 
+  /**
+   * Aqui faço o update das informação
+   */
   async function setUpdateRegisterProd() {
     try {
       if(page == 1) {
-        const {error} = await connection.put(jsonRegisterProd, "EPP/Product.php");
+        const {error} = await connection.put({
+          id_product: codigo,
+          status_prod: status,
+          description: descricao,
+          measure: embalagem,
+          price: "0",
+          id_category_fk: categoryFk,
+        }, "EPP/Product.php");
         setResultError(error)
       }
       if(page == 2) {
-        const {error} = await connection.put(jsonRegistrationMenu, "EPP/Menu.php");
+        const {error} = await connection.put({
+          id_menu: CodeMenu,
+          status: statusMenu,
+          description: DescriptionMenu,
+        }, "EPP/Menu.php");
         setResultError(error)
       }
       if (page == 3) {
-        const {error} = await connection.put(jsonAddMenu, "EPP/LogMenu.php");
+        const {error} = await connection.put({
+          epp_id_menu: TypeCategory,
+          epp_id_product: dessert,
+          plu_menu: menu,
+        }, "EPP/LogMenu.php");
+        Object.keys(updateLogMenu).forEach((key) => {
+          if (updateLogMenu[key]["update"]) {
+            console.log({
+              epp_categoryFk: updateLogMenu[key]["typeCategory"],
+              epp_rice: updateLogMenu[key]["codRice"],
+              epp_dessert: updateLogMenu[key]["codDessert"],
+              epp_menu: updateLogMenu[key]["codMenu"],
+              epp_log: updateLogMenu[key]["codLog"],
+            })
+          }
+        });
+
+        setUpdateLogMenu({
+          rice: { cod: "", update: false },
+          dessert: { cod: "", update: false },
+        });
+
+        setClear();
         setResultError(error);
       }
     } catch (error) {
@@ -194,7 +238,6 @@ const ThemeContextRegisterProvider = ({ children }) => {
   }
 
   const globalConnectionValue = {
-    // Estados useState
     codigo, setCodigo,
     descricao, setDescricao,
     embalagem, setEmbalagem,
@@ -217,11 +260,10 @@ const ThemeContextRegisterProvider = ({ children }) => {
     dataProdMenu, setDataProdMenu,
     menu, setMenu,
 
+    updateLogMenu, setUpdateLogMenu,
 
-    //validação de entrada no formulario
     validationInput, setValidationInput,
 
-    // Adicionar produtos ao menu
     codProdMenu, useCodeProdMenu,
     CodAddProd, setCodeAddProd,
     TypeCategory, setTypeCategory,
@@ -230,7 +272,6 @@ const ThemeContextRegisterProvider = ({ children }) => {
 
     totalPages,
 
-    // Funções
     setPostRegisterProd,
     setUpdateRegisterProd,
     setDeleteRegisterProd,
@@ -242,10 +283,8 @@ const ThemeContextRegisterProvider = ({ children }) => {
     getSearchFunction,
     formatToPtBr,
 
-    // uitl context
     findCategoriesByIds,
 
-    // use Ref
     codInputRef,
     menuInputRef,
     arrozInputRef,

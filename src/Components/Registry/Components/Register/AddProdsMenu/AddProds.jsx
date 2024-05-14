@@ -1,17 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card } from "../RegisterProd/styled";
-import Input from "../../Input/Input";
-import styled from "styled-components";
 import { Title } from "../../Title/index";
 import { ThemeRegisterContexts } from "../../../../../Theme/ThemeRegisterProd";
-import Select from "../../Select/Select";
 import { ThemeConnectionContext } from "../../../../../Theme/ThemeConnection";
+import { CardMenu, StyledInput,Row, StyledSelect } from "./style";
 
 const AddProds = () => {
   const {
     codInputRef,
     arrozInputRef,
     sobremesaInputRef,
+    updateLogMenu, setUpdateLogMenu,
 
     // codProdMenu,
     TypeCategory,
@@ -26,27 +24,9 @@ const AddProds = () => {
     setRice,
     setMenu,
     menu,
-    setClear,
   } = useContext(ThemeRegisterContexts);
 
   const { category } = useContext(ThemeConnectionContext);
-
-  const [updateLogMenu, setUpdateLogMenu] = useState({
-    rice: {
-      codLog: CodAddProd || "",
-      typeCategory: TypeCategory || "",
-      codMenu: menu || "",
-      codRice: rice || "",
-      update: false,
-    },
-    dessert: {
-      codLog: CodAddProd || "",
-      typeCategory: TypeCategory || "",
-      codMenu: menu || "",
-      codDessert: dessert || "",
-      update: false,
-    },
-  });
 
   const changeLogMenu = (value, key, input) => {
     let newLogMenu = updateLogMenu;
@@ -67,7 +47,7 @@ const AddProds = () => {
           <StyledInput
             isReq={true}
             innerRef={codInputRef}
-            isDisabled={false}
+            isDisabled={true}
             onChange={(e) => {
               changeLogMenu(e.target.value, "rice", "codLog");
               setCodeAddProd(e.target.value);
@@ -124,56 +104,12 @@ const AddProds = () => {
             isDisabled={false}
             value={menu}
           />
-          <button
-            onClick={() => {
-              Object.keys(updateLogMenu).forEach((key) => {
-                if (updateLogMenu[key]["update"]) {
-                  console.log({
-                    epp_categoryFk: updateLogMenu[key]["typeCategory"],
-                    epp_rice: updateLogMenu[key]["codRice"],
-                    epp_dessert: updateLogMenu[key]["codDessert"],
-                    epp_menu: updateLogMenu[key]["codMenu"],
-                    epp_log: updateLogMenu[key]["codLog"],
-                  })
-                }
-              });
-              setUpdateLogMenu({
-                rice: { cod: "", update: false },
-                dessert: { cod: "", update: false },
-              });
-              setClear();
-            }}
-          >
-            kakaka
-          </button>
         </Row>
       </CardMenu>
     </React.Fragment>
   );
 };
 
-const CardMenu = styled(Card)`
-  padding-left: var(--spaceDefaultLL);
-`;
 
-const Row = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  margin-bottom: 15px;
-  gap: 1rem;
-`;
-
-const StyledInput = styled(Input)`
-  border-radius: var(--borderRadius);
-  font-size: 16px;
-  transition: border-color 0.3s ease;
-
-  &::placeholder {
-    color: #aaa;
-  }
-`;
-
-const StyledSelect = styled(Select)``;
 
 export default AddProds;
