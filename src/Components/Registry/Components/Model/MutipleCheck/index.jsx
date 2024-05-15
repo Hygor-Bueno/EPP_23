@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
-   import Button from '../../Button/Button';
+import React from 'react';
+import Button from '../../Button/Button';
+import P from 'prop-types';
 import { faArrowRotateBack } from '@fortawesome/free-solid-svg-icons/faArrowRotateBack';
-import { faCircleArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faCircleArrowDown, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { Connection } from '../../../../../Util/RestApi';
-// import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
 import { Container, Footer, Header, Modal, StyledTable, TableContainer } from './style';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const MutipleCheck = ({ data, ...rest }) => {
-    // const {setRefrashChange} = useContext(ThemeRegisterContexts);
-
+const MutipleCheck = (props) => {
+    const { dataHeaders, data, ...rest } = props;
     const [listLocal, setListLocal] = React.useState([]);
 
     React.useEffect(() => {
@@ -35,18 +35,15 @@ const MutipleCheck = ({ data, ...rest }) => {
       data.forEach(item => {
         tempList.push({...item});
       });
-
       setListLocal([...tempList]);
     }
 
     const handleStatusButtonClick = async () => {
       const tempList = [];
-
       for (const item of listLocal) {
         await connection.put(item, 'EPP/Product.php');
         tempList.push(item);
       }
-
       setListLocal([...tempList]);
     };
 
@@ -61,10 +58,9 @@ const MutipleCheck = ({ data, ...rest }) => {
                         <StyledTable>
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Código</th>
-                                    <th>Produto</th>
-                                    <th>Categoria</th>
+                                    {dataHeaders?.map((header) => (
+                                      <th>{header}</th>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,9 +73,9 @@ const MutipleCheck = ({ data, ...rest }) => {
                                                 checked={item.status_prod == 1 ? true:false}
                                             />
                                         </td>
-                                        <td>{item.id_product}</td>
+                                        <td>{item.id_product || item.idMenu}</td>
                                         <td>{item.description}</td>
-                                        <td>{item.category}</td>
+                                        <td>{item.category ? item.category : item.status == 1 ? <FontAwesomeIcon icon={faPowerOff} color='#f90000'/> : <FontAwesomeIcon icon={faPowerOff} color='#199f22' />}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -88,7 +84,7 @@ const MutipleCheck = ({ data, ...rest }) => {
                     <Footer>
                         <div className='d-flex'>
                             <Button bg="#297073" onAction={handleStatusButtonClick} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
-                            <Button bg="#297073" onAction={() => {setListLocal([]);restartList(data)}} iconImage={faArrowRotateBack} isAnimation={true} animationType="rotate" />
+                            <Button bg="#297073" onAction={() => {setListLocal([]);restartList(data)}} iconImage={faArrowRotateBack} arrowAnimation={true} isAnimation={true} animationType="rotate" />
                         </div>
                     </Footer>
                 </Modal>
@@ -97,6 +93,10 @@ const MutipleCheck = ({ data, ...rest }) => {
     )
 }
 
+MutipleCheck.propTypes = {
+  data: P.node,
+  dataHeaders: P.array,
+}
 
 
 export default MutipleCheck;

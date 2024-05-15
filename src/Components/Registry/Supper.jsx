@@ -84,20 +84,24 @@ const Supper = () => {
       }
     }
 
+    let controle = view == 'produto' ? true : false;
+
+    console.log(view);
+
     return (
         <React.Fragment>
             {isError && <Exception error={resultError} onClick={() => {setError(a => !a); setInteractive(false)}} isConfirm={interactive} openException={() => {handleUpdateRegisterProd()}} closeException={() => setError(a => !a)}/>}
-            {isMutipleCheck && <MutipleCheck data={false ? prod.data : category.data} onClick={() => setIsMutipleCheck(a => !a)} />}
+            {isMutipleCheck && <MutipleCheck dataHeaders={controle ? ['', 'Codigo', 'Descrição', 'Categoria'] : ['', 'Codigo', 'Descrição', 'Status']} data={controle ? prod.data : category.data} onClick={() => setIsMutipleCheck(a => !a)} />}
             {isDisplayOrder && <DisplayOrder data={logMenu.data} onClick={() => setIsDisplayOrder(a => !a)} />}
             <div className="d-flex">
                 <ContainerBackground>
                     <NavigationBox>
                         <div className="d-flex align-items-center justify-content-center">
-                            <Button color={'transparent'} bg='#297073' iconImage={faArrowLeft} onAction={() => changePage(-1)} />
+                            <Button borderColor="transparent" color={'transparent'} bg='#297073' iconImage={faArrowLeft} onAction={() => changePage(-1)} />
                         </div>
                         {Carrocel()}
                         <div className="d-flex align-items-center justify-content-center">
-                            <Button color={'transparent'} bg='#297073' iconImage={faArrowRight} onAction={() => changePage(1)} />
+                            <Button borderColor="transparent" color={'transparent'} bg='#297073' iconImage={faArrowRight} onAction={() => changePage(1)} />
                         </div>
                     </NavigationBox>
                     <GroupButton>

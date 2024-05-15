@@ -1,4 +1,4 @@
-export class CSVGenerator { 
+export class CSVGenerator {
     /**
      * Método generateCSV
      * Gera um arquivo CSV a partir das tarefas obtidas pela função getTasks e realiza o download.
@@ -11,7 +11,7 @@ export class CSVGenerator {
         console.error(error.message);
       }
     }
-  
+
     /**
      * Método convertToCSV
      * Converte os dados fornecidos em formato JSON para uma string CSV.
@@ -27,7 +27,7 @@ export class CSVGenerator {
         console.error(error.message);
       }
     }
-  
+
     /**
      * Método downloadCSV
      * Inicia o download do arquivo CSV gerado.
@@ -38,14 +38,14 @@ export class CSVGenerator {
       try {
         const blob = new Blob([csv], { type: `text/csv;charset=utf-8, ${encodeURIComponent(csv)}` });
         const url = URL.createObjectURL(blob);
-    
+
         const a = document.createElement('a');
         a.href = url;
         a.download = filename;
-    
+
         document.body.appendChild(a);
         a.click();
-    
+
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       } catch (error) {
@@ -53,4 +53,3 @@ export class CSVGenerator {
       }
     }
   }
-  

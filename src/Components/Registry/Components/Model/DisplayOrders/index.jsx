@@ -11,11 +11,6 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
         setDessert,
         setMenu,
         setRice,
-
-        // pegar o variavel de ambiente para arroz e sobremesa
-        rice,
-        dessert,
-
         setPage,
         idMenu
       } = useContext(ThemeRegisterContexts);
@@ -27,23 +22,33 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
         const groupedItems = new Map();
 
         items.forEach(item => {
-            const key = item.logMenu.pluMenu;
-            if (!groupedItems.has(key)) {
-                groupedItems.set(key, { ...item, product: { ...item.product, idProduct: [item.product.idProduct], description: [item.product.description], category: [item.product.idCategoryFk] }});
-            } else {
-                const existingItem = groupedItems.get(key);
-                existingItem.product.idProduct.push(item.product.idProduct);
-                existingItem.product.description.push(item.product.description);
-                existingItem.product.category.push(item.product.idCategoryFk);
-            }
+          const key = item.logMenu.pluMenu;
+          if (!groupedItems.has(key)) {
+            groupedItems.set(key, {
+              ...item,
+              product: {
+                ...item.product,
+                idProduct: [item.product.idProduct],
+                description: [item.product.description],
+                category: [item.product.idCategoryFk],
+              },
+              typeBase: [item.logMenu.typeBase] // aonde tenho que fazer a separação desses tipos base!
+            });
+          } else {
+            const existingItem = groupedItems.get(key);
+            existingItem.product.idProduct.push(item.product.idProduct);
+            existingItem.product.description.push(item.product.description);
+            existingItem.product.category.push(item.product.idCategoryFk);
+            existingItem.typeBase.push(item.logMenu.typeBase); // aonde tenho que fazer a separação desses tipos base!
+          }
         });
 
         return Array.from(groupedItems.values()).map(item => {
-            if (item.product.idProduct.length === 1) {
-                return item;
-            } else {
-                return { ...item, isDuplicate: true };
-            }
+          if (item.product.idProduct.length === 1) {
+            return item;
+          } else {
+            return { ...item, isDuplicate: true };
+          }
         });
       }
 
@@ -60,8 +65,6 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
                               let CATEGORY1 = findCategoriesByIds(item.product.category[0], menu.data)
                               let CATEGORY2 = findCategoriesByIds(item.product.category[1], menu.data)
 
-                              console.log(item.product);
-
                               return idMenu == item.logMenu.eppIdMenu && (
                                 <Request onClick={() => {
                                   setCodeAddProd(item.logMenu.eppLogId);
@@ -70,6 +73,8 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
                                   setDessert(item.product.idProduct[1]);
                                   setTypeCategory(item.logMenu.eppIdMenu);
                                   setPage(3);
+
+                                  console.log(item);
                                 }} key={`menu_${index}`}>
                                   <Row className="container">
                                     <Row className="row">

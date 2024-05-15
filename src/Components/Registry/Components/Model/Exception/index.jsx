@@ -1,9 +1,12 @@
 import React from "react";
+import P from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle, faFileCircleCheck, faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { Button, Container, ModalExpetion, ImageExpetion } from "./style";
 
-const Exception = ({error, translate, isConfirm, openException, closeException, ...rest}) => {
+const Exception = (props) => {
+  const {error, translate, isConfirm, openException, closeException, ...rest} = props;
+
   return (
     <React.Fragment>
       <Container {...rest}>
@@ -39,4 +42,21 @@ const Exception = ({error, translate, isConfirm, openException, closeException, 
     </React.Fragment>
   )
 }
+
+Exception.defaultProps = {
+  error: false,
+  translate: 'Tudo Ok',
+  isConfirm: true,
+  openException: (e) => console.log(e.target),
+  closeException: (e) => console.log(e.target),
+}
+
+Exception.propTypes = {
+  error: P.bool.isRequired,
+  translate: P.string,
+  isConfirm: P.bool,
+  openException: P.func.isRequired,
+  closeException: P.func.isRequired
+}
+
 export default Exception;
