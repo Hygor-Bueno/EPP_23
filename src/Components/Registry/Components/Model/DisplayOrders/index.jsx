@@ -1,112 +1,133 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
 import { ThemeConnectionContext } from '../../../../../Theme/ThemeConnection';
 import { Container, Modal, ModalRequest, Row, Request } from './style';
+import P from 'prop-types';
 
-const DisplayOrder = ({onAction, data, ...rest}) => {
-      const {
+const DisplayOrder = (props) => {
+    const { onAction, data, ...rest } = props;
+    const {
         findCategoriesByIds,
         setTypeCategory,
         setCodeAddProd,
         setDessert,
         setMenu,
         setRice,
+        setTypeBase,
         setPage,
         idMenu
-      } = useContext(ThemeRegisterContexts);
+    } = useContext(ThemeRegisterContexts);
 
-      const {menu} = useContext(ThemeConnectionContext);
-      const itemMenu = groupItems(data);
+    const { menu } = useContext(ThemeConnectionContext);
 
-      function groupItems(items) {
+    const itemMenu = useMemo(() => groupItems(data), [data]);
+
+    function groupItems(items) {
         const groupedItems = new Map();
 
         items.forEach(item => {
-          const key = item.logMenu.pluMenu;
-          if (!groupedItems.has(key)) {
-            groupedItems.set(key, {
-              ...item,
-              product: {
-                ...item.product,
-                idProduct: [item.product.idProduct],
-                description: [item.product.description],
-                category: [item.product.idCategoryFk],
-              },
-              typeBase: [item.logMenu.typeBase] // aonde tenho que fazer a separação desses tipos base!
-            });
-          } else {
-            const existingItem = groupedItems.get(key);
-            existingItem.product.idProduct.push(item.product.idProduct);
-            existingItem.product.description.push(item.product.description);
-            existingItem.product.category.push(item.product.idCategoryFk);
-            existingItem.typeBase.push(item.logMenu.typeBase); // aonde tenho que fazer a separação desses tipos base!
-          }
+            const key = item.logMenu.pluMenu;
+
+            if (!groupedItems.has(key)) {
+                groupedItems.set(key, {
+                    ...item,
+                    products: [{
+                        idLog: item.logMenu.eppLogId,
+                        id: item.product.idProduct,
+                        description: item.product.description,
+                        category: item.product.idCategoryFk,
+                        typeBase: item.logMenu.typeBase.toLowerCase()
+                    }],
+                });
+            } else {
+                const existingItem = groupedItems.get(key);
+                existingItem.products.push({
+                    idLog: item.logMenu.eppLogId,
+                    id: item.product.idProduct,
+                    description: item.product.description,
+                    category: item.product.idCategoryFk,
+                    typeBase: item.logMenu.typeBase.toLowerCase()
+                });
+            }
         });
 
         return Array.from(groupedItems.values()).map(item => {
-          if (item.product.idProduct.length === 1) {
-            return item;
-          } else {
-            return { ...item, isDuplicate: true };
-          }
+            return {
+                ...item,
+                isDuplicate: item.products.length > 1
+            };
         });
-      }
+    }
 
-      return (
-        <React.Fragment>
-            <Container {...rest}>
-                <Modal onClick={(e) => e.stopPropagation()}>
-                    <Row>
-                        <h2>Detalhes do menu</h2>
-                    </Row>
-                    <Row>
-                        <ModalRequest>
-                            {itemMenu.length > 0 && itemMenu.map((item, index) => {
-                              let CATEGORY1 = findCategoriesByIds(item.product.category[0], menu.data)
-                              let CATEGORY2 = findCategoriesByIds(item.product.category[1], menu.data)
+    const handleRequestClick = (item) => {
+        const riceProduct = item.products.find(p => p.typeBase === 'rice');
+        const dessertProduct = item.products.find(p => p.typeBase === 'dessert');
+        setCodeAddProd(`${item.products[0].idLog}-${item.products[1].idLog}`);
+        setMenu(item.logMenu.pluMenu);
+        setRice(riceProduct?.id || null);
+        setDessert(dessertProduct?.id || null);
+        setTypeCategory(item.logMenu.eppIdMenu);
+        setTypeBase(item.products);
+        setPage(3);
+    };
 
-                              return idMenu == item.logMenu.eppIdMenu && (
-                                <Request onClick={() => {
-                                  setCodeAddProd(item.logMenu.eppLogId);
-                                  setMenu(item.logMenu.pluMenu);
-                                  setRice(item.product.idProduct[0]);
-                                  setDessert(item.product.idProduct[1]);
-                                  setTypeCategory(item.logMenu.eppIdMenu);
-                                  setPage(3);
 
-                                  console.log(item);
-                                }} key={`menu_${index}`}>
-                                  <Row className="container">
-                                    <Row className="row">
-                                      <Row className="col-2">
-                                        <h6>Cód.Menu</h6>
-                                        <label>{item.logMenu.pluMenu}</label>
-                                      </Row>
-                                      <Row className="col-2">
-                                          <h6>Cód.Prod</h6>
-                                          <label className='d-block'>{item.product.idProduct[0]}</label>
-                                          <label className='d-block'>{item.product.idProduct[1]}</label>
-                                      </Row>
-                                      <Row className="col-4">
-                                          <h6>Descrição</h6>
-                                          <label className='d-block'>{item.product.description[0]}</label>
-                                          <label className='d-block'>{item.product.description[1]}</label>
-                                      </Row>
-                                      <Row className="col-3">
-                                          <h6>Categoria</h6>
-                                          <label className='d-block'>{CATEGORY1}</label>
-                                          <label className='d-block'>{CATEGORY2}</label>
-                                      </Row>
+    return (
+        <Container {...rest}>
+            <Modal onClick={(e) => e.stopPropagation()}>
+                <Row>
+                    <h2>Detalhes do menu</h2>
+                </Row>
+                <Row>
+                    <ModalRequest>
+                        {itemMenu.length > 0 && itemMenu.map((item, index) => {
+                            const categories = item.products.map(product =>
+                                findCategoriesByIds(product.category, menu.data)
+                            );
+
+                            return idMenu === item.logMenu.eppIdMenu && (
+                                <Request onClick={() => handleRequestClick(item)} key={`menu_${index}`}>
+                                    <Row className="container">
+                                        <Row className="row">
+                                            <Row className="col-2">
+                                                <h6>Cód.Menu</h6>
+                                                <label>{item.logMenu.pluMenu}</label>
+                                            </Row>
+                                            <Row className="col-2">
+                                                <h6>Cód.Prod</h6>
+                                                {item.products.map((product, idx) => (
+                                                    <><label key={idx} className='d-block'>{product.id}</label></>
+                                                ))}
+                                            </Row>
+                                            <Row className="col-4">
+                                                <h6>Descrição</h6>
+                                                {item.products.map((product, idx) => (
+                                                    <label key={idx} className='d-block'>{product.description}</label>
+                                                ))}
+                                            </Row>
+                                            <Row className="col-3">
+                                                <h6>Categoria</h6>
+                                                {categories.map((category, idx) => (
+                                                    <label key={idx} className='d-block'>{category}</label>
+                                                ))}
+                                            </Row>
+                                        </Row>
                                     </Row>
-                                  </Row>
-                              </Request>
-                              )
-                            })}
-                        </ModalRequest>
-                    </Row>
-                </Modal>
-            </Container>
-        </React.Fragment>
-    )
+                                </Request>
+                            );
+                        })}
+                    </ModalRequest>
+                </Row>
+            </Modal>
+        </Container>
+    );
+};
+DisplayOrder.protoType = {
+  onAction: P.func,
+  data: P.object,
+  rest: P.object,
 }
+
+
 export default DisplayOrder;
+

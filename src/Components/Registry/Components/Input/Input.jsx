@@ -1,7 +1,9 @@
 import React from 'react';
+import P from 'prop-types';
 import { InputContainer, InputField, Req } from './styled';
 
-const Input = ({ name, value, onChange, isDisabled, required, onBlur, innerRef, isReq, ...rest }) => {
+const Input = (props) => {
+  const { name, value, onChange, isDisabled, onBlur, innerRef, isReq, ...rest } = props;
 
   return (
     <InputContainer>
@@ -18,5 +20,15 @@ const Input = ({ name, value, onChange, isDisabled, required, onBlur, innerRef, 
     </InputContainer>
   );
 };
+
+Input.propTypes = {
+  name: P.string.isRequired,
+  value: P.node,
+  onChange: P.func,
+  isDisabled: P.bool,
+  isReq: P.bool,
+  onBlur: P.func,
+  innerRef: P.any,
+}
 
 export default Input;

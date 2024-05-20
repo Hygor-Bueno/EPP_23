@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Title } from "../../Title/index";
 import { ThemeRegisterContexts } from "../../../../../Theme/ThemeRegisterProd";
 import { ThemeConnectionContext } from "../../../../../Theme/ThemeConnection";
-import { CardMenu, StyledInput,Row, StyledSelect } from "./style";
+import { CardMenu, StyledInput, Row, StyledSelect } from "./style";
 
 const AddProds = () => {
   const {
     codInputRef,
     arrozInputRef,
+    typeBase,
     sobremesaInputRef,
     updateLogMenu, setUpdateLogMenu,
 
@@ -32,6 +33,7 @@ const AddProds = () => {
     let newLogMenu = updateLogMenu;
     newLogMenu[key][input] = value;
     newLogMenu[key]["update"] = true;
+    newLogMenu[key]["typeBase"] = typeBase;
     setUpdateLogMenu({ ...newLogMenu });
   };
 
@@ -47,12 +49,13 @@ const AddProds = () => {
           <StyledInput
             isReq={true}
             innerRef={codInputRef}
-            isDisabled={true}
+            isDisabled={false}
             onChange={(e) => {
               changeLogMenu(e.target.value, "rice", "codLog");
+              changeLogMenu(e.target.value, "dessert", "codLog");
               setCodeAddProd(e.target.value);
             }}
-            name="Cod.Prod"
+            name="Cod"
             placeholder="Código"
             value={CodAddProd}
           />
@@ -64,6 +67,7 @@ const AddProds = () => {
             name="Tipo Categoria"
             onChange={(e) => {
               changeLogMenu(e.target.value, "rice", "typeCategory");
+              changeLogMenu(e.target.value, "dessert", "typeCategory");
               setTypeCategory(e.target.value);
             }}
             value={TypeCategory}
@@ -74,6 +78,7 @@ const AddProds = () => {
             isReq={true}
             onChange={(e) => {
               changeLogMenu(e.target.value, "rice", "codMenu");
+              changeLogMenu(e.target.value, "dessert", "codMenu");
               setMenu(e.target.value);
             }}
             name="Menu"
@@ -87,7 +92,7 @@ const AddProds = () => {
               changeLogMenu(e.target.value, "rice", "codRice");
               setRice(e.target.value);
             }}
-            name="Produto primário"// Arroz
+            name="Arroz"// Arroz
             isDisabled={false}
             placeholder="Arroz"
             value={rice}
@@ -99,7 +104,7 @@ const AddProds = () => {
               changeLogMenu(e.target.value, "dessert", "codDessert");
               setDessert(e.target.value);
             }}
-            name="Produto secundário" // Sobremesa
+            name="Sobremesa" // Sobremesa
             isDisabled={false}
             placeholder="Sobremesa"
             value={dessert}

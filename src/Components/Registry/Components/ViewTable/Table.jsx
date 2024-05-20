@@ -22,8 +22,6 @@ const ResponsiveTable = ({ data, headers, isConsinco, isConsicoSecondary, isMenu
     getSearchFunction,
   } = useContext(ThemeRegisterContexts);
 
-
-
   const [focusedRow, setFocusedRow] = useState();
   const [SearchData, setSearchData] = useState('');
   const [CategoryData, setCategoryData] = useState('');

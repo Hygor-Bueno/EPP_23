@@ -2,7 +2,7 @@ import { styled, css, keyframes } from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types';
+import P from 'prop-types';
 
 /**
  * Botão com animações que pode ser reutilizado.
@@ -76,21 +76,18 @@ const Button = (props) => {
 Button.defaultProps = {
   bg: '#297073',
   onAction: () => console.log('click'),
-  animationType: false,
-  borderColor: '#ffffff',
-  isAnimation: false,
   iconImage: faCog,
 };
 
 Button.propTypes = {
-  bg: PropTypes.string.isRequired,
-  onAction: PropTypes.func.isRequired,
-  iconImage: PropTypes.any,
-  children: PropTypes.string,
-  borderColor: PropTypes.string,
-  isFormRegister: PropTypes.bool,
-  isAnimation: PropTypes.bool,
-  animationType: PropTypes.node,
+  bg: P.string.isRequired,
+  onAction: P.func.isRequired,
+  iconImage: P.any,
+  children: P.string,
+  borderColor: P.string,
+  // isFormRegister: P.bool,
+  isAnimation: P.bool,
+  animationType: P.node,
 };
 
 const rotateAnimation = keyframes`

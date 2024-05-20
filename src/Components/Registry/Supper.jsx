@@ -86,8 +86,6 @@ const Supper = () => {
 
     let controle = view == 'produto' ? true : false;
 
-    console.log(view);
-
     return (
         <React.Fragment>
             {isError && <Exception error={resultError} onClick={() => {setError(a => !a); setInteractive(false)}} isConfirm={interactive} openException={() => {handleUpdateRegisterProd()}} closeException={() => setError(a => !a)}/>}
@@ -105,10 +103,10 @@ const Supper = () => {
                         </div>
                     </NavigationBox>
                     <GroupButton>
-                        <div className="col-sm-2 col-md-2"><Button isFormRegister={true} iconImage={faPlus} color='#fff' onAction={handlePostRegisterProd} /></div>
-                        <div className="col-sm-2 col-md-2"><Button isFormRegister={true} iconImage={faPencil} color='#fff' onAction={() => setError(a => !a)} /></div>
-                        <div className="col-sm-2 col-md-2"><Button isFormRegister={true} iconImage={faTrash} color='#fff' onAction={handleDeleteRegisterProd} /></div>
-                        <div className="col-sm-2 col-md-2"><Button isFormRegister={true} iconImage={faEraser} color='#fff' onAction={handleClear} /></div>
+                        <div className="col-sm-2 col-md-2"><Button iconImage={faPlus} color='#fff' onAction={handlePostRegisterProd} /></div>
+                        <div className="col-sm-2 col-md-2"><Button iconImage={faPencil} color='#fff' onAction={() => setError(a => !a)} /></div>
+                        <div className="col-sm-2 col-md-2"><Button iconImage={faTrash} color='#fff' onAction={handleDeleteRegisterProd} /></div>
+                        <div className="col-sm-2 col-md-2"><Button iconImage={faEraser} color='#fff' onAction={handleClear} /></div>
                     </GroupButton>
                 </ContainerBackground>
                 <Flex>

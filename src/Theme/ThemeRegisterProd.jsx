@@ -28,6 +28,7 @@ const ThemeContextRegisterProvider = ({ children }) => {
   const [rice, setRice] = useState('');
   const [dessert, setDessert] = useState('');
   const [menu, setMenu] = useState('');
+  const [typeBase, setTypeBase] = useState('');
 
   const [CodeMenu, setCodeMenu] = useState('');
   const [statusMenu, setStatusMenu] = useState('');
@@ -49,25 +50,6 @@ const ThemeContextRegisterProvider = ({ children }) => {
       update: false,
     },
   });
-
-  // preciso ver como posso tipar as vindas dos dados porque nem sempre rice pode ser rice e dessert pode ser dessert, preciso fazer uma condicional
-  // caso o tipo base for sobremesa ele vai jogar a informalção de sobremesa para o input sobremesa e assim por diante em cada input.
-  const [update, setUpdate] = useState([
-      {
-        epp_log_id: CodAddProd,
-        epp_id_menu: TypeCategory,
-        epp_id_product: rice,
-        plu_menu: menu,
-        type_base: "rice",
-      },
-      {
-        epp_log_id: CodAddProd,
-        epp_id_menu: TypeCategory,
-        epp_id_product: dessert,
-        plu_menu: menu,
-        type_base: "Dessert",
-      },
-  ])
 
   const [validationInput, setValidationInput] = useState([]);
 
@@ -159,9 +141,9 @@ const ThemeContextRegisterProvider = ({ children }) => {
       }
       if (page == 3) {
         try {
-          for(const item of update) {
+          for(const item of updateLogMenu) {
             let {error} = await connection.put(item, "EPP/LogMenu.php");
-            if(!error) console.log('hahahahah');
+            if(!error) console.log('add success!');
           }
         } catch (error) {
           console.log('Houve um error aqui no PUT');
@@ -196,14 +178,32 @@ const ThemeContextRegisterProvider = ({ children }) => {
         }, "EPP/Menu.php");
         setResultError(error)
       }
-      if (page == 3) {
+      if (page === 3) {
         try {
-          for(const item of update) {
-            let {error} = await connection.put(item, "EPP/LogMenu.php");
-            if(!error) console.log('hahahahah');
+          for (const key of Object.keys(updateLogMenu)) {
+            if (updateLogMenu[key]["update"]) {
+                const payload = {};
+                const { codMenu, typeCategory, codLog, typeBase } = updateLogMenu[key];
+
+                if (key === "rice" || key === "dessert") {
+                    payload.plu_menu = codMenu;
+                    payload.epp_id_menu = typeCategory;
+                    const logIds = codLog.split("-");
+                    payload.epp_log_id = key === "rice" ? logIds[0] : logIds[1];
+                    payload.epp_id_product = key === "rice" ? updateLogMenu[key]["codRice"] : updateLogMenu[key]["codDessert"];
+                    payload.type_base = typeBase[key === "rice" ? 0 : 1]["typeBase"];
+                }
+
+                try {
+                    await connection.put(payload, "EPP/LogMenu.php");
+                    console.log(`${key} updated successfully.`);
+                } catch (error) {
+                    console.error(`Failed to update ${key}: ${error}`);
+                }
+            }
           }
         } catch (error) {
-          console.log('Houve um error aqui no PUT');
+          console.log("Houve um error aqui no PUT", error);
         }
       }
     } catch (error) {
@@ -214,7 +214,7 @@ const ThemeContextRegisterProvider = ({ children }) => {
   async function setDeleteRegisterProd() {
     try {
       if(page == 1) {
-        //await connection.delete(data, "EPP/Product.php");
+        // await connection.delete({}, "EPP/Product.php");
         console.log("teste 1")
       } if(page == 2) {
         console.log('enviando delete page 2');
@@ -247,6 +247,7 @@ const ThemeContextRegisterProvider = ({ children }) => {
   }
 
   const globalConnectionValue = {
+
     codigo, setCodigo,
     descricao, setDescricao,
     embalagem, setEmbalagem,
@@ -268,6 +269,8 @@ const ThemeContextRegisterProvider = ({ children }) => {
     interactive, setInteractive,
     dataProdMenu, setDataProdMenu,
     menu, setMenu,
+
+    typeBase, setTypeBase,
 
     updateLogMenu, setUpdateLogMenu,
 

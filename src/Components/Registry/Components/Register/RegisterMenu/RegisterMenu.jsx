@@ -8,16 +8,14 @@ import {Title} from '../../Title/index.jsx';
 
 export const RegisterMenu = () => {
   const {
-    // Function:
     handleCode,
     handleStatus,
     handleDesc,
-    handleCodeProd,
-    // Variables:
+
     CodeMenu,
     statusMenu,
     DescriptionMenu,
-    codProdMenu,
+
   } = useContext(ThemeRegisterContexts);
 
   const ContainerBox = styled.div`

@@ -83,7 +83,6 @@ export const RegisterProd = () => {
             <div className="col-12">
               <div className="row mt-4">
                 <div className="col-lg-4 col-md-12 col-sm-12 mb-4">
-                  {/* FOCO AQUI!! */}
                   <Select
                       name="Categoria"
                       value={categoryFk}
