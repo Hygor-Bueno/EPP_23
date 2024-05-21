@@ -186,10 +186,11 @@ const ThemeContextRegisterProvider = ({ children }) => {
                 const { codMenu, typeCategory, codLog, typeBase } = updateLogMenu[key];
 
                 if (key === "rice" || key === "dessert") {
+                    const logIds = codLog.split("-");
+
+                    payload.epp_log_id = key === "rice" ? logIds[0] : logIds[1];
                     payload.plu_menu = codMenu;
                     payload.epp_id_menu = typeCategory;
-                    const logIds = codLog.split("-");
-                    payload.epp_log_id = key === "rice" ? logIds[0] : logIds[1];
                     payload.epp_id_product = key === "rice" ? updateLogMenu[key]["codRice"] : updateLogMenu[key]["codDessert"];
                     payload.type_base = typeBase[key === "rice" ? 0 : 1]["typeBase"];
                 }

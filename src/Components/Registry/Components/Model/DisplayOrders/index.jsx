@@ -125,9 +125,7 @@ const DisplayOrder = (props) => {
 DisplayOrder.protoType = {
   onAction: P.func,
   data: P.object,
-  rest: P.object,
 }
-
 
 export default DisplayOrder;
 
