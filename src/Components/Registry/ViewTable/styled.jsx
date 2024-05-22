@@ -9,6 +9,12 @@ export const fadeIn = keyframes`
   }
 `;
 
+export const FixedSize = styled.div`
+  height: 200px !important;
+  overflow-y: scroll;
+  overflow-x: hidden;
+`;
+
 export const Table = styled.table`
   width: 100%;
   font-size: var(--textSize);

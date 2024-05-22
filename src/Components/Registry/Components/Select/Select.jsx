@@ -4,7 +4,6 @@ import { Req } from '../Input/styled';
 import PropTypes from 'prop-types';
 import { SelectContainer, SelectField } from './styled';
 
-/** Selecionador */
 const Select = (props) => {
   const { name, value, onChange, children, valueKey, labelKey, isReq, required, includeInactive, includeEmb, includeView, ...rest } = props;
 

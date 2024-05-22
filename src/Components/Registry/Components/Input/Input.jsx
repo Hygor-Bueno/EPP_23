@@ -37,7 +37,6 @@ const Input = (props) => {
 Input.defaultProps = {
   name: 'Teste',
   isReq: true,
-  onChange: (e) => console.log(e.target.value),
 }
 
 Input.propTypes = {
