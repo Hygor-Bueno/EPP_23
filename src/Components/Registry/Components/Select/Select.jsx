@@ -85,6 +85,7 @@ const SelectContainer = styled.div`
   label {
     font-size: var(--textSize);
     font-weight: var(--fontWeight-bold);
+    color: #297073;
   }
 `;
 

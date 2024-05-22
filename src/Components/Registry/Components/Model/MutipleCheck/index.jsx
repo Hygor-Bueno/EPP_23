@@ -1,102 +1,138 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRotateBack, faCircleArrowDown, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../Button/Button';
-import P from 'prop-types';
-import { faArrowRotateBack } from '@fortawesome/free-solid-svg-icons/faArrowRotateBack';
-import { faCircleArrowDown, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { Connection } from '../../../../../Util/RestApi';
 import { Container, Footer, Header, Modal, StyledTable, TableContainer } from './style';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ThemeRegisterContexts } from '../../../../../Theme/ThemeRegisterProd';
+import { ThemeConnectionContext } from '../../../../../Theme/ThemeConnection';
 
-const MutipleCheck = (props) => {
-    const { dataHeaders, data, ...rest } = props;
-    const [listLocal, setListLocal] = React.useState([]);
+const MultipleCheck = ({ dataHeaders, data, ...rest }) => {
+    const [listLocal, setListLocal] = useState([]);
+    const {setRefreshFlag} = useContext(ThemeConnectionContext);
+    const {
+      setInteractive,
+      setIsMutipleCheck,
+    } = useContext(ThemeRegisterContexts);
 
-    React.useEffect(() => {
-      restartList(data);
+    useEffect(() => {
+        if (data) {
+            setListLocal(data.map(item => ({ ...item })));
+        }
     }, [data]);
-
-    React.useEffect(() =>{},[data,listLocal]);
 
     const connection = new Connection();
 
-    const handleCheckboxChange = (item) => {
-      changeMyList(item);
+    const handleCheckboxChange = (id, type) => {
+        const updatedList = [...listLocal];
+        for (const item of updatedList) {
+            if (item.id_product === id || item.idMenu === id) {
+                item[type] = item[type] === '1' ? '0' : '1';
+                break;
+            }
+        }
+        setListLocal(updatedList);
     };
 
-    const changeMyList = (item)=>{
-      const position = listLocal.findIndex((itemLocal)=> itemLocal.id_product == item.id_product);
-      listLocal[position].status_prod = listLocal[position].status_prod == 1 ? '0': '1';
-      const newList = listLocal;
-      setListLocal([...newList]);
-    }
-
-    const restartList = (data)=>{
-      const tempList = [];
-      data.forEach(item => {
-        tempList.push({...item});
-      });
-      setListLocal([...tempList]);
-    }
-
     const handleStatusButtonClick = async () => {
-      const tempList = [];
-      for (const item of listLocal) {
-        await connection.put(item, 'EPP/Product.php');
-        tempList.push(item);
-      }
-      setListLocal([...tempList]);
+        const updatedList = [];
+        for (const item of listLocal) {
+            if (item.id_product){
+              await connection.put(item, 'EPP/Product.php');
+            }
+            if (item.idMenu){
+              await connection.put({
+                id_menu: item.idMenu,
+                status: item.status,
+                description: item.description,
+              }, 'EPP/Menu.php');
+            }
+            updatedList.push(item);
+        }
+        setListLocal(updatedList);
     };
 
     return (
-        <React.Fragment>
-            <Container {...rest}>
-                <Modal onClick={(e) => e.stopPropagation()}>
-                    <Header>
-                        <h2>Ative ou Inative o Status do produto</h2>
-                    </Header>
-                    <TableContainer>
-                        <StyledTable>
-                            <thead>
-                                <tr>
-                                    {dataHeaders?.map((header) => (
-                                      <th>{header}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {listLocal?.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                onChange={() => handleCheckboxChange(item)}
-                                                type="checkbox"
-                                                checked={item.status_prod == 1 ? true:false}
-                                            />
-                                        </td>
-                                        <td>{item.id_product || item.idMenu}</td>
-                                        <td>{item.description}</td>
-                                        <td>{item.category ? item.category : item.status == 1 ? <FontAwesomeIcon icon={faPowerOff} color='#f90000'/> : <FontAwesomeIcon icon={faPowerOff} color='#199f22' />}</td>
-                                    </tr>
+        <Container {...rest}>
+            <Modal onClick={(e) => e.stopPropagation()}>
+                <Header>
+                    <h2>Ative ou Inative o Status do produto</h2>
+                </Header>
+                <TableContainer>
+                    <StyledTable>
+                        <thead>
+                            <tr>
+                                {dataHeaders?.map((header, index) => (
+                                    <th key={index}>{header}</th>
                                 ))}
-                            </tbody>
-                        </StyledTable>
-                    </TableContainer>
-                    <Footer>
-                        <div className='d-flex'>
-                            <Button bg="#297073" onAction={handleStatusButtonClick} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
-                            <Button bg="#297073" onAction={() => {setListLocal([]);restartList(data)}} iconImage={faArrowRotateBack} arrowAnimation={true} isAnimation={true} animationType="rotate" />
-                        </div>
-                    </Footer>
-                </Modal>
-            </Container>
-        </React.Fragment>
-    )
-}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {listLocal?.map((item, index) => (
+                                <tr key={item.id_product || item.idMenu || index}>
+                                    <td>
+                                        {item.status_prod !== undefined && (
+                                            <input
+                                                type="checkbox"
+                                                onChange={() => handleCheckboxChange(item.id_product, 'status_prod')}
+                                                checked={item.status_prod === '1'}
+                                            />
+                                        )}
+                                        {item.status !== undefined && (
+                                            <input
+                                                type="checkbox"
+                                                onChange={() => handleCheckboxChange(item.idMenu, 'status')}
+                                                checked={item.status === '1'}
+                                            />
+                                        )}
+                                    </td>
+                                    <td>{item.id_product || item.idMenu}</td>
+                                    <td>{item.description}</td>
+                                    <td>
+                                        {item.category || (
+                                            <FontAwesomeIcon
+                                                icon={faPowerOff}
+                                                color={item.status === '1' ? '#199f22' : '#f90000'}
+                                            />
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </StyledTable>
+                </TableContainer>
+                <Footer>
+                    <div className="d-flex">
+                        <Button
+                            bg="#297073"
+                            onAction={() => {
+                              handleStatusButtonClick();
+                              setRefreshFlag(prev=> !prev);
+                              setInteractive(prev => !prev);
+                              setIsMutipleCheck(prev=>!prev);
+                            }}
+                            iconImage={faCircleArrowDown}
+                            isAnimation={true}
+                            animationType="arrow"
+                        />
+                        <Button
+                            bg="#297073"
+                            onAction={() => setListLocal(data.map(item => ({ ...item })))}
+                            iconImage={faArrowRotateBack}
+                            isAnimation={true}
+                            animationType="rotate"
+                        />
+                    </div>
+                </Footer>
+            </Modal>
+        </Container>
+    );
+};
 
-MutipleCheck.propTypes = {
-  data: P.node,
-  dataHeaders: P.array,
-}
+MultipleCheck.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    dataHeaders: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
-
-export default MutipleCheck;
+export default MultipleCheck;

@@ -53,7 +53,7 @@ const Button = (props) => {
             {...rest}
             onClick={handleClick}
             disabled={props.disabled}
-            $borderColor={props.borderColor}
+            $borderColor={props.color}
             $bg={props.bg}
             $isClicked={isClicked}
             $isAnimation={props.isAnimation}
@@ -85,7 +85,6 @@ Button.propTypes = {
   iconImage: P.any,
   children: P.string,
   borderColor: P.string,
-  // isFormRegister: P.bool,
   isAnimation: P.bool,
   animationType: P.node,
 };

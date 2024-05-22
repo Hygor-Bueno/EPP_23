@@ -141,12 +141,31 @@ const ThemeContextRegisterProvider = ({ children }) => {
       }
       if (page == 3) {
         try {
-          for(const item of updateLogMenu) {
-            let {error} = await connection.put(item, "EPP/LogMenu.php");
-            if(!error) console.log('add success!');
+          for (const key of Object.keys(updateLogMenu)) {
+            if (updateLogMenu[key]["update"]) {
+                const payload = {};
+                const { codMenu, typeCategory, codLog, typeBase } = updateLogMenu[key];
+
+                if (key === "rice" || key === "dessert") {
+                    const logIds = codLog.split("-");
+
+                    payload.epp_log_id = key === "rice" ? logIds[0] : logIds[1];
+                    payload.plu_menu = codMenu;
+                    payload.epp_id_menu = typeCategory;
+                    payload.epp_id_product = key === "rice" ? updateLogMenu[key]["codRice"] : updateLogMenu[key]["codDessert"];
+                    payload.type_base = typeBase[key === "rice" ? 0 : 1]["typeBase"];
+                }
+
+                try {
+                    await connection.post(payload, "EPP/LogMenu.php");
+                    console.log(`${key} updated successfully.`);
+                } catch (error) {
+                    console.error(`Failed to update ${key}: ${error}`);
+                }
+            }
           }
         } catch (error) {
-          console.log('Houve um error aqui no PUT');
+          console.log("Houve um error aqui no PUT", error);
         }
       }
     } catch (error) {
@@ -215,12 +234,11 @@ const ThemeContextRegisterProvider = ({ children }) => {
   async function setDeleteRegisterProd() {
     try {
       if(page == 1) {
-        // await connection.delete({}, "EPP/Product.php");
-        console.log("teste 1")
+        console.log("deleting parameter one");
       } if(page == 2) {
-        console.log('enviando delete page 2');
+        console.log('deleting parameter two');
       } if (page == 3) {
-        console.log('enviando delet page 3');
+        console.log('deleting parameter three');
       }
     } catch (error) {
       throw new Error(error.message);
