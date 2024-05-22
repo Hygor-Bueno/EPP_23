@@ -16,32 +16,30 @@ export const RegisterMenu = () => {
 
   return (
     <React.Fragment>
-      <div>
+      <SuperFlex>
         <Title>Cadastrar Menu</Title>
-        <SuperFlex>
-          <SubFlex>
-            <div className='col-3'>
-              <Input name='Codigo' value={Cod} onChange={(e) => setCod(e.target.value)}/>
-            </div>
-            <div className='col-8'>
-              <Input name='Descrição' value={Description} onChange={(e) => setDescription(e.target.value)}/>
-            </div>
-          </SubFlex>
-          <SubFlex>
-            <Select children={(
-              <React.Fragment>
-                <option value="0">Inativo</option>
-                <option value="1">Ativo</option>
-              </React.Fragment>
-            )} name='Status' value={State} onChange={(e) => setState(e.target.value)} />
-          </SubFlex>
-        </SuperFlex>
-        <div className="w-100 d-flex">
-          <Button isAnimation={false} iconImage={faPlus} />
-          <Button isAnimation={false} iconImage={faEdit} />
-          <Button isAnimation={false} iconImage={faTrash} />
-          <Button isAnimation={false} iconImage={faEraser} />
-        </div>
+        <SubFlex>
+          <div className='col-3'>
+            <Input name='Codigo' value={Cod} onChange={(e) => setCod(e.target.value)}/>
+          </div>
+          <div className='col-8'>
+            <Input name='Descrição' value={Description} onChange={(e) => setDescription(e.target.value)}/>
+          </div>
+        </SubFlex>
+        <SubFlex>
+          <Select children={(
+            <React.Fragment>
+              <option value="0">Inativo</option>
+              <option value="1">Ativo</option>
+            </React.Fragment>
+          )} name='Status' value={State} onChange={(e) => setState(e.target.value)} />
+        </SubFlex>
+      </SuperFlex>
+      <div className="w-100 d-flex gap-1">
+        <Button isAnimation={false} iconImage={faPlus} />
+        <Button isAnimation={false} iconImage={faEdit} />
+        <Button isAnimation={false} iconImage={faTrash} />
+        <Button isAnimation={false} iconImage={faEraser} />
       </div>
     </React.Fragment>
   )

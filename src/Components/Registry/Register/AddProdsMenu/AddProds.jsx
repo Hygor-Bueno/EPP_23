@@ -17,26 +17,27 @@ const AddProds = () => {
   const [CodRice, setCodRice] = useState('');
   const [Dessert, setDessert] = useState('');
 
-
   return (
     <React.Fragment>
-      <Title>Adicionar produtos ao menu</Title>
-      <Flex>
-        <div className="col-3"><Input isDisabled={true} value={Cod} onChange={(e) => setCod(e.target.value)} name="Codigo" /></div>
-        <div className="col-8"><Select children={(
-          <React.Fragment>
-            {category.data?.map(({idMenu, description}, index) => {
-              return <option key={`index_${index}`} value={idMenu}>{description}</option>
-            })}
-          </React.Fragment>
-        )} value={MenuDescription} onChange={(e) => setMenuDescruiption(e.target.value)} name="Menu" /></div>
-      </Flex>
-      <Flex className="pt-4">
-        <div className="col-3"><Input value={MenuCod} onChange={(e) => setMenuCod(e.target.value)} name="Codigo Menu" /></div>
-        <div className="col-3"><Input value={CodRice} onChange={(e) => setCodRice(e.target.value)} name="Arroz" /></div>
-        <div className="col-3"><Input value={Dessert} onChange={(e) => setDessert(e.target.value)} name="Sobremesa" /></div>
-      </Flex>
-      <div className="w-100 d-flex">
+      <div>
+        <Title>Adicionar produtos ao menu</Title>
+        <Flex>
+          <div className="col-3"><Input isDisabled={true} value={Cod} onChange={(e) => setCod(e.target.value)} name="Codigo" /></div>
+          <div className="col-8"><Select children={(
+            <React.Fragment>
+              {category.data?.map(({idMenu, description}, index) => {
+                return <option key={`index_${index}`} value={idMenu}>{description}</option>
+              })}
+            </React.Fragment>
+          )} value={MenuDescription} onChange={(e) => setMenuDescruiption(e.target.value)} name="Menu" /></div>
+        </Flex>
+        <Flex className="pt-4">
+          <div className="col-3"><Input value={MenuCod} onChange={(e) => setMenuCod(e.target.value)} name="Codigo Menu" /></div>
+          <div className="col-3"><Input value={CodRice} onChange={(e) => setCodRice(e.target.value)} name="Arroz" /></div>
+          <div className="col-3"><Input value={Dessert} onChange={(e) => setDessert(e.target.value)} name="Sobremesa" /></div>
+        </Flex>
+      </div>
+      <div className="w-100 d-flex gap-1 pb-3">
         <Button isAnimation={false} iconImage={faPlus} />
         <Button isAnimation={false} iconImage={faEdit} />
         <Button isAnimation={false} iconImage={faTrash} />

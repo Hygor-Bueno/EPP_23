@@ -6,12 +6,11 @@ import ConsincoTable from '../../ViewTable/Consinco';
 import { Flex } from '../../styled.page';
 import { Title } from '../../Components/Title';
 import Button from '../../Components/Button/Button.jsx';
-import { faEdit, faEraser, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEraser, faPen, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const RegisterProd = () => {
 
   const {menu} = useContext(ThemeConnectionContext);
-
 
   /** Variaveis de controle  **/
   const [Cod, setCod] = useState('');
@@ -78,9 +77,9 @@ export const RegisterProd = () => {
         <label className="label">Informações consinco:</label>
         <ConsincoTable idProd={Cod} refrashList={refrash} setDescription={setDescription}/>
       </div>
-      <div className="w-100 d-flex">
+      <div className="w-100 d-flex gap-1">
         <Button isAnimation={false} iconImage={faPlus} />
-        <Button isAnimation={false} iconImage={faEdit} />
+        <Button isAnimation={false} iconImage={faPencil} />
         <Button isAnimation={false} iconImage={faTrash} />
         <Button isAnimation={false} iconImage={faEraser} />
       </div>

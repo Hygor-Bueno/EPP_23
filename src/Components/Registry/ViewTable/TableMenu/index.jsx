@@ -1,29 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ContainerTableInformation } from '../../../styled.page';
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from '../styled';
 import { faCog, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../Components/Button/Button';
-import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import P from 'prop-types';
-
 
 /**
  * Tabela dos Menus.
  * @returns
  */
-const TableMenu = ({ data, styleLine, rowStyleFunction }) => {
-
-  const {
-    setCodeMenu,
-    setStatusMenu,
-    setDescriptionMenu,
-    useCodeProdMenu,
-    setIsDisplayOrder,
-    setPage,
-    setIdMenu,
-  } = useContext(ThemeRegisterContexts);
-
+const TableMenu = (props) => {
+  const { data, styleLine, rowStyleFunction } = props;
   return (
     <React.Fragment>
       <ContainerTableInformation>

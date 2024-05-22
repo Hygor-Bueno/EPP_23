@@ -48,6 +48,14 @@ export const NavigationBox = styled.div`
   display: flex;
   flex-direction: row;
   padding: var(--spaceDefault);
+  flex: none;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  height: 100vh;
 `
 
 export const GroupButton = styled(NavigationBox)`
@@ -108,3 +116,22 @@ export const ContainerBackground = styled.section`
 export const ContainerInput = styled.div`
     padding: var(--spaceDefault);
 `;
+
+export const Container = styled.div`
+  height: 100% !important;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .whiteColor {
+    background-color: #ffF;
+  }
+
+  .blueColor {
+    background-color: rgb(41, 112, 115);
+  }
+
+  .border-test {
+    border: 1px solid red;
+  }
+`

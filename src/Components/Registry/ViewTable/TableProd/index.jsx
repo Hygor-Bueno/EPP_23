@@ -4,6 +4,9 @@ import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from "../style
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types';
+import Input from "../../Components/Input/Input";
+import Select from "../../Components/Select/Select";
+import { ThemeConnectionContext } from "../../../../Theme/ThemeConnection";
 
 /**
  * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
@@ -11,10 +14,36 @@ import PropTypes from 'prop-types';
  */
 const TableProd = (props) => {
   const array = ['Cod', 'Descrição', 'Categoria', 'Embalagem', 'Status'];
-  const {data, focusLine, rowClick} = props;
+  const {data, focusLine, ScreenChildren } = props;
+  const {menu} = useContext(ThemeConnectionContext);
+
+  // Vamos separar cada contexto por responsavilidade unica.
 
   return (
     <React.Fragment>
+        <div className="d-flex gap-2 pb-2">
+          <div className="col-2">
+            <Input name="Codigo" />
+          </div>
+          <div className="col-2">
+            <Select children={(
+              <>
+                {menu.data.map(({id_category, cat_description}, index) => (
+                  <option key={`menu_${index}`} value={id_category}>{cat_description}</option>
+                ))}
+              </>
+            )} name="Categoria" />
+          </div>
+          <div className="col-2">
+            <Select children={(
+              <>
+                <option value='0'>Inativo</option>
+                <option value='1'>Ativo</option>
+              </>
+              )} name="Status" />
+          </div>
+          {ScreenChildren}
+        </div>
       <ContainerTableInformation>
         <Table>
           <TableHead>
@@ -54,6 +83,7 @@ TableProd.propTypes = {
   data: PropTypes.node.isRequired,
   focusLine: PropTypes.bool,
   rowClick: PropTypes.func,
+  ScreenChildren: PropTypes.node,
 }
 
 export default TableProd;
