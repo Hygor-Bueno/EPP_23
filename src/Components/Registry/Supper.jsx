@@ -44,9 +44,9 @@ const Supper = () => {
                     <div className="col-9"><Input value={Description} onChange={(e) => setDescription(e.target.value)} name="Descrição" isDisabled={true} /></div>
                   </Flex>
                   <Flex>
-                    <div className="col-3"><Select onChange={(e) => console.log(e.target.value)} name="Categoria" /></div>
-                    <div className="col-3"><Select onChange={(e) => console.log(e.target.value)} name="Emb" /></div>
-                    <div className="col-3"><Select onChange={(e) => console.log(e.target.value)} name="Status" /></div>
+                    <div className="col-3"><Select value={Category} valueKey="id_category" labelKey="cat_description" onChange={(e) => setCategory(e.target.value)} name="Categoria" /></div>
+                    <div className="col-3"><Select value={Emb} onChange={(e) => setEmb(e.target.value)} name="Emb" /></div>
+                    <div className="col-3"><Select value={Status} onChange={(e) => setStatus(e.target.value)} name="Status" /></div>
                   </Flex>
                 </div>
                 <div>
