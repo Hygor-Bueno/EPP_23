@@ -2,14 +2,16 @@ import React, { useContext } from "react";
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from "../styled";
 import { ThemeRegisterContexts } from "../../../../Theme/ThemeRegisterProd";
 import { formatToPtBr } from "../../../../Util/mockUtil";
+import P from 'prop-types';
 
 /**
  * Esse componente é a tabela da Consinco aonde vejo as informações de cada loja com seus produtos e determinados preços.
  * @returns
  */
-const ConsincoTable = ({headers, listSales}) => {
+const ConsincoTable = (props) => {
 
   const {setDescricao} = useContext(ThemeRegisterContexts);
+  const {headers, listSales} = props;
 
   return (
     <React.Fragment>
@@ -34,6 +36,11 @@ const ConsincoTable = ({headers, listSales}) => {
       </Table>
     </React.Fragment>
   )
+}
+
+ConsincoTable.propTypes = {
+  headers: P.node,
+  listSales: P.node
 }
 
 export default ConsincoTable;

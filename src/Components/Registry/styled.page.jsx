@@ -15,18 +15,23 @@ export const ModelRegister = styled.div`
   border-radius: 15px;
   padding: clamp(1vw, 2vw, 10px);
 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   .d-flex {
     display: flex;
     justify-content: space-between;
   }
 `;
 
+
+
 export const Flex =  styled.div`
-  width: var(--widthInput);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: column;
+  flex: none;
 `;
 
 export const NavigationBox = styled.div`

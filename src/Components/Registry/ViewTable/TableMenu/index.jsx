@@ -5,6 +5,7 @@ import { faCog, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../Components/Button/Button';
 import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import P from 'prop-types';
 
 
 /**
@@ -65,6 +66,12 @@ const TableMenu = ({ data, styleLine, rowStyleFunction }) => {
       </ContainerTableInformation>
     </React.Fragment>
   )
+}
+
+TableMenu.propTypes = {
+  data: P.node,
+  styleLine: P.node,
+  rowStyleFunction: P.node
 }
 
 export default TableMenu;

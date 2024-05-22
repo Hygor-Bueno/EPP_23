@@ -3,7 +3,7 @@ import Button from "./Components/Button/Button";
 import Input from "./Components/Input/Input";
 import Select from "./Components/Select/Select";
 import { ThemeConnectionContext } from "../../Theme/ThemeConnection";
-import { ContainerBackground, ModelRegister, NavigationBox } from "./styled.page";
+import { ContainerBackground, Flex, ModelRegister, NavigationBox } from "./styled.page";
 import { faArrowLeft, faArrowRight, faEdit, faEraser, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Supper = () => {
@@ -15,14 +15,35 @@ const Supper = () => {
           <NavigationBox>
             <Button iconImage={faArrowLeft} borderColor="#fff" isAnimation={false} />
               <ModelRegister>
-                <div className="">
-                  <Input name="Cod." />
-                  <Input name="Descrição" isDisabled={true} />
+                <div>
+                  <Flex>
+                    <div className="col-2"><Input name="Cod." /></div>
+                    <div className="col-9"><Input name="Descrição" isDisabled={true} /></div>
+                  </Flex>
+                  <Flex>
+                    <div className="col-3"><Select name="Categoria" /></div>
+                    <div className="col-3"><Select name="Emb" /></div>
+                    <div className="col-3"><Select name="Status" /></div>
+                  </Flex>
                 </div>
-                <div className="">
-                  <Select name="Categoria" />
-                  <Select name="Emb" />
-                  <Select name="Status" />
+                <div>
+                  <label>Informações consinco:</label>
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Value 1</th>
+                        <th>Value 1</th>
+                        <th>Value 1</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Value 1</td>
+                        <td>Value 1</td>
+                        <td>Value 1</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <div className="w-100 d-flex">
                   <Button isAnimation={false} iconImage={faPlus} />
