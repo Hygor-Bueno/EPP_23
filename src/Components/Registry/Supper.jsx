@@ -19,6 +19,19 @@ const Supper = () => {
     // refrash
     const [refrash, setRefrash] = useState(0);
 
+    const handleKeyPress = (e) => {
+      if(e.keyCode === 13) {
+        setRefrash(prev => prev + 1);
+      }
+    }
+
+    React.useEffect(() => {
+      document.addEventListener('keydown', handleKeyPress);
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      }
+    }, [Cod])
+
     return (
       <React.Fragment>
         <ContainerBackground>
@@ -37,8 +50,8 @@ const Supper = () => {
                   </Flex>
                 </div>
                 <div>
-                  <label>Informações consinco:</label>
-                  <ConsincoTable idProd={Cod} setDescription={setDescription}/>
+                  <label className="label">Informações consinco:</label>
+                  <ConsincoTable idProd={Cod} refrashList={refrash} setDescription={setDescription}/>
                 </div>
                 <div className="w-100 d-flex">
                   <Button isAnimation={false} iconImage={faPlus} />

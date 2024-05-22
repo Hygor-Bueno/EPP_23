@@ -15,15 +15,14 @@ const ConsincoTable = (props) => {
 
   const getListConsincoTable = async () => {
     try {
-      // id do produto...
-      const req = await connection.get(`&id_shop=${localStorage.num_store || 0}&id_product=${props.idProd}&fullStore=1`, 'EPP/Product.php');
+      const req = await connection.get(`&id_shop=${localStorage.num_store || 0}&id_product=${props.idProd || 0}&fullStore=1`, 'EPP/Product.php');
       setListSales(req);
     } catch (error) {
       console.log(error);
     }
   }
 
-  useEffect(() => {getListConsincoTable()}, []);
+  useEffect(() => {getListConsincoTable()}, [props.refrashList || false]);
 
   return (
     <React.Fragment>
@@ -55,6 +54,7 @@ const ConsincoTable = (props) => {
 ConsincoTable.propTypes ={
   setDescription: P.func.isRequired,
   idProd: P.string.isRequired,
+  refrashList: P.func.isRequired,
 }
 
 export default ConsincoTable;

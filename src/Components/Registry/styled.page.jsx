@@ -23,6 +23,11 @@ export const ModelRegister = styled.div`
     display: flex;
     justify-content: space-between;
   }
+
+  .label {
+    font-weight: bold;
+    color: #297073;
+  }
 `;
 
 
