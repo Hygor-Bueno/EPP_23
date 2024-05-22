@@ -17,9 +17,6 @@ const ResponsiveTable = ({ data, headers, isConsinco, isConsicoSecondary, isMenu
 
   return (
     <React.Fragment>
-      {isConsinco && (
-        <ConsincoTable headers={headers} listSales={listSales} />
-      )}
       {isConsicoSecondary && (
         <TableProd focusLine={focusedRow} rowClick={handleRowClick} data={data} />
       )}

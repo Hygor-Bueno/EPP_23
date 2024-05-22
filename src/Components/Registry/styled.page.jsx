@@ -37,6 +37,11 @@ export const Flex =  styled.div`
   justify-content: space-between;
   align-items: center;
   flex: none;
+
+  .flex-cl {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export const NavigationBox = styled.div`

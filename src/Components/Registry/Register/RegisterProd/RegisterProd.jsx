@@ -1,130 +1,89 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 import Input from '../../Components/Input/Input';
 import Select from '../../Components/Select/Select';
-import ResponsiveTable from '../../ViewTable/Table';
-import { Card, LimitationBox } from './styled';
-import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
-import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
-import {Title, Subtitle} from '../../Components/Title';
+import ConsincoTable from '../../ViewTable/Consinco';
+import { Flex } from '../../styled.page';
+import { Title } from '../../Components/Title';
+import Button from '../../Components/Button/Button.jsx';
+import { faEdit, faEraser, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const RegisterProd = () => {
 
-  const {
-      menu,
-    } = useContext(ThemeConnectionContext);
-
-    const {
-      codigo,
-      setCodigo,
-      descricao,
-      setDescricao,
-      embalagem,
-      setEmbalagem,
-
-      status,
-      setStatus,
-
-      categoryFk,
-      setCategoryFk,
-
-      refrashList,
-      setRefrashList,
-    } = useContext(ThemeRegisterContexts);
+  const {menu} = useContext(ThemeConnectionContext);
 
 
-    const [headers, setHeaders] = useState(['Loja', 'Produto', 'Preço']);
+  /** Variaveis de controle  **/
+  const [Cod, setCod] = useState('');
+  const [Description, setDescription] = useState('');
+  const [Category, setCategory] = useState('');
+  const [Emb, setEmb] = useState('');
+  const [Status, setStatus] = useState('');
 
-    const handleChange = (e, setter) => {
-      setter(e.target.value);
-    };
+  // refrash
+  const [refrash, setRefrash] = useState(0);
 
-    const handleKeyPress = (event) => {
-      if (event.keyCode === 13) {
-        setRefrashList(prev => !prev);
-      }
-    };
 
-    useEffect(() => {
+  /**A onde posso fazer a pesquisa pelo teclado */
+  const handleKeyPress = (e) => {
+    if(e.keyCode === 13) {
+      setRefrash(prev => prev + 1);
+    }
+  }
+
+  React.useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
-
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     }
-  }, [codigo]);
+  }, [Cod])
 
   return (
-      <Card>
-        <div className="container-fluid">
-          <Title>Cadastrar Produto</Title>
-          <div className="row justify-content-between mt-4">
-            <div className="col-lg-4 col-md-12 col-sm-12">
-              <Input
-                id="input-cod"
-                width={'100%'}
-                isReq={true}
-                name="Cod"
-                value={codigo}
-                onKeyDown={(e) => handleKeyPress(e)}
-                onChange={(e) => handleChange(e, setCodigo)}
-                required={true}
-              />
-            </div>
-            <div className="col-lg-8 col-md-12 col-sm-12">
-              <Input
-                width={'100%'}
-                name="Descrição"
-                isReq={true}
-                isDisabled={true}
-                value={descricao}
-                onChange={(e) => handleChange(e, setDescricao)}
-                required={true}
-              />
-            </div>
-            <div className="col-12">
-              <div className="row mt-4">
-                <div className="col-lg-4 col-md-12 col-sm-12 mb-4">
-                  {/* FOCO AQUI!! */}
-                  <Select
-                      name="Categoria"
-                      value={categoryFk}
-                      isReq={true}
-                      onChange={(e) => setCategoryFk(e.target.value)}
-                      options={menu.data}
-                      valueKey="id_category"
-                      labelKey="cat_description"
-                      required={false}
-                  />
-                </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
-                  <Select
-                    name="Emb"
-                    value={embalagem}
-                    isReq={true}
-                    onChange={(e) => handleChange(e, setEmbalagem)}
-                    options={[]}
-                    required={true}
-                    includeEmb={true}
-                  />
-                </div>
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                  <Select
-                    name="Status"
-                    value={status}
-                    isReq={true}
-                    onChange={(e) => handleChange(e, setStatus)}
-                    options={[]}
-                    required={true}
-                    includeInactive={true}
-                  />
-                </div>
-              </div>
-            </div>
-            <Subtitle>Informações Consinco:</Subtitle>
-            <LimitationBox>
-              <ResponsiveTable refrashTable={refrashList} isConsinco={true} data={[]} headers={headers}/>
-            </LimitationBox>
+    <React.Fragment>
+      <div>
+        <Title>Adicionar Produto</Title>
+        <Flex>
+          <div className="col-2"><Input value={Cod} onChange={(e) => setCod(e.target.value)} name="Cod." /></div>
+          <div className="col-9"><Input value={Description} onChange={(e) => setDescription(e.target.value)} name="Descrição" isDisabled={true} /></div>
+        </Flex>
+        <Flex>
+          <div className="col-3">
+            <Select children={(
+              <React.Fragment>
+                {menu.data?.map(({id_category, cat_description}) => {
+                  return <option key={`option_${id_category}`} value={id_category}>{cat_description}</option>
+                })}
+              </React.Fragment>
+            )} value={Category} onChange={(e) => setCategory(e.target.value)} name="Categoria" />
           </div>
-        </div>
-      </Card>
+          <div className="col-3">
+            <Select children={(
+              <React.Fragment>
+                <option value="kg">Kg</option>
+                <option value="Un">Un</option>
+              </React.Fragment>
+            )} value={Emb} onChange={(e) => setEmb(e.target.value)} name="Emb" />
+          </div>
+          <div className="col-3">
+            <Select children={(
+              <React.Fragment>
+                <option value="0">Inativo</option>
+                <option value="1">Ativo</option>
+              </React.Fragment>
+            )} value={Status} onChange={(e) => setStatus(e.target.value)} name="Status" />
+          </div>
+        </Flex>
+      </div>
+      <div>
+        <label className="label">Informações consinco:</label>
+        <ConsincoTable idProd={Cod} refrashList={refrash} setDescription={setDescription}/>
+      </div>
+      <div className="w-100 d-flex">
+        <Button isAnimation={false} iconImage={faPlus} />
+        <Button isAnimation={false} iconImage={faEdit} />
+        <Button isAnimation={false} iconImage={faTrash} />
+        <Button isAnimation={false} iconImage={faEraser} />
+      </div>
+    </React.Fragment>
   );
 };

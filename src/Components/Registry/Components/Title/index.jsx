@@ -19,7 +19,6 @@ export const Subtitle = ({children}) => {
 }
 
 const TitleComponent = styled.h2`
-  margin-bottom: var(--spaceDefaultLL);
   font-weight: 600;
   color: #297073;
 `;
