@@ -16,7 +16,6 @@ import { ContainerTableInformation, Search } from '../../styled.page';
  */
 const TableMenu = (props) => {
   const { data, styleLine, ScreenChildren, rowStyleFunction } = props;
-
   const {setPage, category} = useContext(ThemeConnectionContext);
   console.log(category);
 
@@ -24,6 +23,7 @@ const TableMenu = (props) => {
     Cod, setCod,
     Description, setDescription,
     State, setState,
+    openDetails, setOpenDetails,
   } = useContext(ThemeMenuContext);
 
   return (
@@ -87,7 +87,7 @@ const TableMenu = (props) => {
                       <TableCell>{row.description}</TableCell>
                       <TableCell>{row.status === '1' ? <FontAwesomeIcon color="#00b318" icon={faPowerOff} /> : <FontAwesomeIcon color="#ff0000" icon={faPowerOff} />}</TableCell>
                       <TableCell>
-                        <Button onAction={() => { console.log('Ola mundo!'); }} bg="#297073" animationType={true} isAnimation={true} iconImage={faCog} />
+                        <Button onAction={() => { console.log('Ola mundo!'); setOpenDetails(true)}} bg="#297073" animationType={true} isAnimation={true} iconImage={faCog} />
                       </TableCell>
                     </TableRow>
                   )

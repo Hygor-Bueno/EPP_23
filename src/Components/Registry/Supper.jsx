@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Button from "./Components/Button/Button";
 import { Container, ModelRegister, NavigationBox } from "./styled.page";
-import { faArrowLeft, faArrowRight, faEdit, faEraser, faFileCsv, faSearch, faTable } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faTable } from "@fortawesome/free-solid-svg-icons";
 import { RegisterProd } from "./Register/RegisterProd/RegisterProd";
 import { RegisterMenu } from "./Register/RegisterMenu/RegisterMenu";
 import AddProds from "./Register/AddProdsMenu/AddProds";
@@ -10,6 +10,7 @@ import TableProd from "./ViewTable/TableProd";
 import styled from "styled-components";
 import TableMenu from "./ViewTable/TableMenu";
 import DisplayOrder from "./Model/DisplayOrders";
+import { ThemeMenuContext } from "../../Theme/ThemeMenu";
 
 const Supper = () => {
     const {
@@ -22,6 +23,10 @@ const Supper = () => {
       // Variables stateless
       page, setPage
     }  = useContext(ThemeConnectionContext);
+
+    const {
+      openDetails, setOpenDetails
+    } = useContext(ThemeMenuContext);
 
     const [table, setTable] = useState(false);
 
@@ -54,13 +59,9 @@ const Supper = () => {
       }
     }
 
-    const changingTable = () => {
-
-    }
-
     return (
       <React.Fragment>
-        <DisplayOrder data={logMenu.data} />
+        {openDetails && <DisplayOrder onAction={() => setOpenDetails(false)} data={logMenu.data} />}
         <Container>
           <div className="col-5 blueColor">
             <NavigationBox>

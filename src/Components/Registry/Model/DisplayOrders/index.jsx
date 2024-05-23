@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
 import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 import { Container, Modal, ModalRequest, Row, Request } from './style';
 import P, { any } from 'prop-types';
+import { ThemeMenuContext } from '../../../../Theme/ThemeMenu';
 
 /**
  * Display Orders é aonde vamos ter varias informações conjuntas de 2 ou mais informações dentro desse componente.
@@ -11,8 +11,24 @@ import P, { any } from 'prop-types';
 const DisplayOrder = (props) => {
       const {onAction, data, ...rest} = props;
 
+      console.log(data);
+
+      const {Cod} = useContext(ThemeMenuContext);
       const {menu} = useContext(ThemeConnectionContext);
       const itemMenu = groupItems(data);
+
+      const findCategories = (cardIds, categoryData) => {
+        const matchingCategory = [];
+        [cardIds].forEach(cardId => {
+          const category = categoryData.find(cat => cat.id_category === cardId.toString());
+          if (category) {
+            matchingCategory.push(category.cat_description);
+          }
+        });
+
+        return matchingCategory;
+      }
+
 
       function groupItems(items) {
         const groupedItems = new Map();
@@ -40,7 +56,7 @@ const DisplayOrder = (props) => {
 
       return (
         <React.Fragment>
-            <Container {...rest}>
+            <Container onClick={onAction} {...rest}>
                 <Modal onClick={(e) => e.stopPropagation()}>
                     <Row>
                         <h2>Detalhes do menu</h2>
@@ -48,10 +64,10 @@ const DisplayOrder = (props) => {
                     <Row>
                         <ModalRequest>
                             {itemMenu.length > 0 && itemMenu.map((item, index) => {
-                              let CATEGORY1 = findCategoriesByIds(item.product.category[0], menu.data)
-                              let CATEGORY2 = findCategoriesByIds(item.product.category[1], menu.data)
+                              let CATEGORY1 = findCategories(item.product.category[0], menu.data)
+                              let CATEGORY2 = findCategories(item.product.category[1], menu.data)
 
-                              return idMenu == item.logMenu.eppIdMenu && (
+                              return Cod == item.logMenu.eppIdMenu && (
                                 <Request onClick={() => {
                                   setCodeAddProd(item.logMenu.eppLogId);
                                   setMenu(item.logMenu.pluMenu);
