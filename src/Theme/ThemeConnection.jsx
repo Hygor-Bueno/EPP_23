@@ -12,6 +12,8 @@ const ThemeContextConnectionProvider = ({ children }) => {
   const [logMenu, setLogMenu] = useState([]);
   const [category, setCategory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
   const [refreshFlag, setRefreshFlag] = useState(false);
 
   const connection = new Connection();
@@ -46,6 +48,7 @@ const ThemeContextConnectionProvider = ({ children }) => {
     refreshFlag,
     logMenu,
 
+    page, setPage,
     setRefreshFlag,
   };
 

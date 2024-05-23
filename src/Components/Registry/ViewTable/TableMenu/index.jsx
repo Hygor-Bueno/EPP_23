@@ -12,6 +12,7 @@ import P from 'prop-types';
  */
 const TableMenu = (props) => {
   const { data, styleLine, rowStyleFunction } = props;
+
   return (
     <React.Fragment>
       <ContainerTableInformation>

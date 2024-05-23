@@ -7,20 +7,21 @@ import { Flex } from '../../styled.page';
 import { Title } from '../../Components/Title';
 import Button from '../../Components/Button/Button.jsx';
 import { faEdit, faEraser, faPen, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { ThemeRegisterProdContext } from '../../../../Theme/ThemeRegister.jsx';
 
 export const RegisterProd = () => {
-
+  /**Data connection */
   const {menu} = useContext(ThemeConnectionContext);
 
-  /** Variaveis de controle  **/
-  const [Cod, setCod] = useState('');
-  const [Description, setDescription] = useState('');
-  const [Category, setCategory] = useState('');
-  const [Emb, setEmb] = useState('');
-  const [Status, setStatus] = useState('');
-
-  // refrash
-  const [refrash, setRefrash] = useState(0);
+  /**Variaveis de estados */
+  const {
+    Cod, setCod,
+    Description, setDescription,
+    Category, setCategory,
+    Emb, setEmb,
+    Status, setStatus,
+    refrash, setRefrash,
+  } = useContext(ThemeRegisterProdContext);
 
 
   /**A onde posso fazer a pesquisa pelo teclado */
@@ -58,7 +59,7 @@ export const RegisterProd = () => {
           <div className="col-3">
             <Select children={(
               <React.Fragment>
-                <option value="kg">Kg</option>
+                <option value="Kg">Kg</option>
                 <option value="Un">Un</option>
               </React.Fragment>
             )} value={Emb} onChange={(e) => setEmb(e.target.value)} name="Emb" />
@@ -77,7 +78,7 @@ export const RegisterProd = () => {
         <label className="label">Informações consinco:</label>
         <ConsincoTable idProd={Cod} refrashList={refrash} setDescription={setDescription}/>
       </div>
-      <div className="w-100 d-flex gap-1">
+      <div className="w-100 d-flex gap-1 pt-2">
         <Button isAnimation={false} iconImage={faPlus} />
         <Button isAnimation={false} iconImage={faPencil} />
         <Button isAnimation={false} iconImage={faTrash} />

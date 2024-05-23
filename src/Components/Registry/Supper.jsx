@@ -10,9 +10,14 @@ import TableProd from "./ViewTable/TableProd";
 import styled from "styled-components";
 
 const Supper = () => {
-    const {prod}  = useContext(ThemeConnectionContext);
+    const {
+      // Promise data fetch
+      prod,
 
-    const [page, setPage] = useState(1);
+      // Variables stateless
+      page, setPage
+    }  = useContext(ThemeConnectionContext);
+
     const totalPages = 3;
 
     const changePage = (increment) => {

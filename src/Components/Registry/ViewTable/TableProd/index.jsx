@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Input from "../../Components/Input/Input";
 import Select from "../../Components/Select/Select";
 import { ThemeConnectionContext } from "../../../../Theme/ThemeConnection";
+import { ThemeRegisterProdContext } from "../../../../Theme/ThemeRegister";
 
 /**
  * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
@@ -15,7 +16,23 @@ import { ThemeConnectionContext } from "../../../../Theme/ThemeConnection";
 const TableProd = (props) => {
   const array = ['Cod', 'Descrição', 'Categoria', 'Embalagem', 'Status'];
   const {data, focusLine, ScreenChildren } = props;
-  const {menu} = useContext(ThemeConnectionContext);
+  const {
+    menu,
+
+    // variables
+    setPage
+  } = useContext(ThemeConnectionContext);
+
+  /**Variaveis de estados */
+  const {
+    Cod, setCod,
+    Description, setDescription,
+    Category, setCategory,
+    Emb, setEmb,
+    Status, setStatus,
+    setRefrash,
+
+  } = useContext(ThemeRegisterProdContext);
 
   // Vamos separar cada contexto por responsavilidade unica.
 
@@ -61,7 +78,13 @@ const TableProd = (props) => {
                     key={`table_${rowIndex}`}
                     className={focusLine === rowIndex ? 'focused' : ''}
                     onClick={() => {
-                      console.log(rowIndex, row, row.id_product, row.id_category_fk, row.measure, row.status_prod)
+                      console.log(rowIndex, row)
+                      setCod(row.id_product);
+                      setEmb(row.measure);
+                      setCategory(row.id_category_fk);
+                      setStatus(row.status_prod);
+                      setRefrash(prev => prev + 1);
+                      setPage(1);
                     }}
                   >
                     <TableCell>{row.id_product}</TableCell>

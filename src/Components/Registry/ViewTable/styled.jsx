@@ -11,8 +11,9 @@ export const fadeIn = keyframes`
 
 export const FixedSize = styled.div`
   height: 200px !important;
+  width: 652px;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: scroll;
 `;
 
 export const Table = styled.table`

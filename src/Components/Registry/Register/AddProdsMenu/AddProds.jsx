@@ -6,16 +6,20 @@ import { Flex } from "../../styled.page";
 import { Title } from "../../Components/Title";
 import { faEdit, faEraser, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../Components/Button/Button";
+import { ThemeLogMenuContext } from "../../../../Theme/ThemeLogMenu";
 
 const AddProds = () => {
+  /**Data Connection*/
   const {logMenu, category} = useContext(ThemeConnectionContext);
 
-  /**Variaveis de Controle do Menu */
-  const [Cod, setCod] = useState('');
-  const [MenuDescription, setMenuDescruiption] = useState('');
-  const [MenuCod, setMenuCod] = useState('');
-  const [CodRice, setCodRice] = useState('');
-  const [Dessert, setDessert] = useState('');
+  /**Variaveis de estados */
+  const {
+    Cod, setCod,
+    MenuDescription, setMenuDescruiption,
+    MenuCod, setMenuCod,
+    CodRice, setCodRice,
+    Dessert, setDessert,
+  } = useContext(ThemeLogMenuContext);
 
   return (
     <React.Fragment>

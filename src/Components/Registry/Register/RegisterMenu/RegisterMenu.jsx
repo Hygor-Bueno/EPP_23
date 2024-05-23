@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Input from '../../Components/Input/Input.jsx';
 import Select from '../../Components/Select/Select.jsx';
 import {Title} from '../../Components/Title/index.jsx';
@@ -6,13 +6,16 @@ import { Flex } from '../../styled.page.jsx';
 import styled from 'styled-components';
 import { faEdit, faEraser, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../Components/Button/Button.jsx';
+import { ThemeMenuContext } from '../../../../Theme/ThemeMenu.jsx';
 
 export const RegisterMenu = () => {
 
-  /**Variaveis de controle */
-  const [Cod, setCod] = React.useState('');
-  const [Description, setDescription] = React.useState('');
-  const [State, setState] = React.useState('');
+  /**Variaveis de Estados.*/
+  const {
+    Cod, setCod,
+    Description, setDescription,
+    State, setState,
+  } = useContext(ThemeMenuContext);
 
   return (
     <React.Fragment>

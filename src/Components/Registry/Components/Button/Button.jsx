@@ -78,7 +78,7 @@ Button.defaultProps = {
   onAction: () => console.log('click'),
   animationType: true,
   borderColor: '#000',
-  isAnimation: true,
+  // isAnimation: true,
   iconImage: faCog,
 };
 
