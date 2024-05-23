@@ -2,22 +2,14 @@ import React, { useContext } from 'react';
 import { ThemeRegisterContexts } from '../../../../Theme/ThemeRegisterProd';
 import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 import { Container, Modal, ModalRequest, Row, Request } from './style';
+import P, { any } from 'prop-types';
 
 /**
  * Display Orders é aonde vamos ter varias informações conjuntas de 2 ou mais informações dentro desse componente.
  * @returns
  */
-const DisplayOrder = ({onAction, data, ...rest}) => {
-      const {
-        findCategoriesByIds,
-        setTypeCategory,
-        setCodeAddProd,
-        setDessert,
-        setMenu,
-        setRice,
-        setPage,
-        idMenu
-      } = useContext(ThemeRegisterContexts);
+const DisplayOrder = (props) => {
+      const {onAction, data, ...rest} = props;
 
       const {menu} = useContext(ThemeConnectionContext);
       const itemMenu = groupItems(data);
@@ -101,4 +93,9 @@ const DisplayOrder = ({onAction, data, ...rest}) => {
         </React.Fragment>
     )
 }
+
+DisplayOrder.propTypes = {
+  onAction: P.func, data: any,
+}
+
 export default DisplayOrder;

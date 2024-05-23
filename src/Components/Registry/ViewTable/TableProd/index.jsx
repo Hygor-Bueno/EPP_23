@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
-import { ContainerTableInformation } from "../../styled.page";
+import { ContainerTableInformation, Search } from "../../styled.page";
 import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from "../styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEraser, faFileCsv, faPowerOff, faSearch } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types';
 import Input from "../../Components/Input/Input";
 import Select from "../../Components/Select/Select";
 import { ThemeConnectionContext } from "../../../../Theme/ThemeConnection";
 import { ThemeRegisterProdContext } from "../../../../Theme/ThemeRegister";
+import Button from "../../Components/Button/Button";
 
 /**
  * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
@@ -31,7 +32,6 @@ const TableProd = (props) => {
     Emb, setEmb,
     Status, setStatus,
     setRefrash,
-
   } = useContext(ThemeRegisterProdContext);
 
   // Vamos separar cada contexto por responsavilidade unica.
@@ -59,7 +59,13 @@ const TableProd = (props) => {
               </>
               )} name="Status" />
           </div>
-          {ScreenChildren}
+          <Search className="w-100">
+            <Button iconImage={faSearch}/>
+            <Button iconImage={faFileCsv}/>
+            <Button iconImage={faEdit}/>
+            <Button iconImage={faEraser}/>
+            {ScreenChildren}
+          </Search>
         </div>
       <ContainerTableInformation>
         <Table>

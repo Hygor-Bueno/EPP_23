@@ -27,7 +27,7 @@ export const arrowAnimation = keyframes`
 
 export const ButtonContainer = styled.button`
     position: relative;
-    width: 20%;
+    width: 100%; // 20%
     overflow: hidden;
     background-color: ${({ $bg }) => $bg || 'transparent'};
 

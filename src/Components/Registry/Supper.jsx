@@ -8,15 +8,22 @@ import AddProds from "./Register/AddProdsMenu/AddProds";
 import { ThemeConnectionContext } from "../../Theme/ThemeConnection";
 import TableProd from "./ViewTable/TableProd";
 import styled from "styled-components";
+import TableMenu from "./ViewTable/TableMenu";
+import DisplayOrder from "./Model/DisplayOrders";
 
 const Supper = () => {
     const {
       // Promise data fetch
       prod,
+      menu,
+      category,
+      logMenu,
 
       // Variables stateless
       page, setPage
     }  = useContext(ThemeConnectionContext);
+
+    const [table, setTable] = useState(false);
 
     const totalPages = 3;
 
@@ -47,8 +54,13 @@ const Supper = () => {
       }
     }
 
+    const changingTable = () => {
+
+    }
+
     return (
       <React.Fragment>
+        <DisplayOrder data={logMenu.data} />
         <Container>
           <div className="col-5 blueColor">
             <NavigationBox>
@@ -62,15 +74,15 @@ const Supper = () => {
           <div className="col-7 h-100 border-test">
             {/**Talvez agente pode deixar a barra de pesquisa aqui!! */}
             <div className="w-100 d-flex flex-column justify-content-between">
-              <TableProd ScreenChildren={(
-                <Search className="w-100">
-                  <Button iconImage={faSearch}/>
-                  <Button iconImage={faTable}/>
-                  <Button iconImage={faEdit}/>
-                  <Button iconImage={faEraser}/>
-                  <Button iconImage={faFileCsv}/>
-                </Search>
-              )} data={prod.data} />
+              {!table ? (
+                <>
+                  <TableProd ScreenChildren={(<Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/>)} data={prod.data} />
+                </>
+              ) : (
+                <>
+                  <TableMenu data={category.data} ScreenChildren={(<Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/>)}/>
+                </>
+              )}
             </div>
           </div>
         </Container>

@@ -6,7 +6,8 @@ import { Connection } from '../../../../Util/RestApi';
 import { Container, Footer, Header, Modal, StyledTable, TableContainer } from './style';
 
 /** Display Orders é onde vamos poder ativar ou desativar um produto a lita. */
-const MutipleCheck = ({ data, ...rest }) => {
+const MutipleCheck = (props) => {
+    const { data, ...rest } = props;
     const [listLocal, setListLocal] = React.useState([]);
 
     React.useEffect(() => {

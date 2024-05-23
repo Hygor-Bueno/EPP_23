@@ -113,6 +113,18 @@ export const ContainerBackground = styled.section`
   }
 `;
 
+export const Search = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: end;
+
+  button {
+    flex: none;
+    width: 50px;
+    height: 50px;
+  }
+`;
+
 export const ContainerInput = styled.div`
     padding: var(--spaceDefault);
 `;
