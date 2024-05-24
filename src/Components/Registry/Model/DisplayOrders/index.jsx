@@ -3,6 +3,7 @@ import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 import { Container, Modal, ModalRequest, Row, Request } from './style';
 import P, { any } from 'prop-types';
 import { ThemeMenuContext } from '../../../../Theme/ThemeMenu';
+import { ThemeLogMenuContext } from '../../../../Theme/ThemeLogMenu';
 
 /**
  * Display Orders é aonde vamos ter varias informações conjuntas de 2 ou mais informações dentro desse componente.
@@ -13,8 +14,18 @@ const DisplayOrder = (props) => {
 
       console.log(data);
 
-      const {Cod} = useContext(ThemeMenuContext);
-      const {menu} = useContext(ThemeConnectionContext);
+      const {
+        idMenu,
+
+        Cod, setCod,
+        MenuDescription, setMenuDescruiption,
+        MenuCod, setMenuCod,
+        CodRice, setCodRice,
+        Dessert, setDessert,
+
+      } = useContext(ThemeLogMenuContext);
+
+      const {menu, setPage} = useContext(ThemeConnectionContext);
       const itemMenu = groupItems(data);
 
       const findCategories = (cardIds, categoryData) => {
@@ -67,13 +78,14 @@ const DisplayOrder = (props) => {
                               let CATEGORY1 = findCategories(item.product.category[0], menu.data)
                               let CATEGORY2 = findCategories(item.product.category[1], menu.data)
 
-                              return Cod == item.logMenu.eppIdMenu && (
+                              return idMenu == item.logMenu.eppIdMenu && (
                                 <Request onClick={() => {
-                                  setCodeAddProd(item.logMenu.eppLogId);
-                                  setMenu(item.logMenu.pluMenu);
-                                  setRice(item.product.idProduct[0]);
+                                  // Dados vindo do Tema de Contexto.
+                                  setCod(item.logMenu.eppLogId);
+                                  setMenuDescruiption(item.logMenu.eppIdMenu);
+                                  setMenuCod(item.logMenu.pluMenu);
+                                  setCodRice(item.product.idProduct[0]);
                                   setDessert(item.product.idProduct[1]);
-                                  setTypeCategory(item.logMenu.eppIdMenu);
                                   setPage(3);
                                 }} key={`menu_${index}`}>
                                   <Row className="container">

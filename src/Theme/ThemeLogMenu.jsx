@@ -10,6 +10,9 @@ const ThemeLogMenuProvider = ({ children }) => {
   const [CodRice, setCodRice] = useState('');
   const [Dessert, setDessert] = useState('');
 
+  // Codigo da indentificação do Menu
+  const [idMenu, setIdMenu] = useState('');
+
   /**Variaveis de Controle do Menu do arquivo AddProds.jsx */
   const globalLogMenuValue = {
     Cod, setCod,
@@ -17,6 +20,7 @@ const ThemeLogMenuProvider = ({ children }) => {
     MenuCod, setMenuCod,
     CodRice, setCodRice,
     Dessert, setDessert,
+    idMenu, setIdMenu
   };
 
   return (
