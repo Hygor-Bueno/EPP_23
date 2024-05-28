@@ -109,13 +109,16 @@ const TableProd = (props) => {
             <Button onAction={handleSearchProd} iconImage={faSearch} />
             <Button onAction={() => {
               const csv = new CSVGenerator();
-              const fileJson = dataProd.map(item => ({
-                "Codigo do Produto": item.id_product,
-                "Nome do Produto": item.description,
-                "Embalagem do produto": item.measure,
-                "Categoria do Produto":item.id_category_fk,
-                "Status do Produto": item.status_prod === '1' ? 'Ativo' : 'Inativo',
-              }));
+              const fileJson = dataProd.map(item => {
+                console.log(item);
+                return ({
+                  "Codigo do Produto": item.id_product,
+                  "Nome do Produto": item.description,
+                  "Embalagem do produto": item.measure,
+                  "Categoria do Produto":item.id_category_fk,
+                  "Status do Produto": item.status_prod === '1' ? 'Ativo' : 'Inativo',
+                })
+              });
 
               csv.generateCSV(fileJson, 'documento');
             }}iconImage={faFileCsv} />
