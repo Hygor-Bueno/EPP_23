@@ -8,10 +8,11 @@ import { Title } from '../../Components/Title';
 import Button from '../../Components/Button/Button.jsx';
 import { faEdit, faEraser, faPen, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ThemeRegisterProdContext } from '../../../../Theme/ThemeRegister.jsx';
+import { Connection } from '../../../../Util/RestApi.js';
 
 export const RegisterProd = () => {
-  /**Data connection */
   const {menu} = useContext(ThemeConnectionContext);
+  const connection = new Connection();
 
   /**Variaveis de estados */
   const {
@@ -37,6 +38,68 @@ export const RegisterProd = () => {
       document.removeEventListener('keydown', handleKeyPress);
     }
   }, [Cod])
+
+  const post = async () => {
+    try {
+      const jsonPost = {
+        id_product: Cod,
+        description: Description,
+        price: 0,
+        status_prod: Status,
+        measure: Emb,
+        id_category_fk: Category,
+      }
+
+      const {error} = await connection.post(jsonPost, "EPP/Product.php");
+      if(!error) {
+        console.log('Dado Atualizado!');
+        refrasetRefrash(prev => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const update = async () => {
+    try {
+      const jsonUpdate = {
+        id_product: Cod,
+        description: Description,
+        price: 0,
+        status_prod: Status,
+        measure: Emb,
+        id_category_fk: Category,
+      }
+
+      const {error} = await connection.post(jsonUpdate, "EPP/Product.php");
+      if(!error) {
+        console.log('Dado Atualizado!');
+        refrasetRefrash(prev => prev + 1);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const del = () => {
+    try {
+      const jsonDelete = {
+        id_product: Cod,
+      }
+
+      console.log(jsonDelete);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+  const clear = () => {
+    setCod('');
+    setDescription('');
+    setCategory('');
+    setEmb('');
+    setStatus('');
+    setRefrash(prev => prev + 1);
+  }
 
   return (
     <React.Fragment>
@@ -79,10 +142,10 @@ export const RegisterProd = () => {
         <ConsincoTable idProd={Cod} refrashList={refrash} setDescription={setDescription}/>
       </div>
       <div className="w-100 d-flex gap-1 pt-2">
-        <Button isAnimation={false} iconImage={faPlus} />
-        <Button isAnimation={false} iconImage={faPencil} />
-        <Button isAnimation={false} iconImage={faTrash} />
-        <Button isAnimation={false} iconImage={faEraser} />
+        <Button onAction={() => post()} isAnimation={false} iconImage={faPlus} />
+        <Button onAction={() => update()} isAnimation={false} iconImage={faPencil} />
+        <Button onAction={() => del()} isAnimation={false} iconImage={faTrash} />
+        <Button onAction={() => clear()} isAnimation={false} iconImage={faEraser} />
       </div>
     </React.Fragment>
   );
