@@ -7,9 +7,11 @@ import { Title } from "../../Components/Title";
 import { faEraser, faPencil, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../Components/Button/Button";
 import { ThemeLogMenuContext } from "../../../../Theme/ThemeLogMenu";
+import { Connection } from "../../../../Util/RestApi";
 
 const AddProds = () => {
   /**Data Connection*/
+  const connection = new Connection();
   const {logMenu, category} = useContext(ThemeConnectionContext);
 
   /**Variaveis de estados */
@@ -22,37 +24,59 @@ const AddProds = () => {
     typeBase, dataLog
   } = useContext(ThemeLogMenuContext);
 
-  console.log(dataLog);
+  const post = async () => {
+    const payloadOne = {
+      epp_log_id: Cod.split('-')[0],
+      epp_id_menu: MenuDescription,
+      epp_id_product: CodRice,
+      plu_menu: MenuCod,
+      type_base: typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0],
+    };
 
-  const post = () => {
+    const payloadTwo = {
+      epp_log_id: Cod.split('-')[1],
+      epp_id_menu: MenuDescription,
+      epp_id_product: Dessert,
+      plu_menu: MenuCod,
+      type_base: typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0],
+    };
+
     try {
-      console.log({
-        id: dataLog.logId[0],
-        description: MenuDescription,
-        menu: MenuCod,
-        rice: CodRice,
-        dessert: Dessert,
-        type_base: typeBase,
-      });
+      const array = new Array(payloadOne, payloadTwo);
+      for await (const value of array) {
+        connection.post(value, "EPP/LogMenu.php");
+      };
     } catch (error) {
       console.log(error);
     }
   };
-  const update = () => {
+  const update = async () => {
+    const payloadOne = {
+      epp_log_id: Cod.split('-')[0],
+      epp_id_menu: MenuDescription,
+      epp_id_product: CodRice,
+      plu_menu: MenuCod,
+      type_base: typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0],
+    };
+
+    const payloadTwo = {
+      epp_log_id: Cod.split('-')[1],
+      epp_id_menu: MenuDescription,
+      epp_id_product: Dessert,
+      plu_menu: MenuCod,
+      type_base: typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0],
+    };
+
     try {
-      console.log({
-        id: Cod,
-        description: MenuDescription,
-        menu: MenuCod,
-        rice: CodRice,
-        dessert: Dessert,
-        type_base: typeBase,
-      });
+      const array = new Array(payloadOne, payloadTwo);
+      for await (const value of array) {
+        connection.put(value, "EPP/LogMenu.php");
+      };
     } catch (error) {
       console.log(error);
     }
   };
-  const remove = () => {
+  const remove = async () => {
     try {
       console.log({
         id: Cod
