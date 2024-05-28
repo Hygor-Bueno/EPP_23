@@ -1,110 +1,112 @@
 import React from 'react';
 import Button from '../../Components/Button/Button';
-import { faArrowRotateBack } from '@fortawesome/free-solid-svg-icons/faArrowRotateBack';
-import { faCircleArrowDown, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRotateBack, faCircleArrowDown, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { Connection } from '../../../../Util/RestApi';
 import { Container, Footer, Header, Modal, StyledTable, TableContainer } from './style';
 import P from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-/** Display Orders é onde vamos poder ativar ou desativar um produto a lita. */
+/**
+ * Componente ListCheck
+ * Exibe uma lista de produtos com opção para ativar ou desativar o status de cada produto.
+ */
 const ListCheck = (props) => {
-    const { data, header, ...rest } = props;
+    const { data } = props;
 
+    // Estado local para armazenar a lista de produtos
     const [listLocal, setListLocal] = React.useState([]);
 
+    // Efeito para reinicializar a lista quando os dados mudam
     React.useEffect(() => {
-      restartList(data);
+        restartList(data);
     }, [data]);
 
-    React.useEffect(() =>{},[data,listLocal]);
+    // Função para reinicializar a lista com os novos dados
+    const restartList = (data) => {
+        const tempList = data.map(item => ({ ...item }));
+        setListLocal(tempList);
+    };
 
+    // Função para lidar com a mudança de checkbox
+    const handleCheckboxChange = (item) => {
+        changeMyList(item);
+    };
+
+    // Função para alterar o status de um item na lista
+    const changeMyList = (item) => {
+        const newList = listLocal.map((itemLocal) => {
+            if (itemLocal.id_product === item.id_product) {
+                return { ...itemLocal, status_prod: itemLocal.status_prod === '1' ? '0' : '1' };
+            }
+            return itemLocal;
+        });
+        setListLocal(newList);
+    };
+
+    // Função para lidar com o clique no botão de atualização de status
+    const handleStatusButtonClick = async () => {
+        const tempList = [];
+
+        for await (const item of listLocal) {
+            connection.put(item, 'EPP/Product.php');
+            tempList.push(item);
+        }
+
+        // Atualizar o estado com a lista atualizada
+        setListLocal(tempList);
+    };
+
+    // Instância de conexão para chamadas de API
     const connection = new Connection();
 
-    const handleCheckboxChange = (item) => {
-      changeMyList(item);
-    };
-
-    const changeMyList = (item)=>{
-      const position = listLocal.findIndex((itemLocal)=> itemLocal.id_product == item.id_product);
-      listLocal[position].status_prod = listLocal[position].status_prod == 1 ? '0': '1';
-      const newList = listLocal;
-      setListLocal([...newList]);
-    }
-
-    const restartList = (data)=>{
-      const tempList = [];
-      data.forEach(item => {
-        tempList.push({...item});
-      });
-
-      setListLocal([...tempList]);
-    }
-
-    const handleStatusButtonClick = async () => {
-      const tempList = [];
-
-      for (const item of listLocal) {
-        await connection.put(item, 'EPP/Product.php');
-        tempList.push(item);
-      }
-
-      setListLocal([...tempList]);
-    };
-
     return (
-        <React.Fragment>
-            <Container {...rest}>
-                <Modal onClick={(e) => e.stopPropagation()}>
-                    <Header>
-                        <h2>Ative ou Inative o Status do produto</h2>
-                    </Header>
-                    <TableContainer>
-                        <StyledTable>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Código</th>
-                                    <th>Produto</th>
-                                    <th>Categoria</th>
+        <Container>
+            <Modal onClick={(e) => e.stopPropagation()}>
+                <Header>
+                    <h2>Ative ou Inative o Status do produto</h2>
+                </Header>
+                <TableContainer>
+                    <StyledTable>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Código</th>
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {listLocal.map((item, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <input
+                                            onChange={() => handleCheckboxChange(item)}
+                                            type="checkbox"
+                                            checked={item.status_prod === '1'}
+                                        />
+                                    </td>
+                                    <td>{item.id_product || item.idMenu}</td>
+                                    <td>{item.description}</td>
+                                    <td>{item.category || (item.status_prod === '0' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : 'Ativo')}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {listLocal?.map((item, index) => {
-                                  return (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                onChange={() => handleCheckboxChange(item)}
-                                                type="checkbox"
-                                                checked={item.status_prod == 1 ? true:false}
-                                            />
-                                        </td>
-                                        <td>{item.id_product || item.idMenu}</td>
-                                        <td>{item.description}</td>
-                                        <td>{item.category || item.status == '0' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : 'Ativo'}</td>
-                                    </tr>
-                                  )}
-                                )}
-                            </tbody>
-                        </StyledTable>
-                    </TableContainer>
-                    <Footer>
-                        <div className='d-flex'>
-                            <Button bg="#297073" onAction={handleStatusButtonClick} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
-                            <Button bg="#297073" onAction={() => {setListLocal([]);restartList(data)}} iconImage={faArrowRotateBack} isAnimation={true} animationType="rotate" />
-                        </div>
-                    </Footer>
-                </Modal>
-            </Container>
-        </React.Fragment>
-    )
-}
+                            ))}
+                        </tbody>
+                    </StyledTable>
+                </TableContainer>
+                <Footer>
+                    <div className='d-flex'>
+                        <Button bg="#297073" onAction={handleStatusButtonClick} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
+                        <Button bg="#297073" onAction={() => restartList(data)} iconImage={faArrowRotateBack} isAnimation={true} animationType="rotate" />
+                    </div>
+                </Footer>
+            </Modal>
+        </Container>
+    );
+};
 
+// Propriedades esperadas
 ListCheck.propTypes = {
-  data: P.any,
-  onClick: P.func,
-  header: P.any,
-}
+    data: P.array,
+};
 
 export default ListCheck;

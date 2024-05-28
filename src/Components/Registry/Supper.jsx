@@ -95,16 +95,4 @@ const Supper = () => {
 
 }
 
-const Search = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: end;
-
-  button {
-    flex: none;
-    width: 50px;
-    height: 50px;
-  }
-`;
-
 export default Supper;

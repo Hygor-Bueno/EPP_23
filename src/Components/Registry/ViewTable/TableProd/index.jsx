@@ -10,7 +10,6 @@ import { ThemeConnectionContext } from "../../../../Theme/ThemeConnection";
 import { ThemeRegisterProdContext } from "../../../../Theme/ThemeRegister";
 import Button from "../../Components/Button/Button";
 import { Connection } from "../../../../Util/RestApi";
-import { ThemeMenuContext } from "../../../../Theme/ThemeMenu";
 import { CSVGenerator } from "../../class/CSV";
 
 /**
