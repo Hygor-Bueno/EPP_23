@@ -103,11 +103,9 @@ const TableMenu = (props) => {
             <Button onAction={() => {
                const csv = new CSVGenerator();
                const fileJson = dataMenu.map(item => ({
-                 "Codigo do produto": item.id_product,
-                 "Categoria do produto": item.category,
-                 "Nome do produto": item.description,
-                 "Embalagem do produto": item.measure,
-                 "Status do produto": item.status_prod === '1' ? 'Ativo' : 'Inativo',
+                 "Codigo do menu": item.idMenu,
+                 "Nome do Menu": item.description,
+                 "Status do Menu": item.status === '1' ? 'Ativo' : 'Inativo',
                }));
 
                csv.generateCSV(fileJson, 'documento');

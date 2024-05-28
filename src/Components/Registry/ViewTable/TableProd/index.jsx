@@ -11,6 +11,7 @@ import { ThemeRegisterProdContext } from "../../../../Theme/ThemeRegister";
 import Button from "../../Components/Button/Button";
 import { Connection } from "../../../../Util/RestApi";
 import { ThemeMenuContext } from "../../../../Theme/ThemeMenu";
+import { CSVGenerator } from "../../class/CSV";
 
 /**
  * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
@@ -106,7 +107,18 @@ const TableProd = (props) => {
           </div>
           <Search className="w-100">
             <Button onAction={handleSearchProd} iconImage={faSearch} />
-            <Button iconImage={faFileCsv} />
+            <Button onAction={() => {
+              const csv = new CSVGenerator();
+              const fileJson = dataProd.map(item => ({
+                "Codigo do Produto": item.id_product,
+                "Nome do Produto": item.description,
+                "Embalagem do produto": item.measure,
+                "Categoria do Produto":item.id_category_fk,
+                "Status do Produto": item.status_prod === '1' ? 'Ativo' : 'Inativo',
+              }));
+
+              csv.generateCSV(fileJson, 'documento');
+            }}iconImage={faFileCsv} />
             <Button
               iconImage={faEraser}
               onAction={() => { setIdProd(''); setIdCategory(''); setStatusProd(''); fetchData(); }}
