@@ -11,6 +11,7 @@ import Select from '../../Components/Select/Select';
 import { ContainerTableInformation, Search } from '../../styled.page';
 import { ThemeLogMenuContext } from '../../../../Theme/ThemeLogMenu';
 import { Connection } from '../../../../Util/RestApi';
+import { CSVGenerator } from '../../class/CSV';
 
 /**
  * Tabela dos Menus.
@@ -38,6 +39,14 @@ const TableMenu = (props) => {
   const [idCategory, setIdCategory] = useState('');
   const [status, setStatus] = useState('');
 
+  const {
+    Cod, setCod,
+    Description, setDescription,
+    State, setState,
+    openDetails, setOpenDetails,
+    refrash,
+  } = useContext(ThemeMenuContext);
+
   const fetchData = async () => {
     const result = await searchProd(idCategory, status);
     setDataMenu(result || []);
@@ -45,19 +54,12 @@ const TableMenu = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refrash]);
 
   const handleSearch = async (e) => {
     // e.preventDefault();
     fetchData();
   };
-
-  const {
-    Cod, setCod,
-    Description, setDescription,
-    State, setState,
-    openDetails, setOpenDetails,
-  } = useContext(ThemeMenuContext);
 
   return (
     <React.Fragment>
@@ -66,6 +68,7 @@ const TableMenu = (props) => {
           <div className="col-2">
             <Input
               name="Codigo"
+
               value={idCategory}
               onChange={(e) => setIdCategory(e.target.value)}
               onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
@@ -97,7 +100,18 @@ const TableMenu = (props) => {
           </div>
           <Search className="w-100">
             <Button onAction={(e) => handleSearch(e)} iconImage={faSearch} />
-            <Button iconImage={faFileCsv} />
+            <Button onAction={() => {
+               const csv = new CSVGenerator();
+               const fileJson = dataMenu.map(item => ({
+                 "Codigo do produto": item.id_product,
+                 "Categoria do produto": item.category,
+                 "Nome do produto": item.description,
+                 "Embalagem do produto": item.measure,
+                 "Status do produto": item.status_prod === '1' ? 'Ativo' : 'Inativo',
+               }));
+
+               csv.generateCSV(fileJson, 'documento');
+            }} iconImage={faFileCsv} />
             <Button
               iconImage={faEraser}
               onAction={() => { setIdCategory(''); setStatus(''); fetchData(); }}

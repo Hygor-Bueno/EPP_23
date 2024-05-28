@@ -10,6 +10,7 @@ import { ThemeConnectionContext } from "../../../../Theme/ThemeConnection";
 import { ThemeRegisterProdContext } from "../../../../Theme/ThemeRegister";
 import Button from "../../Components/Button/Button";
 import { Connection } from "../../../../Util/RestApi";
+import { ThemeMenuContext } from "../../../../Theme/ThemeMenu";
 
 /**
  * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
@@ -47,10 +48,6 @@ const TableProd = (props) => {
     setDataProd(result || []);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handleSearchProd = async (e) => {
     // e.preventDefault();
     fetchData();
@@ -64,7 +61,12 @@ const TableProd = (props) => {
     Emb, setEmb,
     Status, setStatus,
     setRefrash,
+    refrash,
   } = useContext(ThemeRegisterProdContext);
+
+  useEffect(() => {
+    fetchData();
+  }, [refrash]);
 
   return (
     <React.Fragment>

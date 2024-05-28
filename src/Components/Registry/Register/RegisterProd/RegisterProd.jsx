@@ -44,7 +44,7 @@ export const RegisterProd = () => {
       const jsonPost = {
         id_product: Cod,
         description: Description,
-        price: 0,
+        price: "0",
         status_prod: Status,
         measure: Emb,
         id_category_fk: Category,
@@ -53,7 +53,7 @@ export const RegisterProd = () => {
       const {error} = await connection.post(jsonPost, "EPP/Product.php");
       if(!error) {
         console.log('Dado Atualizado!');
-        refrasetRefrash(prev => prev + 1);
+        setRefrash(prev => prev + 1);
       }
     } catch (error) {
       console.log(error);
@@ -64,33 +64,31 @@ export const RegisterProd = () => {
       const jsonUpdate = {
         id_product: Cod,
         description: Description,
-        price: 0,
+        price: "0",
         status_prod: Status,
         measure: Emb,
         id_category_fk: Category,
       }
 
-      const {error} = await connection.post(jsonUpdate, "EPP/Product.php");
+      const {error} = await connection.put(jsonUpdate, "EPP/Product.php");
       if(!error) {
         console.log('Dado Atualizado!');
-        refrasetRefrash(prev => prev + 1);
+        setRefrash(prev => prev + 1);
       }
 
     } catch (error) {
       console.log(error);
     }
   }
-  const del = () => {
+  const del = async () => {
     try {
-      const jsonDelete = {
-        id_product: Cod,
+      const {error} = await connection.put({id_product: Cod}, "EPP/Product.php");
+      if(!error) {
+        console.log('Registro deletado!');
       }
-
-      console.log(jsonDelete);
     } catch (error) {
       console.log(error);
     }
-
   }
   const clear = () => {
     setCod('');

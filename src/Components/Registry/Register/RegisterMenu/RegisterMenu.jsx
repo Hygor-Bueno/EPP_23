@@ -7,15 +7,70 @@ import styled from 'styled-components';
 import { faEdit, faEraser, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../Components/Button/Button.jsx';
 import { ThemeMenuContext } from '../../../../Theme/ThemeMenu.jsx';
+import { Connection } from '../../../../Util/RestApi.js';
 
 export const RegisterMenu = () => {
+  const connection = new Connection();
 
-  /**Variaveis de Estados.*/
   const {
     Cod, setCod,
     Description, setDescription,
     State, setState,
+    setRefrash,
   } = useContext(ThemeMenuContext);
+
+  const post = async () => {
+    try {
+      const jsonPost = {
+        id_menu: Cod,
+        status: State,
+        description: Description,
+      }
+
+      const {error} = await connection.post(jsonPost, "EPP/Menu.php");
+      if(!error) {
+        console.log('Dado Atualizado!');
+        setRefrash(prev => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const update = async () => {
+    try {
+      const jsonUpdate = {
+        id_menu: Cod,
+        status: State,
+        description: Description,
+      }
+
+      const {error} = await connection.put(jsonUpdate, "EPP/Menu.php");
+      if(!error) {
+        console.log('Dado Atualizado!');
+        setRefrash(prev => prev + 1);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const del = async () => {
+    try {
+      const {error} = await connection.put({id_menu: Cod}, "EPP/Menu.php");
+      if(!error) {
+        console.log('Registro deletado!');
+        setRefrash(prev => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const clear = () => {
+    setCod('');
+    setDescription('');
+    setState('');
+    setRefrash(prev => prev + 1);
+  }
 
   return (
     <React.Fragment>
@@ -23,7 +78,7 @@ export const RegisterMenu = () => {
         <Title>Cadastrar Menu</Title>
         <SubFlex>
           <div className='col-3'>
-            <Input name='Codigo' value={Cod} onChange={(e) => setCod(e.target.value)}/>
+            <Input isDisabled={true} name='Codigo' value={Cod} onChange={(e) => setCod(e.target.value)}/>
           </div>
           <div className='col-8'>
             <Input name='Descrição' value={Description} onChange={(e) => setDescription(e.target.value)}/>
@@ -39,10 +94,10 @@ export const RegisterMenu = () => {
         </SubFlex>
       </SuperFlex>
       <div className="w-100 d-flex gap-1">
-        <Button isAnimation={false} iconImage={faPlus} />
-        <Button isAnimation={false} iconImage={faEdit} />
-        <Button isAnimation={false} iconImage={faTrash} />
-        <Button isAnimation={false} iconImage={faEraser} />
+        <Button onAction={() => post()} isAnimation={false} iconImage={faPlus} />
+        <Button onAction={() => update()} isAnimation={false} iconImage={faEdit} />
+        <Button onAction={() => del()} isAnimation={false} iconImage={faTrash} />
+        <Button onAction={() => clear()} isAnimation={false} iconImage={faEraser} />
       </div>
     </React.Fragment>
   )
