@@ -9,9 +9,13 @@ export const fadeIn = keyframes`
   }
 `;
 
+export const HeaderSearch = styled.div`
+  padding-left: 1vw;
+`;
+
 export const FixedSize = styled.div`
   height: 200px !important;
-  width: 652px;
+  width: 565px;
   overflow-y: scroll;
   overflow-x: scroll;
 `;
@@ -51,7 +55,6 @@ export const TableHead = styled.thead`
       &:focus {
         background-color: inherit;
       }
-
   }
 `;
 

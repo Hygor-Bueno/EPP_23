@@ -9,11 +9,13 @@ export const ContainerTableInformation = styled.div`
 `;
 
 export const ModelRegister = styled.div`
-  width: clamp(20vw, 100vw, 700px);
+  width: clamp(20vw, 100vw, 600px);
   height: clamp(20vh, 100vh, 500px);
   background-color: #fff;
   border-radius: 15px;
   padding: clamp(1vw, 2vw, 10px);
+
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;

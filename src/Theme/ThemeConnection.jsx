@@ -14,9 +14,13 @@ const ThemeContextConnectionProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
+
   const [refreshFlag, setRefreshFlag] = useState(false);
 
+
   const connection = new Connection();
+
+  const [listCheckAll, setListCheckAll] = useState();
 
   useEffect(() => {
     fetchData();
@@ -50,6 +54,9 @@ const ThemeContextConnectionProvider = ({ children }) => {
 
     page, setPage,
     setRefreshFlag,
+
+    // isso aqui vai abrir de checks
+    listCheckAll, setListCheckAll
   };
 
   return (

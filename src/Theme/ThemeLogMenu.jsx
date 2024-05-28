@@ -9,9 +9,14 @@ const ThemeLogMenuProvider = ({ children }) => {
   const [MenuCod, setMenuCod] = useState('');
   const [CodRice, setCodRice] = useState('');
   const [Dessert, setDessert] = useState('');
+  const [typeBase, setTypeBase] = useState('');
+
+  const [dataLog, setDataLog] = useState([]);
 
   // Codigo da indentificação do Menu
   const [idMenu, setIdMenu] = useState('');
+
+  useEffect(() => {console.log('mudou!')},[dataLog])
 
   /**Variaveis de Controle do Menu do arquivo AddProds.jsx */
   const globalLogMenuValue = {
@@ -20,7 +25,11 @@ const ThemeLogMenuProvider = ({ children }) => {
     MenuCod, setMenuCod,
     CodRice, setCodRice,
     Dessert, setDessert,
-    idMenu, setIdMenu
+    idMenu, setIdMenu,
+    typeBase, setTypeBase,
+
+    // Esse DataLog vai trazer todo o json que foi clicado pondo até mudar!
+    dataLog, setDataLog
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Button from "./Components/Button/Button";
 import { Container, ModelRegister, NavigationBox } from "./styled.page";
-import { faArrowLeft, faArrowRight, faTable } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faEdit, faTable } from "@fortawesome/free-solid-svg-icons";
 import { RegisterProd } from "./Register/RegisterProd/RegisterProd";
 import { RegisterMenu } from "./Register/RegisterMenu/RegisterMenu";
 import AddProds from "./Register/AddProdsMenu/AddProds";
@@ -11,6 +11,7 @@ import styled from "styled-components";
 import TableMenu from "./ViewTable/TableMenu";
 import DisplayOrder from "./Model/DisplayOrders";
 import { ThemeMenuContext } from "../../Theme/ThemeMenu";
+import ListCheck from "./Model/MutipleCheck";
 
 const Supper = () => {
     const {
@@ -21,7 +22,9 @@ const Supper = () => {
       logMenu,
 
       // Variables stateless
-      page, setPage
+      page, setPage,
+
+      listCheckAll, setListCheckAll,
     }  = useContext(ThemeConnectionContext);
 
     const {
@@ -62,6 +65,7 @@ const Supper = () => {
     return (
       <React.Fragment>
         {openDetails && <DisplayOrder onAction={() => setOpenDetails(false)} data={logMenu.data} />}
+        {listCheckAll && <ListCheck onClick={() => setListCheckAll(false)} data={!table ? prod.data : category.data} />}
         <Container>
           <div className="col-5 blueColor">
             <NavigationBox>
@@ -72,16 +76,15 @@ const Supper = () => {
               <Button iconImage={faArrowRight} borderColor="#fff" isAnimation={false} onAction={() => changePage(1)}/>
             </NavigationBox>
           </div>
-          <div className="col-7 h-100 border-test">
-            {/**Talvez agente pode deixar a barra de pesquisa aqui!! */}
+          <div className="col-7 h-100">
             <div className="w-100 d-flex flex-column justify-content-between">
               {!table ? (
                 <>
-                  <TableProd ScreenChildren={(<Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/>)} data={prod.data} />
+                  <TableProd data={prod.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/></>)}/>
                 </>
               ) : (
                 <>
-                  <TableMenu data={category.data} ScreenChildren={(<Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/>)}/>
+                  <TableMenu data={category.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/></>)}/>
                 </>
               )}
             </div>

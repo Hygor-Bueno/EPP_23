@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 import { Container, Modal, ModalRequest, Row, Request } from './style';
 import P, { any } from 'prop-types';
-import { ThemeMenuContext } from '../../../../Theme/ThemeMenu';
 import { ThemeLogMenuContext } from '../../../../Theme/ThemeLogMenu';
 
 /**
@@ -12,17 +11,16 @@ import { ThemeLogMenuContext } from '../../../../Theme/ThemeLogMenu';
 const DisplayOrder = (props) => {
       const {onAction, data, ...rest} = props;
 
-      console.log(data);
-
       const {
         idMenu,
-
         Cod, setCod,
         MenuDescription, setMenuDescruiption,
         MenuCod, setMenuCod,
         CodRice, setCodRice,
         Dessert, setDessert,
+        setTypeBase,
 
+        setDataLog,
       } = useContext(ThemeLogMenuContext);
 
       const {menu, setPage} = useContext(ThemeConnectionContext);
@@ -44,24 +42,36 @@ const DisplayOrder = (props) => {
       function groupItems(items) {
         const groupedItems = new Map();
 
-        items.forEach(item => {
-            const key = item.logMenu.pluMenu;
-            if (!groupedItems.has(key)) {
-                groupedItems.set(key, { ...item, product: { ...item.product, idProduct: [item.product.idProduct], description: [item.product.description], category: [item.product.idCategoryFk] } });
-            } else {
-                const existingItem = groupedItems.get(key);
-                existingItem.product.idProduct.push(item.product.idProduct);
-                existingItem.product.description.push(item.product.description);
-                existingItem.product.category.push(item.product.idCategoryFk);
-            }
+        items.forEach((item) => {
+          const key = item.logMenu.pluMenu;
+          if (!groupedItems.has(key)) {
+            groupedItems.set(key, {
+              ...item,
+              product: {
+                ...item.product,
+                idProduct: [item.product.idProduct],
+                description: [item.product.description],
+                category: [item.product.idCategoryFk],
+                typebase: [item.logMenu.typeBase],
+                logId: [item.logMenu.eppLogId],
+              },
+            });
+          } else {
+            const existingItem = groupedItems.get(key);
+            existingItem.product.idProduct.push(item.product.idProduct);
+            existingItem.product.description.push(item.product.description);
+            existingItem.product.category.push(item.product.idCategoryFk);
+            existingItem.product.typebase.push(item.logMenu.typeBase);
+            existingItem.product.logId.push(item.logMenu.eppLogId);
+          }
         });
 
-        return Array.from(groupedItems.values()).map(item => {
-            if (item.product.idProduct.length === 1) {
-                return item;
-            } else {
-                return { ...item, isDuplicate: true };
-            }
+        return Array.from(groupedItems.values()).map((item) => {
+          if (item.product.idProduct.length === 1) {
+            return item;
+          } else {
+            return { ...item, isDuplicate: true };
+          }
         });
       }
 
@@ -78,14 +88,22 @@ const DisplayOrder = (props) => {
                               let CATEGORY1 = findCategories(item.product.category[0], menu.data)
                               let CATEGORY2 = findCategories(item.product.category[1], menu.data)
 
+                              // console.log(item);
+
+                              const jsonObj = JSON.stringify(item.product);
+                              localStorage.setItem("product", jsonObj);
+
                               return idMenu == item.logMenu.eppIdMenu && (
                                 <Request onClick={() => {
                                   // Dados vindo do Tema de Contexto.
-                                  setCod(item.logMenu.eppLogId);
+                                  setCod(`${item.product.logId[0]}-${item.product.logId[1]}`);
                                   setMenuDescruiption(item.logMenu.eppIdMenu);
                                   setMenuCod(item.logMenu.pluMenu);
                                   setCodRice(item.product.idProduct[0]);
                                   setDessert(item.product.idProduct[1]);
+                                  setTypeBase(item.product.typebase);
+
+                                  setDataLog(item.product);
                                   setPage(3);
                                 }} key={`menu_${index}`}>
                                   <Row className="container">
