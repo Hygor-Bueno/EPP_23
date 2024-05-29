@@ -4,7 +4,7 @@ import Select from '../../Components/Select/Select.jsx';
 import {Title} from '../../Components/Title/index.jsx';
 import { Flex } from '../../styled.page.jsx';
 import styled from 'styled-components';
-import { faEdit, faEraser, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEraser, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../Components/Button/Button.jsx';
 import { ThemeMenuContext } from '../../../../Theme/ThemeMenu.jsx';
 import { Connection } from '../../../../Util/RestApi.js';
@@ -95,7 +95,7 @@ export const RegisterMenu = () => {
       </SuperFlex>
       <div className="w-100 d-flex gap-1">
         <Button onAction={() => post()} isAnimation={false} iconImage={faPlus} />
-        <Button onAction={() => update()} isAnimation={false} iconImage={faEdit} />
+        <Button onAction={() => update()} isAnimation={false} iconImage={faPencil} />
         <Button onAction={() => del()} isAnimation={false} iconImage={faTrash} />
         <Button onAction={() => clear()} isAnimation={false} iconImage={faEraser} />
       </div>

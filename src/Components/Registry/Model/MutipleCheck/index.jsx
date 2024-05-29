@@ -5,21 +5,45 @@ import { Connection } from '../../../../Util/RestApi';
 import { Container, Footer, Header, Modal, StyledTable, TableContainer } from './style';
 import P from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ThemeRegisterProdContext } from '../../../../Theme/ThemeRegister';
 
 /**
  * Componente ListCheck
  * Exibe uma lista de produtos com opção para ativar ou desativar o status de cada produto.
  */
+const connection = new Connection();
+const searchProd = async () => {
+  try {
+    const result = await connection.get('&registration=1','EPP/Product.php');
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const ListCheck = (props) => {
-    const { data } = props;
+    const { data, ...rest } = props;
 
     // Estado local para armazenar a lista de produtos
     const [listLocal, setListLocal] = React.useState([]);
+    const [dataCheck, setDataCheck] = React.useState([]);
+
+    //context
+    const {refrash, setRefrash} = React.useContext(ThemeRegisterProdContext)
+
+    const fetchData = async () => {
+      const data = await searchProd() || [];
+      setDataCheck(data);
+    }
+
+    React.useEffect(() => {
+      fetchData();
+    }, [refrash]);
 
     // Efeito para reinicializar a lista quando os dados mudam
     React.useEffect(() => {
-        restartList(data);
-    }, [data]);
+        restartList(dataCheck);
+    }, [dataCheck]);
 
     // Função para reinicializar a lista com os novos dados
     const restartList = (data) => {
@@ -60,7 +84,7 @@ const ListCheck = (props) => {
     const connection = new Connection();
 
     return (
-        <Container>
+        <Container {...rest}>
             <Modal onClick={(e) => e.stopPropagation()}>
                 <Header>
                     <h2>Ative ou Inative o Status do produto</h2>
@@ -95,7 +119,7 @@ const ListCheck = (props) => {
                 </TableContainer>
                 <Footer>
                     <div className='d-flex'>
-                        <Button bg="#297073" onAction={handleStatusButtonClick} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
+                        <Button bg="#297073" onAction={() => { setRefrash(prev => prev + 1); handleStatusButtonClick() }} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
                         <Button bg="#297073" onAction={() => restartList(data)} iconImage={faArrowRotateBack} isAnimation={true} animationType="rotate" />
                     </div>
                 </Footer>

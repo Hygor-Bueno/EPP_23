@@ -7,11 +7,12 @@ import { RegisterMenu } from "./Register/RegisterMenu/RegisterMenu";
 import AddProds from "./Register/AddProdsMenu/AddProds";
 import { ThemeConnectionContext } from "../../Theme/ThemeConnection";
 import TableProd from "./ViewTable/TableProd";
-import styled from "styled-components";
 import TableMenu from "./ViewTable/TableMenu";
 import DisplayOrder from "./Model/DisplayOrders";
 import { ThemeMenuContext } from "../../Theme/ThemeMenu";
 import ListCheck from "./Model/MutipleCheck";
+import Input from "./Components/Input/Input";
+import styled from "styled-components";
 
 const Supper = () => {
     const {
@@ -62,6 +63,41 @@ const Supper = () => {
       }
     }
 
+    const AlterTable = () => {
+      const options = ['Produtos', 'Menu'];
+
+      const handleChange = (option) => {
+        setTable(option === 'Menu');
+      };
+
+      const DivTable = styled.div`
+        label {
+          display: flex;
+          gap: 0.3rem;
+          cursor: pointer;
+        }
+      `;
+
+      return (
+        <div>
+          {options.map(option => (
+            <DivTable key={option}>
+              <label>
+                <input
+                  type="radio"
+                  value={option}
+                  checked={table === (option === 'Menu')}
+                  onChange={() => handleChange(option)}
+                />
+                {option}
+              </label>
+            </DivTable>
+          ))}
+        </div>
+      );
+    };
+
+
     return (
       <React.Fragment>
         {openDetails && <DisplayOrder onAction={() => setOpenDetails(false)} data={logMenu.data} />}
@@ -77,14 +113,15 @@ const Supper = () => {
             </NavigationBox>
           </div>
           <div className="col-7 h-100">
+
             <div className="w-100 d-flex flex-column justify-content-between">
               {!table ? (
                 <>
-                  <TableProd data={prod.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/></>)}/>
+                  <TableProd data={prod.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)}/>
                 </>
               ) : (
                 <>
-                  <TableMenu data={category.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><Button onAction={() => setTable(prev => !prev)} iconImage={faTable}/></>)}/>
+                  <TableMenu data={category.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)}/>
                 </>
               )}
             </div>
