@@ -16,12 +16,21 @@ const AddProds = () => {
 
   /**Variaveis de estados */
   const {
-    Cod, setCod,
-    MenuDescription, setMenuDescruiption,
-    MenuCod, setMenuCod,
-    CodRice, setCodRice,
-    Dessert, setDessert,
-    typeBase, dataLog
+    // variables
+    Cod,
+    MenuDescription,
+    MenuCod,
+    CodRice,
+    Dessert,
+    typeBase,
+
+    // states
+    setCod,
+    setMenuDescruiption,
+    setMenuCod,
+    setCodRice,
+    setDessert,
+    dataLog
   } = useContext(ThemeLogMenuContext);
 
   const post = async () => {
@@ -87,7 +96,11 @@ const AddProds = () => {
   };
   const clear = () => {
     try {
-      console.log('Limpando produto');
+      setCod('');
+      setMenuDescruiption('');
+      setMenuCod('');
+      setCodRice('');
+      setDessert('');
     } catch (error) {
       console.log(error);
     }

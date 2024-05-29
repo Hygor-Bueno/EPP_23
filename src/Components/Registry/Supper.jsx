@@ -101,7 +101,7 @@ const Supper = () => {
     return (
       <React.Fragment>
         {openDetails && <DisplayOrder onAction={() => setOpenDetails(false)} data={logMenu.data} />}
-        {listCheckAll && <ListCheck onClick={() => setListCheckAll(false)} data={!table ? prod.data : category.data} />}
+        {listCheckAll && <ListCheck onClick={() => setListCheckAll(false)} data={table ? prod.data : category.data} />}
         <Container>
           <div className="col-5 blueColor">
             <NavigationBox>
