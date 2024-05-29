@@ -11,7 +11,6 @@ import TableMenu from "./ViewTable/TableMenu";
 import DisplayOrder from "./Model/DisplayOrders";
 import { ThemeMenuContext } from "../../Theme/ThemeMenu";
 import ListCheck from "./Model/MutipleCheck";
-import Input from "./Components/Input/Input";
 import styled from "styled-components";
 
 const Supper = () => {
@@ -64,10 +63,10 @@ const Supper = () => {
     }
 
     const AlterTable = () => {
-      const options = ['Produtos', 'Menu'];
+      const options = ['Produtos', 'Menus'];
 
       const handleChange = (option) => {
-        setTable(option === 'Menu');
+        setTable(option === 'Menus');
       };
 
       const DivTable = styled.div`
@@ -86,7 +85,7 @@ const Supper = () => {
                 <input
                   type="radio"
                   value={option}
-                  checked={table === (option === 'Menu')}
+                  checked={table === (option === 'Menus')}
                   onChange={() => handleChange(option)}
                 />
                 {option}
