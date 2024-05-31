@@ -70,10 +70,10 @@ const Supper = () => {
       };
 
       const DivTable = styled.div`
+
         label {
           display: flex;
           gap: 0.3rem;
-          cursor: pointer;
 
           input[type=radio]:checked + label:before {
             content: "\2022";
@@ -108,7 +108,7 @@ const Supper = () => {
     return (
       <React.Fragment>
         {openDetails && <DisplayOrder onAction={() => setOpenDetails(false)} data={logMenu.data} />}
-        {listCheckAll && <ListCheck onClick={() => setListCheckAll(false)} data={table ? prod.data : category.data} />}
+        {listCheckAll && <ListCheck onClick={() => setListCheckAll(false)} table={table} />}
         <Container>
           <div className="col-5 blueColor">
             <NavigationBox>
@@ -120,7 +120,6 @@ const Supper = () => {
             </NavigationBox>
           </div>
           <div className="col-7 h-100">
-
             <div className="w-100 d-flex flex-column justify-content-between">
               {!table ? (
                 <>

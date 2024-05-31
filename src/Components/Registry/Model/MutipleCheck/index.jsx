@@ -5,37 +5,45 @@ import { Connection } from '../../../../Util/RestApi';
 import { Container, Footer, Header, Modal, StyledTable, TableContainer } from './style';
 import P from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ThemeRegisterProdContext } from '../../../../Theme/ThemeRegister';
 import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 
-/**
- * Componente ListCheck
- * Exibe uma lista de produtos com opção para ativar ou desativar o status de cada produto.
- */
-const connection = new Connection();
-const searchProd = async () => {
-  try {
-    const result = await connection.get('&registration=1','EPP/Product.php');
-    return result.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const ListCheck = (props) => {
-    const {...rest } = props;
+    const { table, ...rest } = props;
 
-    // Estado local para armazenar a lista de produtos
-    const [listLocal, setListLocal] = React.useState([]);
-    const [dataCheck, setDataCheck] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
+  /**
+   * Componente ListCheck
+   * Exibe uma lista de produtos com opção para ativar ou desativar o status de cada produto.
+   */
+  const connection = new Connection();
 
+  const searchProd = async () => {
+    try {
+      const result = await connection.get('&registration=1','EPP/Product.php');
+      return result.data || [];
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchCategory = async () => {
+    try {
+      const result = await connection.get(`&registration=1`, 'EPP/Menu.php')
+      return result.data || [];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Estado local para armazenar a lista de produtos
+  const [listLocal, setListLocal] = React.useState([]);
+  const [dataCheck, setDataCheck] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   const {setListCheckAll} = React.useContext(ThemeConnectionContext);
 
     const fetchData = async () => {
       setLoading(true);
-      const data = await searchProd() || [];
+      const data = !table ? await searchProd() || [] : await searchCategory() || [];
       setDataCheck(data);
       setLoading(false);
     };
@@ -57,12 +65,13 @@ const ListCheck = (props) => {
 
     // Função para lidar com a mudança de checkbox
     const handleCheckboxChange = (item) => {
-        changeMyList(item);
+        !table ? changeMyList(item) : changeMyListCategory(item);
     };
 
     // Função para alterar o status de um item na lista
     const changeMyList = (item) => {
         const newList = listLocal.map((itemLocal) => {
+            console.log(itemLocal, item);
             if (itemLocal.id_product === item.id_product) {
                 return { ...itemLocal, status_prod: itemLocal.status_prod === '1' ? '0' : '1' };
             }
@@ -71,12 +80,28 @@ const ListCheck = (props) => {
         setListLocal(newList);
     };
 
+    const changeMyListCategory = (item) => {
+      const newList = listLocal.map((itemLocal) => {
+        console.log(item, itemLocal);
+          if (itemLocal.idMenu === item.idMenu) {
+              return { ...itemLocal, status: itemLocal.status === '1' ? '0' : '1' };
+          }
+          return itemLocal;
+      });
+      setListLocal(newList);
+  };
+
     // Função para lidar com o clique no botão de atualização de status
     const handleStatusButtonClick = async () => {
         const tempList = [];
 
         for await (const item of listLocal) {
-            connection.put(item, 'EPP/Product.php');
+            !table ? connection.put(item, 'EPP/Product.php') :
+            connection.put({
+              id_menu: item.idMenu,
+              description: item.description,
+              status: item.status
+            }, 'EPP/Menu.php');
             tempList.push(item);
         }
 
@@ -110,12 +135,12 @@ const ListCheck = (props) => {
                                             <input
                                                 onChange={() => handleCheckboxChange(item)}
                                                 type="checkbox"
-                                                checked={item.status_prod === '1'}
+                                                checked={!table ? item.status_prod === '1' : item.status === '1'}
                                             />
                                         </td>
                                         <td>{item.id_product || item.idMenu}</td>
                                         <td>{item.description}</td>
-                                        <td>{item.category || (item.status_prod === '0' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : 'Ativo')}</td>
+                                        <td>{item.category || (item.status_prod === '0' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : <FontAwesomeIcon icon={faPowerOff} color='#b90000' />)}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -133,7 +158,6 @@ const ListCheck = (props) => {
     );
 };
 
-// Propriedades esperadas
 ListCheck.propTypes = {
     data: P.array,
 };

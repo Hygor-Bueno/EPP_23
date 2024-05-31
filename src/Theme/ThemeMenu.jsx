@@ -10,6 +10,8 @@ const ThemeMenuProvider = ({ children }) => {
 
   const [openDetails, setOpenDetails] = React.useState(false);
 
+  const [status, setStatus] = useState('');
+
   const [refrash, setRefrash] = React.useState(0);
 
   /**Variaveis de controle do Register do arquivo RegisterMenu.jsx*/
@@ -21,6 +23,8 @@ const ThemeMenuProvider = ({ children }) => {
 
     // Faz o refrash da tabela de Menu.
     refrash, setRefrash,
+
+    status, setStatus,
 
     // fecha e abre o modal de detalhes do arquivo de DisplayOrders
     openDetails, setOpenDetails,

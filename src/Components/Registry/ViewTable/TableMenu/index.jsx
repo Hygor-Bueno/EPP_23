@@ -13,26 +13,6 @@ import { ThemeLogMenuContext } from '../../../../Theme/ThemeLogMenu';
 import { Connection } from '../../../../Util/RestApi';
 import { CSVGenerator } from '../../class/CSV';
 
-/**
- * Tabela dos Menus.
- * @returns
- */
-
-const connection = new Connection();
-
-const searchProd = async (idCategory, status) => {
-  try {
-    const result = await connection.get(
-      `&${idCategory ? `id_menu=${idCategory}` : ''}`
-      + `&${status ? `status=${status}` : (!idCategory && !status) ? 'registration=1' : ''}`,
-      'EPP/Menu.php'
-    );
-    return result.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const TableMenu = (props) => {
   const { styleLine, ScreenChildren } = props;
   const { setPage, category } = useContext(ThemeConnectionContext);
@@ -40,13 +20,24 @@ const TableMenu = (props) => {
 
   const [dataMenu, setDataMenu] = useState([]);
   const [idCategory, setIdCategory] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatusSearch] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const connection = new Connection();
+
+  const searchProd = async (idCategory, status) => {
+    try {
+      const result = await connection.get(`&${idCategory ? `id_menu=${idCategory}` : ''}`+`&${status ? `status=${status}` : (!idCategory && !status) ? 'registration=1' : ''}`,'EPP/Menu.php');
+      return result.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const {
     setCod,
     setDescription,
-    setState,
+    setStatus,
     setOpenDetails,
     refrash,
   } = useContext(ThemeMenuContext);
@@ -94,7 +85,7 @@ const TableMenu = (props) => {
           <div className="col-2">
             <Select
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={(e) => setStatusSearch(e.target.value)}
               onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
               name="Status"
             >
@@ -117,7 +108,7 @@ const TableMenu = (props) => {
             }} iconImage={faFileCsv} />
             <Button
               iconImage={faEraser}
-              onAction={() => { setIdCategory(''); setStatus(''); fetchData(); }}
+              onAction={() => { setIdCategory(''); setStatusSearch(''); fetchData(); }}
             />
             {ScreenChildren}
           </Search>
@@ -125,7 +116,7 @@ const TableMenu = (props) => {
       </form>
       <ContainerTableInformation>
         {loading ? (
-          <div>Loading...</div> // Aqui você pode substituir por um componente de loader personalizado
+          <div>Loading...</div>
         ) : (
           <Table>
             <TableHead>
@@ -137,14 +128,16 @@ const TableMenu = (props) => {
               </TableRow>
             </TableHead>
             <tbody>
-              {dataMenu && dataMenu.map((row, rowIndex) => (
+              {dataMenu && dataMenu.map((row, rowIndex) => {
+                console.log(row)
+                return (
                 <TableRow
                   key={`table_${rowIndex}`}
                   className={styleLine === rowIndex ? 'focused' : ''}
                   onClick={() => {
                     setCod(row.idMenu);
                     setDescription(row.description);
-                    setState(row.status);
+                    setStatus(row.status);
                     setPage(2);
                   }}
                 >
@@ -155,7 +148,7 @@ const TableMenu = (props) => {
                     <Button onAction={() => { setOpenDetails(true); setIdMenu(row.idMenu); }} bg="#297073" animationType={true} isAnimation={true} iconImage={faCog} />
                   </TableCell>
                 </TableRow>
-              ))}
+              )})}
             </tbody>
           </Table>
         )}

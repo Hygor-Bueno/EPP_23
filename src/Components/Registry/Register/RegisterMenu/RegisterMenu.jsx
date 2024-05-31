@@ -13,9 +13,12 @@ export const RegisterMenu = () => {
   const connection = new Connection();
 
   const {
-    Cod, setCod,
-    Description, setDescription,
-    State, setState,
+    Cod,
+    Description,
+    status,
+    setCod,
+    setDescription,
+    setStatus,
     setRefrash,
   } = useContext(ThemeMenuContext);
 
@@ -23,7 +26,7 @@ export const RegisterMenu = () => {
     try {
       const jsonPost = {
         id_menu: Cod,
-        status: State,
+        status: status,
         description: Description,
       }
 
@@ -40,7 +43,7 @@ export const RegisterMenu = () => {
     try {
       const jsonUpdate = {
         id_menu: Cod,
-        status: State,
+        status: status,
         description: Description,
       }
 
@@ -54,6 +57,7 @@ export const RegisterMenu = () => {
       console.log(error);
     }
   }
+
   const del = async () => {
     try {
       const {error} = await connection.put({id_menu: Cod}, "EPP/Menu.php");
@@ -65,10 +69,11 @@ export const RegisterMenu = () => {
       console.log(error);
     }
   }
+
   const clear = () => {
     setCod('');
     setDescription('');
-    setState('');
+    setStatus('');
     setRefrash(prev => prev + 1);
   }
 
@@ -90,7 +95,7 @@ export const RegisterMenu = () => {
               <option value="0">Inativo</option>
               <option value="1">Ativo</option>
             </React.Fragment>
-          )} name='Status' value={State} onChange={(e) => setState(e.target.value)} />
+          )} name='Status' value={status} onChange={(e) => setStatus(e.target.value)} />
         </SubFlex>
       </SuperFlex>
       <div className="w-100 d-flex gap-1">
