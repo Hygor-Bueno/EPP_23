@@ -42,10 +42,13 @@ const TableProd = (props) => {
   const [idProd, setIdProd] = useState('');
   const [idCategory, setIdCategory] = useState('');
   const [statusProd, setStatusProd] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
     const result = await searchProd(idProd, idCategory, statusProd);
     setDataProd(result || []);
+    setLoading(false);
   };
 
   const handleSearchProd = async (e) => {
@@ -130,37 +133,41 @@ const TableProd = (props) => {
         </HeaderSearch>
       </form>
       <ContainerTableInformation>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {array.map((h, index) => (
-                <TableHeaderCell key={index}>{h}</TableHeaderCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <tbody>
-            {dataProd.map((row, rowIndex) => (
-              <TableRow
-                key={`table_${rowIndex}`}
-                className={focusLine === rowIndex ? 'focused' : ''}
-                onClick={() => {
-                  setCod(row.id_product);
-                  setEmb(row.measure);
-                  setCategory(row.id_category_fk);
-                  setStatus(row.status_prod);
-                  setRefrash(prev => prev + 1);
-                  setPage(1);
-                }}
-              >
-                <TableCell>{row.id_product}</TableCell>
-                <TableCell>{row.description}</TableCell>
-                <TableCell>{row.category}</TableCell>
-                <TableCell>{row.measure}</TableCell>
-                <TableCell>{row.status_prod === '1' ? <FontAwesomeIcon color="#00b318" icon={faPowerOff} /> : <FontAwesomeIcon color="#ff0000" icon={faPowerOff} />}</TableCell>
+        {loading ? (
+          <div>Loading...</div> // Aqui você pode substituir por um componente de loader personalizado
+        ) : (
+          <Table>
+            <TableHead>
+              <TableRow>
+                {array.map((h, index) => (
+                  <TableHeaderCell key={index}>{h}</TableHeaderCell>
+                ))}
               </TableRow>
-            ))}
-          </tbody>
-        </Table>
+            </TableHead>
+            <tbody>
+              {dataProd.map((row, rowIndex) => (
+                <TableRow
+                  key={`table_${rowIndex}`}
+                  className={focusLine === rowIndex ? 'focused' : ''}
+                  onClick={() => {
+                    setCod(row.id_product);
+                    setEmb(row.measure);
+                    setCategory(row.id_category_fk);
+                    setStatus(row.status_prod);
+                    setRefrash(prev => prev + 1);
+                    setPage(1);
+                  }}
+                >
+                  <TableCell>{row.id_product}</TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell>{row.category}</TableCell>
+                  <TableCell>{row.measure}</TableCell>
+                  <TableCell>{row.status_prod === '1' ? <FontAwesomeIcon color="#00b318" icon={faPowerOff} /> : <FontAwesomeIcon color="#ff0000" icon={faPowerOff} />}</TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </ContainerTableInformation>
     </React.Fragment>
   );

@@ -74,6 +74,14 @@ const Supper = () => {
           display: flex;
           gap: 0.3rem;
           cursor: pointer;
+
+          input[type=radio]:checked + label:before {
+            content: "\2022";
+            color: #f3f3f3;
+            font-size: 30px;
+            text-align: center;
+            line-height: 18px;
+          }
         }
       `;
 

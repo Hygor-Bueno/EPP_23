@@ -6,6 +6,7 @@ import { Container, Footer, Header, Modal, StyledTable, TableContainer } from '.
 import P from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ThemeRegisterProdContext } from '../../../../Theme/ThemeRegister';
+import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
 
 /**
  * Componente ListCheck
@@ -22,23 +23,26 @@ const searchProd = async () => {
 };
 
 const ListCheck = (props) => {
-    const { data, ...rest } = props;
+    const {...rest } = props;
 
     // Estado local para armazenar a lista de produtos
     const [listLocal, setListLocal] = React.useState([]);
     const [dataCheck, setDataCheck] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
 
-    //context
-    const {refrash, setRefrash} = React.useContext(ThemeRegisterProdContext)
+
+  const {setListCheckAll} = React.useContext(ThemeConnectionContext);
 
     const fetchData = async () => {
+      setLoading(true);
       const data = await searchProd() || [];
       setDataCheck(data);
-    }
+      setLoading(false);
+    };
 
     React.useEffect(() => {
       fetchData();
-    }, [refrash]);
+    }, []);
 
     // Efeito para reinicializar a lista quando os dados mudam
     React.useEffect(() => {
@@ -80,9 +84,6 @@ const ListCheck = (props) => {
         setListLocal(tempList);
     };
 
-    // Instância de conexão para chamadas de API
-    const connection = new Connection();
-
     return (
         <Container {...rest}>
             <Modal onClick={(e) => e.stopPropagation()}>
@@ -90,37 +91,41 @@ const ListCheck = (props) => {
                     <h2>Ative ou Inative o Status do produto</h2>
                 </Header>
                 <TableContainer>
-                    <StyledTable>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Código</th>
-                                <th>Produto</th>
-                                <th>Categoria</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listLocal.map((item, index) => (
-                                <tr key={index}>
-                                    <td>
-                                        <input
-                                            onChange={() => handleCheckboxChange(item)}
-                                            type="checkbox"
-                                            checked={item.status_prod === '1'}
-                                        />
-                                    </td>
-                                    <td>{item.id_product || item.idMenu}</td>
-                                    <td>{item.description}</td>
-                                    <td>{item.category || (item.status_prod === '0' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : 'Ativo')}</td>
+                    {loading ? (
+                        <div>Loading...</div>
+                    ) : (
+                        <StyledTable>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Código</th>
+                                    <th>Produto</th>
+                                    <th>Categoria</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </StyledTable>
+                            </thead>
+                            <tbody>
+                                {listLocal.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <input
+                                                onChange={() => handleCheckboxChange(item)}
+                                                type="checkbox"
+                                                checked={item.status_prod === '1'}
+                                            />
+                                        </td>
+                                        <td>{item.id_product || item.idMenu}</td>
+                                        <td>{item.description}</td>
+                                        <td>{item.category || (item.status_prod === '0' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : 'Ativo')}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </StyledTable>
+                    )}
                 </TableContainer>
                 <Footer>
                     <div className='d-flex'>
-                        <Button bg="#297073" onAction={() => { setRefrash(prev => prev + 1); handleStatusButtonClick() }} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
-                        <Button bg="#297073" onAction={() => restartList(data)} iconImage={faArrowRotateBack} isAnimation={true} animationType="rotate" />
+                        <Button bg="#297073" onAction={() => { handleStatusButtonClick(); setListCheckAll(false); }} iconImage={faCircleArrowDown} isAnimation={true} animationType="arrow" />
+                        <Button bg="#297073" onAction={() => restartList(dataCheck)} iconImage={faArrowRotateBack} isAnimation={true} animationType="rotate" />
                     </div>
                 </Footer>
             </Modal>

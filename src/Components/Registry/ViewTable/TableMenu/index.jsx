@@ -22,8 +22,11 @@ const connection = new Connection();
 
 const searchProd = async (idCategory, status) => {
   try {
-    const result = await connection.get(`&${idCategory ? `id_menu=${idCategory}` :
-                                        ''}&${status ? `status=${status}` : (!idCategory && !status) ? 'registration=1' : ''}`, 'EPP/Menu.php');
+    const result = await connection.get(
+      `&${idCategory ? `id_menu=${idCategory}` : ''}`
+      + `&${status ? `status=${status}` : (!idCategory && !status) ? 'registration=1' : ''}`,
+      'EPP/Menu.php'
+    );
     return result.data;
   } catch (error) {
     console.log(error);
@@ -38,18 +41,21 @@ const TableMenu = (props) => {
   const [dataMenu, setDataMenu] = useState([]);
   const [idCategory, setIdCategory] = useState('');
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {
-    Cod, setCod,
-    Description, setDescription,
-    State, setState,
-    openDetails, setOpenDetails,
+    setCod,
+    setDescription,
+    setState,
+    setOpenDetails,
     refrash,
   } = useContext(ThemeMenuContext);
 
   const fetchData = async () => {
+    setLoading(true);
     const result = await searchProd(idCategory, status);
     setDataMenu(result || []);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -68,7 +74,6 @@ const TableMenu = (props) => {
           <div className="col-2">
             <Input
               name="Codigo"
-
               value={idCategory}
               onChange={(e) => setIdCategory(e.target.value)}
               onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
@@ -101,14 +106,14 @@ const TableMenu = (props) => {
           <Search className="w-100">
             <Button onAction={(e) => handleSearch(e)} iconImage={faSearch} />
             <Button onAction={() => {
-               const csv = new CSVGenerator();
-               const fileJson = dataMenu.map(item => ({
-                 "Codigo do menu": item.idMenu,
-                 "Nome do Menu": item.description,
-                 "Status do Menu": item.status === '1' ? 'Ativo' : 'Inativo',
-               }));
+              const csv = new CSVGenerator();
+              const fileJson = dataMenu.map(item => ({
+                "Codigo do menu": item.idMenu,
+                "Nome do Menu": item.description,
+                "Status do Menu": item.status === '1' ? 'Ativo' : 'Inativo',
+              }));
 
-               csv.generateCSV(fileJson, 'documento');
+              csv.generateCSV(fileJson, 'documento');
             }} iconImage={faFileCsv} />
             <Button
               iconImage={faEraser}
@@ -119,37 +124,41 @@ const TableMenu = (props) => {
         </HeaderSearch>
       </form>
       <ContainerTableInformation>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell>Cod</TableHeaderCell>
-              <TableHeaderCell>Descrição</TableHeaderCell>
-              <TableHeaderCell>Status</TableHeaderCell>
-              <TableHeaderCell></TableHeaderCell>
-            </TableRow>
-          </TableHead>
-          <tbody>
-            {dataMenu && dataMenu.map((row, rowIndex) => (
-              <TableRow
-                key={`table_${rowIndex}`}
-                className={styleLine === rowIndex ? 'focused' : ''}
-                onClick={() => {
-                  setCod(row.idMenu);
-                  setDescription(row.description);
-                  setState(row.status);
-                  setPage(2);
-                }}
-              >
-                <TableCell>{row.idMenu}</TableCell>
-                <TableCell>{row.description}</TableCell>
-                <TableCell>{row.status === '1' ? <FontAwesomeIcon color="#00b318" icon={faPowerOff} /> : <FontAwesomeIcon color="#ff0000" icon={faPowerOff} />}</TableCell>
-                <TableCell>
-                  <Button onAction={() => { setOpenDetails(true); setIdMenu(row.idMenu); }} bg="#297073" animationType={true} isAnimation={true} iconImage={faCog} />
-                </TableCell>
+        {loading ? (
+          <div>Loading...</div> // Aqui você pode substituir por um componente de loader personalizado
+        ) : (
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell>Cod</TableHeaderCell>
+                <TableHeaderCell>Descrição</TableHeaderCell>
+                <TableHeaderCell>Status</TableHeaderCell>
+                <TableHeaderCell></TableHeaderCell>
               </TableRow>
-            ))}
-          </tbody>
-        </Table>
+            </TableHead>
+            <tbody>
+              {dataMenu && dataMenu.map((row, rowIndex) => (
+                <TableRow
+                  key={`table_${rowIndex}`}
+                  className={styleLine === rowIndex ? 'focused' : ''}
+                  onClick={() => {
+                    setCod(row.idMenu);
+                    setDescription(row.description);
+                    setState(row.status);
+                    setPage(2);
+                  }}
+                >
+                  <TableCell>{row.idMenu}</TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell>{row.status === '1' ? <FontAwesomeIcon color="#00b318" icon={faPowerOff} /> : <FontAwesomeIcon color="#ff0000" icon={faPowerOff} />}</TableCell>
+                  <TableCell>
+                    <Button onAction={() => { setOpenDetails(true); setIdMenu(row.idMenu); }} bg="#297073" animationType={true} isAnimation={true} iconImage={faCog} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </ContainerTableInformation>
     </React.Fragment>
   );
