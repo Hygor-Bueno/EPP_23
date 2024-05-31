@@ -36,8 +36,12 @@ const searchProd = async (idProduct, idCategory, statusProd) => {
 
 const TableProd = (props) => {
   const array = ['Cod', 'Descrição', 'Categoria', 'Embalagem', 'Status'];
-  const { focusLine, ScreenChildren } = props;
+  const { ScreenChildren } = props;
+
+
   const { menu, setPage } = useContext(ThemeConnectionContext);
+
+  const [focusLine, setFocusLine] = useState('');
 
   const [dataProd, setDataProd] = useState([]);
   const [idProd, setIdProd] = useState('');
@@ -46,26 +50,28 @@ const TableProd = (props) => {
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    setLoading(true);
     const result = await searchProd(idProd, idCategory, statusProd);
     setDataProd(result || []);
-    setLoading(false);
   };
 
   const handleSearchProd = async (e) => {
-    // e.preventDefault();
+    e?.preventDefault();
     fetchData();
   };
 
   /** Variáveis de estado */
   const {
-    Cod, setCod,
-    Description, setDescription,
-    Category, setCategory,
-    Emb, setEmb,
-    Status, setStatus,
+    setCod,
+    setCategory,
+    setEmb,
+    setStatus,
     setRefrash,
     refrash,
+
+    Cod,
+    Category,
+    Emb,
+    Status,
   } = useContext(ThemeRegisterProdContext);
 
   useEffect(() => {

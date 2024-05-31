@@ -1,13 +1,4 @@
-import styled, { keyframes } from 'styled-components';
-
-export const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+import styled from 'styled-components';
 
 export const HeaderSearch = styled.div`
   padding-left: 1vw;
@@ -59,7 +50,6 @@ export const TableHead = styled.thead`
 `;
 
 export const TableRow = styled.tr`
-  animation: ${fadeIn} 0.5s ease-in-out;
   transition: all ease 0.5s;
   text-align: center;
 
