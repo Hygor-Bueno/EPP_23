@@ -4,10 +4,6 @@ import { formatToPtBr } from "../../../../Util/mockUtil";
 import P from 'prop-types';
 import { Connection } from "../../../../Util/RestApi";
 
-/**
- * Esse componente é a tabela da Consinco aonde vejo as informações de cada loja com seus produtos e determinados preços.
- * @returns
- */
 const ConsincoTable = (props) => {
   const [listSales, setListSales] = React.useState('');
 

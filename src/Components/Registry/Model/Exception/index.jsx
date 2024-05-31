@@ -5,7 +5,7 @@ import { Button, Container, ModalExpetion, ImageExpetion } from "./style";
 import PropTypes from 'prop-types';
 
 
-
+// Ainda retorno o erro!
 /**
  * Modelo de erro por resposta do WebServices.
  *
@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
  * @param {*} isConfirm
  * @param {*} openException
  * @param {*} closeException
- * @param {{ [x: string]: any; }} param....rest
+ * @param {{ [x: string]: any; }} rest Resgata todas as propriedades do componente para serem utilizado mesmo não sendo especificado. atualização do ES6
  * @returns {*}
  */
 const Exception = (props) => {

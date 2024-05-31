@@ -11,6 +11,7 @@ import { ThemeRegisterProdContext } from "../../../../Theme/ThemeRegister";
 import Button from "../../Components/Button/Button";
 import { Connection } from "../../../../Util/RestApi";
 import { CSVGenerator } from "../../class/CSV";
+import { CircleSpinner } from "../../Components/Loading/Loading";
 
 /**
  * Tabela dos produtos. Aonde tenho informações da consico e posso cadastrar produtos que vem da consico.
@@ -134,7 +135,11 @@ const TableProd = (props) => {
       </form>
       <ContainerTableInformation>
         {loading ? (
-          <div>Loading...</div> // Aqui você pode substituir por um componente de loader personalizado
+          <CircleSpinner>
+            <div className='background'>
+              <div className='spinner'></div>
+            </div>
+          </CircleSpinner>
         ) : (
           <Table>
             <TableHead>

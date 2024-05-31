@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { HeaderSearch, Table, TableCell, TableHead, TableHeaderCell, TableRow } from '../styled';
-import { faCog, faEraser, faFileCsv, faPowerOff, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faEraser, faFileCsv, faPowerOff, faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import P from 'prop-types';
@@ -12,6 +12,7 @@ import { ContainerTableInformation, Search } from '../../styled.page';
 import { ThemeLogMenuContext } from '../../../../Theme/ThemeLogMenu';
 import { Connection } from '../../../../Util/RestApi';
 import { CSVGenerator } from '../../class/CSV';
+import { CircleSpinner } from '../../Components/Loading/Loading';
 
 const TableMenu = (props) => {
   const { styleLine, ScreenChildren } = props;
@@ -116,7 +117,11 @@ const TableMenu = (props) => {
       </form>
       <ContainerTableInformation>
         {loading ? (
-          <div>Loading...</div>
+          <CircleSpinner>
+            <div className='background'>
+              <div className='spinner'></div>
+            </div>
+          </CircleSpinner>
         ) : (
           <Table>
             <TableHead>
