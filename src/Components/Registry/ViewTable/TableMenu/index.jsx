@@ -35,6 +35,8 @@ const TableMenu = (props) => {
     }
   };
 
+  const [index, setIndex] = useState(null);
+
   const {
     setCod,
     setDescription,
@@ -58,6 +60,8 @@ const TableMenu = (props) => {
     // e.preventDefault();
     fetchData();
   };
+
+  const handleLine = (index) => setIndex(index);
 
   return (
     <React.Fragment>
@@ -138,8 +142,9 @@ const TableMenu = (props) => {
                 return (
                 <TableRow
                   key={`table_${rowIndex}`}
-                  className={styleLine === rowIndex ? 'focused' : ''}
+                  className={index === rowIndex ? 'focused' : ''}
                   onClick={() => {
+                    handleLine(rowIndex);
                     setCod(row.idMenu);
                     setDescription(row.description);
                     setStatus(row.status);

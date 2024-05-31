@@ -41,7 +41,7 @@ const TableProd = (props) => {
 
   const { menu, setPage } = useContext(ThemeConnectionContext);
 
-  const [focusLine, setFocusLine] = useState('');
+  const [focusLine, setFocusLine] = useState();
 
   const [dataProd, setDataProd] = useState([]);
   const [idProd, setIdProd] = useState('');
@@ -73,6 +73,10 @@ const TableProd = (props) => {
     Emb,
     Status,
   } = useContext(ThemeRegisterProdContext);
+
+  const handleRowClick = (index) => {
+    setFocusLine(index);
+  };
 
   useEffect(() => {
     fetchData();
@@ -161,6 +165,7 @@ const TableProd = (props) => {
                   key={`table_${rowIndex}`}
                   className={focusLine === rowIndex ? 'focused' : ''}
                   onClick={() => {
+                    handleRowClick(rowIndex);
                     setCod(row.id_product);
                     setEmb(row.measure);
                     setCategory(row.id_category_fk);
