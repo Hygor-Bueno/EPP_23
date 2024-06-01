@@ -74,9 +74,10 @@ const Supper = () => {
         label {
           display: flex;
           gap: 0.3rem;
+          font-weight: 600;
+          color: rgb(41, 112, 115);
 
           input[type=radio]:checked + label:before {
-            content: "\2022";
             color: #f3f3f3;
             font-size: 30px;
             text-align: center;
