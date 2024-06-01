@@ -556,7 +556,7 @@ export default function Home() {
             if (order.data[0].idMenu && parseInt(order.data[0].idMenu) !== 0) {
                 loadRiceDessert(order.data[0].typeRice, order.data[0].dessert);
             } else {
-
+                console.log(order,logSales);
             }
             setOrderCod(order.data[0].idOrder);
             setNameClient(order.data[0].nameClient);
@@ -624,9 +624,10 @@ export default function Home() {
                 if (!sale.getMeasure()) {
                     req.push(sale.getProductEPP());
                 }
-            })
+            });
             let result = await Promise.all(req);
-            result.forEach(item => {
+            console.log(result);
+            result.forEach((item,index) => {
                 if (!item.error) {
                     array.forEach(sale => {
                         if (parseInt(sale.epp_id_product) === parseInt(item.data[0].id_product)) {
