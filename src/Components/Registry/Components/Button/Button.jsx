@@ -98,7 +98,7 @@ const rotateAnimation = keyframes`
     }
 `;
 
-const arrowAnimation = keyframes`
+export const arrowAnimation = keyframes`
     0% {
         transform: translateY(0);
     }
@@ -113,9 +113,9 @@ const arrowAnimation = keyframes`
     }
 `;
 
-const ButtonContainer = styled.button`
+export const ButtonContainer = styled.button`
     position: relative;
-    width: 100%;
+    width: 100%; // 20%
     overflow: hidden;
     background-color: ${({ $bg }) => $bg || 'transparent'};
 
@@ -125,6 +125,7 @@ const ButtonContainer = styled.button`
     border: var(--borderSize) solid;
     border-color: ${({ $borderColor }) => $borderColor || '#fff'};
     border-radius: var(--borderRadius);
+    flex: 1;
     font-size: var(--textSize);
     font-weight: bold;
     cursor: pointer;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types"; // Importe PropTypes
 import styled from "styled-components";
 
 export const Title = ({children}) => {
@@ -18,7 +19,6 @@ export const Subtitle = ({children}) => {
 }
 
 const TitleComponent = styled.h2`
-  margin-bottom: var(--spaceDefaultLL);
   font-weight: 600;
   color: #297073;
 `;
@@ -28,3 +28,12 @@ const SubtitileComponent = styled.h3`
   font-weight: 600;
   color: #297073;
 `;
+
+// Defina PropTypes para os componentes
+Title.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+Subtitle.propTypes = {
+  children: PropTypes.node.isRequired,
+};

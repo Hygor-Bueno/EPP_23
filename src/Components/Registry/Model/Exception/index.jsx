@@ -3,7 +3,22 @@ import P from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle, faFileCircleCheck, faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { Button, Container, ModalExpetion, ImageExpetion } from "./style";
+import PropTypes from 'prop-types';
 
+
+// Ainda retorno o erro!
+/**
+ * Modelo de erro por resposta do WebServices.
+ *
+ * @param {{ [x: string]: any; error: any; translate: any; isConfirm: any; openException: any; closeException: any; }} param
+ * @param {*} error
+ * @param {*} translate
+ * @param {*} isConfirm
+ * @param {*} openException
+ * @param {*} closeException
+ * @param {{ [x: string]: any; }} rest Resgata todas as propriedades do componente para serem utilizado mesmo não sendo especificado. atualização do ES6
+ * @returns {*}
+ */
 const Exception = (props) => {
   const {error, translate, isConfirm, openException, closeException, ...rest} = props;
 
@@ -40,23 +55,15 @@ const Exception = (props) => {
         </div>
       </Container>
     </React.Fragment>
-  )
-}
-
-Exception.defaultProps = {
-  error: false,
-  translate: 'Tudo Ok',
-  isConfirm: true,
-  openException: (e) => console.log(e.target),
-  closeException: (e) => console.log(e.target),
+  );
 }
 
 Exception.propTypes = {
-  error: P.bool.isRequired,
-  translate: P.string,
-  isConfirm: P.bool,
-  openException: P.func.isRequired,
-  closeException: P.func.isRequired
+  error: PropTypes.any,
+  translate: PropTypes.any,
+  isConfirm: PropTypes.any,
+  openException: PropTypes.any,
+  closeException: PropTypes.any,
 }
 
 export default Exception;

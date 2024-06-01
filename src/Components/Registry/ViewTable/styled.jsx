@@ -1,12 +1,14 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-export const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+export const HeaderSearch = styled.div`
+  padding-left: 1vw;
+`;
+
+export const FixedSize = styled.div`
+  height: 200px !important;
+  width: 565px;
+  overflow-y: scroll;
+  overflow-x: scroll;
 `;
 
 export const Table = styled.table`
@@ -44,12 +46,10 @@ export const TableHead = styled.thead`
       &:focus {
         background-color: inherit;
       }
-
   }
 `;
 
 export const TableRow = styled.tr`
-  animation: ${fadeIn} 0.5s ease-in-out;
   transition: all ease 0.5s;
   text-align: center;
 

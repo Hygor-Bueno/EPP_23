@@ -8,18 +8,56 @@ export const ContainerTableInformation = styled.div`
   margin-bottom: 1vw;
 `;
 
+export const ModelRegister = styled.div`
+  width: clamp(20vw, 100vw, 600px);
+  height: clamp(20vh, 100vh, 500px);
+  background-color: #fff;
+  border-radius: 15px;
+  padding: clamp(1vw, 2vw, 10px);
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .d-flex {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .label {
+    font-weight: bold;
+    color: #297073;
+  }
+`;
+
+
+
 export const Flex =  styled.div`
-  width: var(--widthInput);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: column;
+  flex: none;
+
+  .flex-cl {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export const NavigationBox = styled.div`
   display: flex;
   flex-direction: row;
   padding: var(--spaceDefault);
+  flex: none;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  height: 100vh;
 `
 
 export const GroupButton = styled(NavigationBox)`
@@ -28,9 +66,8 @@ export const GroupButton = styled(NavigationBox)`
 `;
 
 export const ContainerBackground = styled.section`
-  width: 80%;
+  width: 100vw;
   height: 100vh;
-
   background-color: #297073;
 
    // Color Gradient Modern
@@ -78,6 +115,37 @@ export const ContainerBackground = styled.section`
   }
 `;
 
+export const Search = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: end;
+
+  button {
+    flex: none;
+    width: 50px;
+    height: 50px;
+  }
+`;
+
 export const ContainerInput = styled.div`
     padding: var(--spaceDefault);
 `;
+
+export const Container = styled.div`
+  height: 100% !important;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .whiteColor {
+    background-color: #ffF;
+  }
+
+  .blueColor {
+    background-color: rgb(41, 112, 115);
+  }
+
+  .border-test {
+    border: 1px solid red;
+  }
+`

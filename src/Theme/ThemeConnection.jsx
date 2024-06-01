@@ -11,12 +11,16 @@ const ThemeContextConnectionProvider = ({ children }) => {
   const [menu, setMenu] = useState([]);
   const [logMenu, setLogMenu] = useState([]);
   const [category, setCategory] = useState([]);
-
-  /* Carregamentos */
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+
   const [refreshFlag, setRefreshFlag] = useState(false);
 
+
   const connection = new Connection();
+
+  const [listCheckAll, setListCheckAll] = useState();
 
   useEffect(() => {
     fetchData();
@@ -48,7 +52,11 @@ const ThemeContextConnectionProvider = ({ children }) => {
     refreshFlag,
     logMenu,
 
+    page, setPage,
     setRefreshFlag,
+
+    // isso aqui vai abrir de checks
+    listCheckAll, setListCheckAll
   };
 
   return (
