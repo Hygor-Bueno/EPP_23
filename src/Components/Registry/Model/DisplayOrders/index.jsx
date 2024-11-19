@@ -88,7 +88,7 @@ const DisplayOrder = ({ onAction, data, ...rest }) => {
                       setMenuCod(item.logMenu.pluMenu);
                       setCodRice(item.product.idProduct.id[0]);
                       setDessert(item.product.idProduct.id[1]);
-                      setTypeBase(item.product.typebase);
+                      setTypeBase(item.product.idProduct.typebase);
                       setDataLog(item.product);
                       setPage(3);
                     }}

@@ -27,7 +27,7 @@ const ListCheck = (props) => {
 
   const searchCategory = async () => {
     try {
-      const result = await connection.get(`&registration=1`, 'EPP/Menu.php')
+      const result = await connection.get(`&registration=1`, 'EPP/Menu.php');
       return result.data || [];
     } catch (error) {
       console.log(error);

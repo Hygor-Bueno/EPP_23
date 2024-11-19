@@ -123,7 +123,7 @@ const TableProd = (props) => {
             <Button onAction={() => {
               const csv = new CSVGenerator();
               const fileJson = dataProd.map(item => {
-                console.log(item);
+                // console.log(item);
                 return ({
                   "Codigo do Produto": item.id_product,
                   "Nome do Produto": item.description,

@@ -124,11 +124,11 @@ const Supper = () => {
             <div className="w-100 d-flex flex-column justify-content-between">
               {!table ? (
                 <>
-                  <TableProd data={prod.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)}/>
+                  <TableProd data={prod.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)} />
                 </>
               ) : (
                 <>
-                  <TableMenu data={category.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)}/>
+                  <TableMenu data={category.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)} />
                 </>
               )}
             </div>

@@ -39,7 +39,7 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: CodRice,
       plu_menu: MenuCod,
-      type_base: typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0],
+      type_base: typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0], // typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0]
     };
 
     const payloadTwo = {
@@ -65,7 +65,7 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: CodRice,
       plu_menu: MenuCod,
-      type_base: typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0],
+      type_base: console.log(typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0]), // typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0]
     };
 
     const payloadTwo = {
@@ -73,7 +73,7 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: Dessert,
       plu_menu: MenuCod,
-      type_base: typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0],
+      type_base: console.log(typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0]), // typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0]
     };
 
     try {

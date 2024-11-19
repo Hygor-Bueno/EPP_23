@@ -16,7 +16,9 @@ const ThemeLogMenuProvider = ({ children }) => {
   // Codigo da indentificação do Menu
   const [idMenu, setIdMenu] = useState('');
 
-  useEffect(() => {console.log('mudou!')},[dataLog])
+  useEffect(() => {console.log('mudou!')},[dataLog]);
+
+  console.log(MenuCod, CodRice, Dessert, typeBase);
 
   /**Variaveis de Controle do Menu do arquivo AddProds.jsx */
   const globalLogMenuValue = {

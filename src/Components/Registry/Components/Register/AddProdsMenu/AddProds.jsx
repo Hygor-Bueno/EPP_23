@@ -30,11 +30,15 @@ const AddProds = () => {
   const { category } = useContext(ThemeConnectionContext);
 
   const changeLogMenu = (value, key, input) => {
-    let newLogMenu = updateLogMenu;
-    newLogMenu[key][input] = value;
-    newLogMenu[key]["update"] = true;
-    newLogMenu[key]["typeBase"] = typeBase;
-    setUpdateLogMenu({ ...newLogMenu });
+    try {
+      let newLogMenu = updateLogMenu;
+      newLogMenu[key][input] = value;
+      newLogMenu[key]["update"] = true;
+      newLogMenu[key]["typeBase"] = typeBase;
+      setUpdateLogMenu({ ...newLogMenu });
+    } catch (e) {
+      console.log('teste');
+    }
   };
 
   useEffect(() => {

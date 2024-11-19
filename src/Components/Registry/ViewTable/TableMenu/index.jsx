@@ -138,7 +138,6 @@ const TableMenu = (props) => {
             </TableHead>
             <tbody>
               {dataMenu && dataMenu.map((row, rowIndex) => {
-                console.log(row)
                 return (
                 <TableRow
                   key={`table_${rowIndex}`}
