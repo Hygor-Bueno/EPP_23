@@ -1,14 +1,10 @@
 import React, { useContext, useMemo } from 'react';
 import { ThemeConnectionContext } from '../../../../Theme/ThemeConnection';
-import { Container, Modal, ModalRequest, Row, Request } from './style';
-import PropTypes from 'prop-types';
+import { Col, Container, Modal, ModalRequest, Request, Row, RowTwo } from './style';
 import { ThemeLogMenuContext } from '../../../../Theme/ThemeLogMenu';
 
-/**
- * DisplayOrder é onde vamos ter várias informações conjuntas de 2 ou mais informações dentro desse componente.
- * @returns
- */
-const DisplayOrder = ({ onAction, data, ...rest }) => {
+const DisplayOrder = (props) => {
+  const { onAction, data, ...rest } = props;
   const {
     idMenu,
     setCod,
@@ -17,132 +13,157 @@ const DisplayOrder = ({ onAction, data, ...rest }) => {
     setCodRice,
     setDessert,
     setTypeBase,
-    setDataLog,
   } = useContext(ThemeLogMenuContext);
 
   const { menu, setPage } = useContext(ThemeConnectionContext);
 
-  const findCategories = (cardIds, categoryData) => {
-    return cardIds.map(cardId => {
-      const category = categoryData.find(cat => cat.id_category === cardId.toString());
-      return category ? category.cat_description : 'Categoria não encontrada';
-    });
-  };
+  // Função para combinar itens pelo pluMenu
+  const combineItemsByPluMenu = (items) => {
+    const grouped = {};
 
-  const groupItems = (items) => {
-    return items.reduce((acc, item) => {
-      const { pluMenu, typeBase, eppLogId } = item.logMenu;
-      const { idProduct, description, idCategoryFk } = item.product;
+    items.forEach((item) => {
+      const { pluMenu, typeBase, eppLogId, eppIdMenu } = item.logMenu;
+      const { description, idCategoryFk, idProduct } = item.product;
+      const { idMenu } = item.menu;
 
-      if (!acc[pluMenu]) {
-        acc[pluMenu] = {
-          ...item,
-          product: {
-            ...item.product,
-            idProduct: { id: [idProduct], typebase: [typeBase] },
-            description: [description],
-            category: [idCategoryFk],
-            logId: [eppLogId],
-          },
-        };
-      } else {
-        const existingItem = acc[pluMenu];
-        existingItem.product.idProduct.id.push(idProduct);
-        existingItem.product.idProduct.typebase.push(typeBase);
-        existingItem.product.description.push(description);
-        existingItem.product.category.push(idCategoryFk);
-        existingItem.product.logId.push(eppLogId);
+      // Inicializa o grupo para idMenu se não existir
+      if (!grouped[idMenu]) {
+        grouped[idMenu] = { id: idMenu, data: [] };
       }
 
-      return acc;
-    }, {});
+      // Procura uma entrada existente para o pluMenu
+      let existingEntry = grouped[idMenu].data.find((entry) => entry.idPluMenu === pluMenu);
+
+      if (!existingEntry) {
+        // Cria nova entrada para este pluMenu
+        existingEntry = { ...item.menu, idPluMenu: pluMenu, items: [] };
+        grouped[idMenu].data.push(existingEntry);
+      }
+
+      // Adiciona os dados do tipo base ao array items
+      existingEntry.items.push({
+        typeBase,
+        idLog: eppLogId,
+        description,
+        category_fk: idCategoryFk,
+        product: idProduct,
+      });
+    });
+
+    // Retorna os valores agrupados
+    return Object.values(grouped);
   };
 
-  const itemMenu = useMemo(() => {
-    const groupedItems = groupItems(data);
-    return Object.values(groupedItems).map((item) => ({
-      ...item,
-      isDuplicate: item.product.idProduct.id.length > 1,
-    }));
-  }, [data]);
+  // Memoização dos dados agrupados
+  const groupedData = useMemo(() => combineItemsByPluMenu(data), [data]);
+
+  // Função para encontrar o item correspondente ao idMenu
+  const fieldMenu = (element) => {
+    const matched = groupedData.find((group) => group.id === element);
+    return matched ? matched.id : null;
+  };
+
+  const valueMenu = fieldMenu(idMenu);
 
   return (
     <React.Fragment>
-      <Container onClick={onAction} {...rest}>
-        <Modal onClick={(e) => e.stopPropagation()}>
-          <Row>
-            <h2>Detalhes do Menu</h2>
-          </Row>
-          <Row>
-            <ModalRequest>
-              {itemMenu.length > 0 && itemMenu.map((item, index) => {
-                const categories = findCategories(item.product.category, menu.data);
-                const jsonObj = JSON.stringify(item.product);
-                localStorage.setItem("product", jsonObj);
+  <Container onClick={onAction} {...rest}>
+    <Modal onClick={(e) => e.stopPropagation()}>
+      <Row>
+        <h2>Detalhes do Menu</h2>
+      </Row>
+      <Row>
+        <ModalRequest>
+          {idMenu === valueMenu ? (
+            <div>
+              {groupedData.map((item) => {
+                if (item.id === valueMenu) {
+                  return (
+                    <div key={item.id}>
+                      {item.data.map((group) => (
+                        <Request onClick={() => {
 
-                return idMenu === item.logMenu.eppIdMenu && (
-                  <Request
-                    onClick={() => {
-                      setCod(`${item.product.logId[0]}-${item.product.logId[1]}`);
-                      setMenuDescruiption(item.logMenu.eppIdMenu);
-                      setMenuCod(item.logMenu.pluMenu);
-                      setCodRice(item.product.idProduct.id[0]);
-                      setDessert(item.product.idProduct.id[1]);
-                      setTypeBase(item.product.idProduct.typebase);
-                      setDataLog(item.product);
-                      setPage(3);
-                    }}
-                    key={`menu_${index}`}
-                  >
-                    <Row className="container">
-                      <Row className="row">
-                        <Row className="col-2">
-                          <h6>Cód. Menu</h6>
-                          <label>{item.logMenu.pluMenu}</label>
-                        </Row>
-                        <Row className="col-2">
-                          <h6>Cód. Prod</h6>
-                          <label className='d-block'>{item.product.idProduct.id[0]}</label>
-                          <label className='d-block'>{item.product.idProduct.id[1]}</label>
-                        </Row>
-                        <Row className="col-4">
-                          <h6>Descrição</h6>
-                          <label className='d-block'>{item.product.description[0]}</label>
-                          <label className='d-block'>{item.product.description[1]}</label>
-                        </Row>
-                        <Row className="col-3">
-                          <h6>Categoria</h6>
-                          <label className='d-block'>{categories[0]}</label>
-                          <label className='d-block'>{categories[1]}</label>
-                        </Row>
-                      </Row>
-                    </Row>
-                  </Request>
-                );
+                          let cod;
+                          setMenuDescruiption(group.idMenu);
+                          setMenuCod(group.idPluMenu);
+                          setTypeBase(group.typeBase);
+
+                          // Aqui faço uma sepação para conseguir recuperar um valor pelo callback do useState e conseguir renderizar para cada input verificando seu tipo.
+                          group.items.map((item,index) => {
+                            if(index == 0){
+                              cod = item.idLog;
+                            }else{
+                              cod = `${cod}-${item.idLog}`
+                            }
+
+                            if(item.typeBase.toLowerCase() === "rice") {
+                              setCodRice(item.product);
+                            }
+                            else if(item.typeBase.toLowerCase() === "dessert") {
+                              setDessert(item.product)
+                            }
+                            else console.error('error');
+                          })
+
+                          setCod(cod);
+                          setPage(3);
+                          props.setOpenDetails(false);
+                        }} key={group.idPluMenu}>
+                          <div>
+                            <Col col={12} sm={6} md={4} lg={3} xl={2}>
+                              <strong>Numero do cartão: </strong>{group.idPluMenu}
+                            </Col>
+                            <Col>
+                              {group.items.map((subitem, index) => (
+                                <Col>
+                                  <RowTwo col={6} sm={6} md={4} lg={3} xl={2} key={`${group.idPluMenu}-${index}`}>
+                                    <strong className='gap-1'>{subitem.typeBase.toLowerCase() == "rice" ? "Arroz:" : "Sobremessa:"} </strong>
+                                    <div>{subitem.description} - <strong>{subitem.product}</strong></div>
+                                  </RowTwo>
+                                </Col>
+                              ))}
+                            </Col>
+                          </div>
+                        </Request>
+                      ))}
+                    </div>
+                  );
+                }
+                return null;
               })}
-            </ModalRequest>
-          </Row>
-        </Modal>
-      </Container>
-    </React.Fragment>
+            </div>
+          ) : (
+            <div>Deu errado!</div>
+          )}
+        </ModalRequest>
+      </Row>
+    </Modal>
+  </Container>
+</React.Fragment>
+
   );
 };
 
-DisplayOrder.propTypes = {
-  onAction: PropTypes.func.isRequired,
-  data: PropTypes.arrayOf(PropTypes.shape({
-    logMenu: PropTypes.shape({
-      pluMenu: PropTypes.string.isRequired,
-      typeBase: PropTypes.string.isRequired,
-      eppLogId: PropTypes.string.isRequired,
-      eppIdMenu: PropTypes.string.isRequired,
-    }).isRequired,
-    product: PropTypes.shape({
-      idProduct: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      idCategoryFk: PropTypes.string.isRequired,
-    }).isRequired,
-  })).isRequired,
-};
+  // DisplayOrder.propTypes = {
+  //   onAction: PropTypes.func.isRequired,
+  //   data: PropTypes.arrayOf(
+  //     PropTypes.shape({
+  //       logMenu: PropTypes.shape({
+  //         pluMenu: PropTypes.string.isRequired,
+  //         typeBase: PropTypes.string.isRequired,
+  //         eppLogId: PropTypes.string.isRequired,
+  //         eppIdMenu: PropTypes.string.isRequired,
+  //       }).isRequired,
+  //       product: PropTypes.shape({
+  //         idProduct: PropTypes.string.isRequired,
+  //         description: PropTypes.string.isRequired,
+  //         idCategoryFk: PropTypes.string.isRequired,
+  //       }).isRequired,
+  //       menu: PropTypes.shape({
+  //         idMenu: PropTypes.string.isRequired,
+  //       }).isRequired,
+  //     })
+  //   ).isRequired,
+  // };
 
 export default DisplayOrder;

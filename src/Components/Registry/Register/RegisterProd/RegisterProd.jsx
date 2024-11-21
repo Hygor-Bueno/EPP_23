@@ -72,8 +72,9 @@ export const RegisterProd = () => {
 
       const {error} = await connection.put(jsonUpdate, "EPP/Product.php");
       if(!error) {
-        console.log('Dado Atualizado!');
+        alert('Dado Atualizado!');
         setRefrash(prev => prev + 1);
+        clear();
       }
 
     } catch (error) {
@@ -84,7 +85,9 @@ export const RegisterProd = () => {
     try {
       const {error} = await connection.put({id_product: Cod}, "EPP/Product.php");
       if(!error) {
-        console.log('Registro deletado!');
+        alert('Registro deletado!');
+        setRefrash(prev => prev + 1);
+        clear();
       }
     } catch (error) {
       console.log(error);

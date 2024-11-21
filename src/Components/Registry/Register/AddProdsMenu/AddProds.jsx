@@ -12,7 +12,7 @@ import { Connection } from "../../../../Util/RestApi";
 const AddProds = () => {
   /**Data Connection*/
   const connection = new Connection();
-  const {logMenu, category} = useContext(ThemeConnectionContext);
+  const {logMenu, category, setRefreshFlag} = useContext(ThemeConnectionContext);
 
   /**Variaveis de estados */
   const {
@@ -23,6 +23,9 @@ const AddProds = () => {
     CodRice,
     Dessert,
     typeBase,
+
+    // aqui vem todos os dados.
+    dataMenu,
 
     // states
     setCod,
@@ -39,7 +42,7 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: CodRice,
       plu_menu: MenuCod,
-      type_base: typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0], // typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0]
+      // type_base: typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0], // typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0]
     };
 
     const payloadTwo = {
@@ -47,7 +50,7 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: Dessert,
       plu_menu: MenuCod,
-      type_base: typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0],
+      // type_base: typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0],
     };
 
     try {
@@ -55,6 +58,9 @@ const AddProds = () => {
       for await (const value of array) {
         connection.post(value, "EPP/LogMenu.php");
       };
+      alert("Enviado");
+      setRefreshFlag(prev => !prev);
+      clear();
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +71,6 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: CodRice,
       plu_menu: MenuCod,
-      type_base: console.log(typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0]), // typeBase.filter(v => v.toLowerCase() == "rice".toLowerCase())[0]
     };
 
     const payloadTwo = {
@@ -73,7 +78,6 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: Dessert,
       plu_menu: MenuCod,
-      type_base: console.log(typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0]), // typeBase.filter(v => v.toLowerCase() == "dessert".toLowerCase())[0]
     };
 
     try {
@@ -81,6 +85,9 @@ const AddProds = () => {
       for await (const value of array) {
         connection.put(value, "EPP/LogMenu.php");
       };
+      alert("Atualizado!");
+      setRefreshFlag(prev => !prev);
+      clear();
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +101,8 @@ const AddProds = () => {
       console.log(error);
     }
   };
-  const clear = () => {
+
+  function clear() {
     try {
       setCod('');
       setMenuDescruiption('');

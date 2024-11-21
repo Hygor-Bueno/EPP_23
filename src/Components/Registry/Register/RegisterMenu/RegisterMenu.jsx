@@ -32,8 +32,9 @@ export const RegisterMenu = () => {
 
       const {error} = await connection.post(jsonPost, "EPP/Menu.php");
       if(!error) {
-        console.log('Dado Atualizado!');
+        alert('Dado Atualizado!');
         setRefrash(prev => prev + 1);
+        clear();
       }
     } catch (error) {
       console.log(error);
@@ -49,8 +50,9 @@ export const RegisterMenu = () => {
 
       const {error} = await connection.put(jsonUpdate, "EPP/Menu.php");
       if(!error) {
-        console.log('Dado Atualizado!');
+        alert('Dado Atualizado!');
         setRefrash(prev => prev + 1);
+        clear();
       }
 
     } catch (error) {
@@ -62,8 +64,9 @@ export const RegisterMenu = () => {
     try {
       const {error} = await connection.put({id_menu: Cod}, "EPP/Menu.php");
       if(!error) {
-        console.log('Registro deletado!');
+        alert('Registro deletado!');
         setRefrash(prev => prev + 1);
+        clear();
       }
     } catch (error) {
       console.log(error);

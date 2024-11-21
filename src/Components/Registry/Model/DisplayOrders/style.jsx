@@ -25,6 +25,7 @@ export const Request = styled.div`
 
     &:hover {
         background-color: #297073;
+        color: white !important;
 
         h6, label {
             color: #fff;
@@ -76,5 +77,38 @@ export const Row = styled.div`
   label {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+`;
+
+export const RowTwo = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+`;
+
+export const Col = styled.div`
+
+  .gap-1 {
+    margin-right: 1rem;
+  }
+
+  padding: 0.5rem;
+  flex: 0 0 auto;
+  width: ${({ col }) => (col ? `${(col / 12) * 100}%` : "100%")};
+
+  @media (min-width: 576px) {
+    width: ${({ sm }) => (sm ? `${(sm / 12) * 100}%` : "auto")};
+  }
+
+  @media (min-width: 768px) {
+    width: ${({ md }) => (md ? `${(md / 12) * 100}%` : "auto")};
+  }
+
+  @media (min-width: 992px) {
+    width: ${({ lg }) => (lg ? `${(lg / 12) * 100}%` : "auto")};
+  }
+
+  @media (min-width: 1200px) {
+    width: ${({ xl }) => (xl ? `${(xl / 12) * 100}%` : "auto")};
   }
 `;

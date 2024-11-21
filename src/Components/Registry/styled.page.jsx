@@ -44,6 +44,18 @@ export const Flex =  styled.div`
     display: flex;
     flex-direction: column;
   }
+
+  .w100 {
+    width: 100%;
+  }
+
+  .gap-1 {
+    gap: 10px;
+  }
+
+  .jc-between {
+    width: 100%;
+  }
 `;
 
 export const NavigationBox = styled.div`

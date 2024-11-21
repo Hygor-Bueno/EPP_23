@@ -24,7 +24,7 @@ export default function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/order" element={<Skeleton><Order /></Skeleton>} />
                 <Route path="/registry" element={<Skeleton><Registry /></Skeleton>} />
-                <Route path="/Supper" element={<Skeleton><Register /></Skeleton>} />
+                <Route path="/supper" element={<Skeleton><Register /></Skeleton>} />
             </Routes>
         </HashRouter>
     )
