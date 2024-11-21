@@ -140,7 +140,7 @@ export const RegisterProd = () => {
       </div>
       <div>
         <label className="label">Informações consinco:</label>
-        <ConsincoTable idProd={Cod} refrashList={refrash} setDescription={setDescription}/>
+        <ConsincoTable idProd={Cod} refrashList={refrash} setDescription={setDescription} />
       </div>
       <div className="w-100 d-flex gap-1 pt-2">
         <Button onAction={() => post()} isAnimation={false} iconImage={faPlus} />
