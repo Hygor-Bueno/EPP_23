@@ -107,11 +107,11 @@ export const RegisterProd = () => {
       <div>
         <Title>Adicionar Produto</Title>
         <Flex>
-          <div className="col-2"><Input value={Cod} onChange={(e) => setCod(e.target.value)} name="Cod." /></div>
-          <div className="col-9"><Input value={Description} onChange={(e) => setDescription(e.target.value)} name="Descrição" isDisabled={true} /></div>
+          <div className=""><Input value={Cod} onChange={(e) => setCod(e.target.value)} name="Cod." /></div>
+          <div className=""><Input value={Description} onChange={(e) => setDescription(e.target.value)} name="Descrição" isDisabled={true} /></div>
         </Flex>
         <Flex>
-          <div className="col-3">
+          <div className="">
             <Select children={(
               <React.Fragment>
                 {menu.data?.map(({id_category, cat_description}) => {
@@ -120,7 +120,7 @@ export const RegisterProd = () => {
               </React.Fragment>
             )} value={Category} onChange={(e) => setCategory(e.target.value)} name="Categoria" />
           </div>
-          <div className="col-3">
+          <div className="">
             <Select children={(
               <React.Fragment>
                 <option value="Kg">Kg</option>
@@ -128,7 +128,7 @@ export const RegisterProd = () => {
               </React.Fragment>
             )} value={Emb} onChange={(e) => setEmb(e.target.value)} name="Emb" />
           </div>
-          <div className="col-3">
+          <div className="">
             <Select children={(
               <React.Fragment>
                 <option value="0">Inativo</option>

@@ -6,9 +6,11 @@ export const HeaderSearch = styled.div`
 
 export const FixedSize = styled.div`
   height: 200px !important;
-  width: 565px;
+  width: 100%;
   overflow-y: scroll;
   overflow-x: scroll;
+
+  font-size: var(--textSize) !important;
 `;
 
 export const Table = styled.table`
@@ -64,6 +66,7 @@ export const TableRow = styled.tr`
 export const TableHeaderCell = styled.th`
   padding: var(--spaceDefault);
   border: var(--borderSize) solid #ddd;
+  overflow: auto;
   color: ${({ $txtColor }) => $txtColor ? `#297073` : '#000'};
   text-align: left;
 `;

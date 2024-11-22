@@ -111,24 +111,26 @@ const Supper = () => {
         {openDetails && <DisplayOrder onAction={() => setOpenDetails(false)} setOpenDetails={setOpenDetails} data={logMenu.data} />}
         {listCheckAll && <ListCheck onClick={() => setListCheckAll(false)} table={table} />}
         <Container>
-          <div className="col-5 blueColor">
+          <div className="col-5 d-flex justify-content-center blueColor">
             <NavigationBox>
-              <Button iconImage={faArrowLeft} borderColor="#fff" isAnimation={false} onAction={() => changePage(-1)} />
-                <ModelRegister>
-                  {Carrocel()}
-                </ModelRegister>
-              <Button iconImage={faArrowRight} borderColor="#fff" isAnimation={false} onAction={() => changePage(1)}/>
+
+                <Button iconImage={faArrowLeft} borderColor="#fff" isAnimation={false} onAction={() => changePage(-1)} />
+                  <ModelRegister>
+                    {Carrocel()}
+                  </ModelRegister>
+                <Button iconImage={faArrowRight} borderColor="#fff" isAnimation={false} onAction={() => changePage(1)}/>
+
             </NavigationBox>
           </div>
           <div className="col-7 h-100">
-            <div className="w-100 d-flex flex-column justify-content-between">
+            <div className="w-100 h-100 d-flex flex-column justify-content-between">
               {!table ? (
                 <>
-                  <TableProd data={prod.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)} />
+                  <TableProd data={prod.data} ScreenChildren={(<div className="d-flex align-items-center gap-4 justify-content-between"><div><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/></div><div><AlterTable /></div></div>)} />
                 </>
               ) : (
                 <>
-                  <TableMenu data={category.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)} />
+                  <TableMenu data={category.data} ScreenChildren={(<div className="d-flex align-items-center gap-4 justify-content-between"><div><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/></div><div><AlterTable /></div></div>)} />
                 </>
               )}
             </div>

@@ -65,60 +65,64 @@ const TableMenu = (props) => {
 
   return (
     <React.Fragment>
-      <form onSubmit={handleSearch}>
-        <HeaderSearch className="d-flex gap-2 pb-2">
-          <div className="col-2">
-            <Input
-              name="Codigo"
-              value={idCategory}
-              onChange={(e) => setIdCategory(e.target.value)}
-              onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
-            />
-          </div>
-          <div className="col-2">
-            <Select
-              value={idCategory}
-              onChange={(e) => setIdCategory(e.target.value)}
-              onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
-              name="Tipo do Menu"
-            >
-              {category.data.map(({ description, idMenu }, index) => (
-                <option key={`menu_${index}`} value={idMenu}>{description}</option>
-              ))}
-            </Select>
-          </div>
-          <div className="col-2">
-            <Select
-              value={status}
-              onChange={(e) => setStatusSearch(e.target.value)}
-              onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
-              name="Status"
-            >
-              <option value="">Todos</option>
-              <option value="0">Inativo</option>
-              <option value="1">Ativo</option>
-            </Select>
-          </div>
-          <Search className="w-100">
-            <Button onAction={(e) => handleSearch(e)} iconImage={faSearch} />
-            <Button onAction={() => {
-              const csv = new CSVGenerator();
-              const fileJson = dataMenu.map(item => ({
-                "Codigo do menu": item.idMenu,
-                "Nome do Menu": item.description,
-                "Status do Menu": item.status === '1' ? 'Ativo' : 'Inativo',
-              }));
+      <div className='d-flex flex-column justify-content-around h-100'>
+        <form onSubmit={handleSearch}>
+          <HeaderSearch className="d-flex gap-5">
+            <div className="col-2">
+              <Input
+                name="Codigo"
+                value={idCategory}
+                onChange={(e) => setIdCategory(e.target.value)}
+                onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
+              />
+            </div>
+            <div className="col-2">
+              <Select
+                value={idCategory}
+                onChange={(e) => setIdCategory(e.target.value)}
+                onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
+                name="Tipo do Menu"
+              >
+                {category.data.map(({ description, idMenu }, index) => (
+                  <option key={`menu_${index}`} value={idMenu}>{description}</option>
+                ))}
+              </Select>
+            </div>
+            <div className="col-2">
+              <Select
+                value={status}
+                onChange={(e) => setStatusSearch(e.target.value)}
+                onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
+                name="Status"
+              >
+                <option value="">Todos</option>
+                <option value="0">Inativo</option>
+                <option value="1">Ativo</option>
+              </Select>
+            </div>
+            <Search className="d-flex gap-1">
+              <div><Button onAction={(e) => handleSearch(e)} iconImage={faSearch} /></div>
+              <div>
+              <Button onAction={() => {
+                const csv = new CSVGenerator();
+                const fileJson = dataMenu.map(item => ({
+                  "Codigo do menu": item.idMenu,
+                  "Nome do Menu": item.description,
+                  "Status do Menu": item.status === '1' ? 'Ativo' : 'Inativo',
+                }));
 
-              csv.generateCSV(fileJson, 'documento');
-            }} iconImage={faFileCsv} />
-            <Button
-              iconImage={faEraser}
-              onAction={() => { setIdCategory(''); setStatusSearch(''); fetchData(); }}
-            />
-            {ScreenChildren}
-          </Search>
-        </HeaderSearch>
-      </form>
+                csv.generateCSV(fileJson, 'documento');
+              }} iconImage={faFileCsv} />
+              </div>
+              <div><Button
+                iconImage={faEraser}
+                onAction={() => { setIdCategory(''); setStatusSearch(''); fetchData(); }}
+              /></div>
+              {ScreenChildren}
+            </Search>
+          </HeaderSearch>
+        </form>
+
       <ContainerTableInformation>
         {loading ? (
           <CircleSpinner>
@@ -162,6 +166,7 @@ const TableMenu = (props) => {
           </Table>
         )}
       </ContainerTableInformation>
+      </div>
     </React.Fragment>
   );
 };
