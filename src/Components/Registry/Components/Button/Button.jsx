@@ -61,6 +61,7 @@ const Button = (props) => {
         >
             {iconImage && (
                 <FontAwesomeIcon
+                    data-testid="icon"
                     icon={iconImage}
                     style={{
                         transform: isClicked && props.isAnimation ? (props.isAnimation === 'arrow' ? 'translateY(50px)' : 'rotate(360deg)') : 'rotate(0deg)',

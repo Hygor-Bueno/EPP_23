@@ -40,9 +40,9 @@ Input.defaultProps = {
 }
 
 Input.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   //value: PropTypes.oneOf([PropTypes.string, PropTypes.number, PropTypes.bool, PropTypes.object, PropTypes.any]),
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   isDisabled: PropTypes.bool,
   innerRef: PropTypes.any,
   placeHolder: PropTypes.string
