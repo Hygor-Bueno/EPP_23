@@ -16,13 +16,18 @@ export const Container = styled.div`
 
 export const Modal = styled.div`
     background-color: #ffffff;
-    width: clamp(50px, 50vw, 100vmin);
-    height: clamp(50px, 80vh, 100vmin);
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    width: clamp(200px, 100vw, 600px);
+    height: clamp(200px, 100vh, 500px);
 
     border-radius: 8px;
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
 
-    padding: 16px;
+    padding: 1rem;
 `;
 
 export const Footer = styled.div`

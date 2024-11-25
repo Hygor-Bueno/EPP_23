@@ -140,7 +140,7 @@ const ListCheck = (props) => {
                                         </td>
                                         <td>{item.id_product || item.idMenu}</td>
                                         <td>{item.description}</td>
-                                        <td>{item.category || (item.status_prod === '0' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : <FontAwesomeIcon icon={faPowerOff} color='#b90000' />)}</td>
+                                        <td>{item.category || (item.status === '1' ? <FontAwesomeIcon icon={faPowerOff} color='#006600' /> : <FontAwesomeIcon icon={faPowerOff} color='#b90000' />)}</td>
                                     </tr>
                                 ))}
                             </tbody>

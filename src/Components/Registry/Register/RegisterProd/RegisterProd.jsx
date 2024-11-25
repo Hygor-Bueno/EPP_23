@@ -6,7 +6,7 @@ import ConsincoTable from '../../ViewTable/Consinco';
 import { Flex } from '../../styled.page';
 import { Title } from '../../Components/Title';
 import Button from '../../Components/Button/Button.jsx';
-import { faEdit, faEraser, faPen, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPen, faEraser, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ThemeRegisterProdContext } from '../../../../Theme/ThemeRegister.jsx';
 import { Connection } from '../../../../Util/RestApi.js';
 
@@ -14,7 +14,7 @@ export const RegisterProd = () => {
   const {menu} = useContext(ThemeConnectionContext);
   const connection = new Connection();
 
-  /**Variaveis de estados */
+  /* Variaveis de estados */
   const {
     Cod, setCod,
     Description, setDescription,
@@ -25,7 +25,7 @@ export const RegisterProd = () => {
   } = useContext(ThemeRegisterProdContext);
 
 
-  /**A onde posso fazer a pesquisa pelo teclado */
+  /* A onde posso fazer a pesquisa pelo teclado */
   const handleKeyPress = (e) => {
     if(e.keyCode === 13) {
       setRefrash(prev => prev + 1);
@@ -107,8 +107,8 @@ export const RegisterProd = () => {
       <div>
         <Title>Adicionar Produto</Title>
         <Flex>
-          <div className=""><Input value={Cod} onChange={(e) => setCod(e.target.value)} name="Cod." /></div>
-          <div className=""><Input value={Description} onChange={(e) => setDescription(e.target.value)} name="Descrição" isDisabled={true} /></div>
+          <div className="col-2"><Input value={Cod} onChange={(e) => setCod(e.target.value)} name="Cod." /></div>
+          <div className="col-9"><Input value={Description} onChange={(e) => setDescription(e.target.value)} name="Descrição" isDisabled={true} /></div>
         </Flex>
         <Flex>
           <div className="">

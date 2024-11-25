@@ -17,6 +17,8 @@ export const Table = styled.table`
   width: 100%;
   font-size: var(--textSize);
 
+  margin-top: 1rem;
+
   border-collapse: collapse;
   border-spacing: 0;
   border-radius: var(--border);
