@@ -42,7 +42,7 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: CodRice,
       plu_menu: MenuCod,
-      type_base: "rice"
+      type_base: "Rice"
     };
 
     const payloadTwo = {
@@ -50,7 +50,7 @@ const AddProds = () => {
       epp_id_menu: MenuDescription,
       epp_id_product: Dessert,
       plu_menu: MenuCod,
-      type_base: "dessert"
+      type_base: "Dessert"
     };
 
     try {
