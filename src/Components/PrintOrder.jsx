@@ -24,8 +24,8 @@ export default function PrintOrder(props) {
         </button>
     );
     async function print() {
-        let additionalItems = props.logSales.filter(item => parseInt(item.menu) === 0);
-        let addItems = addtionalItems(await formatAddItems(additionalItems));
+        // let additionalItems = props.logSales.filter(item => parseInt(item.menu) === 0);
+        let addItems = addtionalItems(await formatAddItems(props.logSales));
         let menuItem = props.logSales.filter(item => parseInt(item.menu) === 1);
         // Cria uma nova janela
         const newWindow = window.open("", "_blank", "width=600,height=400");
@@ -88,17 +88,8 @@ export default function PrintOrder(props) {
                         Pagar: R$ ${parseFloat(props.total - props.signal).toFixed(2)}<br/>
                         Total: R$ ${parseFloat(props.total).toFixed(2)}<br/>
                         <hr/>
-                        ${
-                            props.pluMenu && `
-                                Menu: ${props.menu} - ${util.maskName(menuItem[0].getDescription())}<br/>
-                                Código: ${props.pluMenu}<br/>
-                                Tipo do arroz: ${props.rice}<br/>
-                                Sobremesa: ${props.dessert}<br/>
-                                Subtotal: R$ ${parseFloat(menuItem[0].price).toFixed(2)}<br/>
-                                <hr/>
-                            `
-                        }
-                        Adicional:<br/>
+                        
+                        Pedidos:<br/>
                         ${addItems}<br/>
                         <hr/>
                         <strong>
