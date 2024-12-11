@@ -94,9 +94,30 @@ const AddProds = () => {
   };
   const remove = async () => {
     try {
-      console.log({
-        id: Cod
-      });
+      const payloadOne = {
+        epp_log_id: Cod.split('-')[0],
+        epp_id_menu: MenuDescription,
+        epp_id_product: CodRice,
+        status_log_menu: "0",
+        plu_menu: MenuCod,
+      };
+
+      const payloadTwo = {
+        epp_log_id: Cod.split('-')[1],
+        epp_id_menu: MenuDescription,
+        epp_id_product: Dessert,
+        status_log_menu: "0",
+        plu_menu: MenuCod,
+      };
+
+      const array = new Array(payloadOne, payloadTwo);
+      for await (const value of array) {
+        connection.put(value, "EPP/LogMenu.php");
+      };
+      alert("Produto desativado!");
+      setRefreshFlag(prev => !prev);
+      clear();
+
     } catch (error) {
       console.log(error);
     }
