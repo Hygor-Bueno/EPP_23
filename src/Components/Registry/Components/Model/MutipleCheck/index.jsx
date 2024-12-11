@@ -91,10 +91,7 @@ const MultipleCheck = ({ dataHeaders, data, ...rest }) => {
                                     <td>{item.description}</td>
                                     <td>
                                         {item.category || (
-                                            <FontAwesomeIcon
-                                                icon={faPowerOff}
-                                                color={item.status === '1' ? '#199f22' : '#f90000'}
-                                            />
+                                          <FontAwesomeIcon icon={faPowerOff} color={item.status_prod === '1' ? '#199f22' : '#f90000'} />
                                         )}
                                     </td>
                                 </tr>

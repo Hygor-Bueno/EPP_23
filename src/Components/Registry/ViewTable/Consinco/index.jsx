@@ -23,7 +23,7 @@ const ConsincoTable = (props) => {
   return (
     <React.Fragment>
       <FixedSize>
-        <Table >
+        <Table>
           <TableHead>
             <TableRow>
               <TableHeaderCell>Loja</TableHeaderCell>

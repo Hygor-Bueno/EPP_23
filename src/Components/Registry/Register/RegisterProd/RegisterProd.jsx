@@ -6,7 +6,7 @@ import ConsincoTable from '../../ViewTable/Consinco';
 import { Flex } from '../../styled.page';
 import { Title } from '../../Components/Title';
 import Button from '../../Components/Button/Button.jsx';
-import { faEdit, faEraser, faPen, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPen, faEraser, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ThemeRegisterProdContext } from '../../../../Theme/ThemeRegister.jsx';
 import { Connection } from '../../../../Util/RestApi.js';
 
@@ -14,7 +14,7 @@ export const RegisterProd = () => {
   const {menu} = useContext(ThemeConnectionContext);
   const connection = new Connection();
 
-  /**Variaveis de estados */
+  /* Variaveis de estados */
   const {
     Cod, setCod,
     Description, setDescription,
@@ -25,7 +25,7 @@ export const RegisterProd = () => {
   } = useContext(ThemeRegisterProdContext);
 
 
-  /**A onde posso fazer a pesquisa pelo teclado */
+  /* A onde posso fazer a pesquisa pelo teclado */
   const handleKeyPress = (e) => {
     if(e.keyCode === 13) {
       setRefrash(prev => prev + 1);
@@ -111,7 +111,7 @@ export const RegisterProd = () => {
           <div className="col-9"><Input value={Description} onChange={(e) => setDescription(e.target.value)} name="Descrição" isDisabled={true} /></div>
         </Flex>
         <Flex>
-          <div className="col-3">
+          <div className="">
             <Select children={(
               <React.Fragment>
                 {menu.data?.map(({id_category, cat_description}) => {
@@ -120,7 +120,7 @@ export const RegisterProd = () => {
               </React.Fragment>
             )} value={Category} onChange={(e) => setCategory(e.target.value)} name="Categoria" />
           </div>
-          <div className="col-3">
+          <div className="">
             <Select children={(
               <React.Fragment>
                 <option value="Kg">Kg</option>
@@ -128,7 +128,7 @@ export const RegisterProd = () => {
               </React.Fragment>
             )} value={Emb} onChange={(e) => setEmb(e.target.value)} name="Emb" />
           </div>
-          <div className="col-3">
+          <div className="">
             <Select children={(
               <React.Fragment>
                 <option value="0">Inativo</option>

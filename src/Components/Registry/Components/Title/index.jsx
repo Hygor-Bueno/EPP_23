@@ -20,6 +20,7 @@ export const Subtitle = ({children}) => {
 
 const TitleComponent = styled.h2`
   font-weight: 600;
+  font-size: var(--textSizeL);
   color: #297073;
 `;
 

@@ -4,16 +4,16 @@ export const ContainerTableInformation = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
-  max-height: 90vh;
+  max-height: 80vh;
   margin-bottom: 1vw;
 `;
 
 export const ModelRegister = styled.div`
-  width: clamp(20vw, 100vw, 600px);
-  height: clamp(20vh, 100vh, 500px);
+  width: clamp(200px, 100vw, 590px);
+  height: clamp(200px, 100vh, 500px);
+  padding: clamp(1vw, 2vw, 10px);
   background-color: #fff;
   border-radius: 15px;
-  padding: clamp(1vw, 2vw, 10px);
 
   overflow: hidden;
 
@@ -40,6 +40,8 @@ export const Flex =  styled.div`
   align-items: center;
   flex: none;
 
+  gap: 0.5rem;
+
   .flex-cl {
     display: flex;
     flex-direction: column;
@@ -60,14 +62,11 @@ export const Flex =  styled.div`
 
 export const NavigationBox = styled.div`
   display: flex;
-  flex-direction: row;
   padding: var(--spaceDefault);
   flex: none;
 
   align-items: center;
   justify-content: space-between;
-
-  gap: 1rem;
 
   height: 100vh;
 `
@@ -145,6 +144,7 @@ export const ContainerInput = styled.div`
 
 export const Container = styled.div`
   height: 100% !important;
+
   display: flex;
   justify-content: space-around;
   align-items: center;

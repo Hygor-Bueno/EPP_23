@@ -123,7 +123,7 @@ export const ButtonContainer = styled.button`
     padding: var(--spaceDefaultP) var(--spaceDefault);
     text-align: center;
     border: var(--borderSize) solid;
-    border-color: ${({ $borderColor }) => $borderColor || '#fff'};
+    border-color: ${({ $borderColor }) => $borderColor || 'transparent'};
     border-radius: var(--borderRadius);
     flex: 1;
     font-size: var(--textSize);

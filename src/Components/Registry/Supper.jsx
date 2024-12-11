@@ -14,25 +14,9 @@ import ListCheck from "./Model/MutipleCheck";
 import styled from "styled-components";
 
 const Supper = () => {
-    const {
-      // Promise data fetch
-      prod,
-      menu,
-      category,
-      logMenu,
-
-      // Variables stateless
-      page, setPage,
-
-      listCheckAll, setListCheckAll,
-    }  = useContext(ThemeConnectionContext);
-
-    const {
-      openDetails, setOpenDetails
-    } = useContext(ThemeMenuContext);
-
+    const { prod, menu, category, logMenu, page, setPage, listCheckAll, setListCheckAll }  = useContext(ThemeConnectionContext);
+    const { openDetails, setOpenDetails } = useContext(ThemeMenuContext);
     const [table, setTable] = useState(false);
-
     const totalPages = 3;
 
     const changePage = (increment) => {
@@ -64,13 +48,8 @@ const Supper = () => {
 
     const AlterTable = () => {
       const options = ['Produtos', 'Menus'];
-
-      const handleChange = (option) => {
-        setTable(option === 'Menus');
-      };
-
+      const handleChange = (option) => {setTable(option === 'Menus')};
       const DivTable = styled.div`
-
         label {
           display: flex;
           gap: 0.3rem;
@@ -105,31 +84,30 @@ const Supper = () => {
       );
     };
 
-
     return (
       <React.Fragment>
         {openDetails && <DisplayOrder onAction={() => setOpenDetails(false)} setOpenDetails={setOpenDetails} data={logMenu.data} />}
         {listCheckAll && <ListCheck onClick={() => setListCheckAll(false)} table={table} />}
         <Container>
-          <div className="col-5 blueColor">
+          <div className="col-5 d-flex justify-content-center blueColor overflow-hidden">
             <NavigationBox>
               <Button iconImage={faArrowLeft} borderColor="#fff" isAnimation={false} onAction={() => changePage(-1)} />
                 <ModelRegister>
                   {Carrocel()}
                 </ModelRegister>
-              <Button iconImage={faArrowRight} borderColor="#fff" isAnimation={false} onAction={() => changePage(1)}/>
+              <Button iconImage={faArrowRight} borderColor="#fff" isAnimation={false} onAction={() => changePage(1)} />
             </NavigationBox>
           </div>
-          <div className="col-7 h-100">
-            <div className="w-100 d-flex flex-column justify-content-between">
+          <div className="col-7">
+            <div className="w-100 h-100 d-flex flex-column justify-content-between">
               {!table ? (
-                <>
-                  <TableProd data={prod.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)} />
-                </>
+                <React.Fragment>
+                  <TableProd data={prod.data} ScreenChildren={(<div className="d-flex align-items-center gap-4 justify-content-between"><div><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/></div><div><AlterTable /></div></div>)} />
+                </React.Fragment>
               ) : (
-                <>
-                  <TableMenu data={category.data} ScreenChildren={(<><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/><AlterTable /></>)} />
-                </>
+                <React.Fragment>
+                  <TableMenu data={category.data} ScreenChildren={(<div className="d-flex align-items-center gap-4 justify-content-between"><div><Button onAction={() => setListCheckAll(true)} iconImage={faEdit}/></div><div><AlterTable /></div></div>)} />
+                </React.Fragment>
               )}
             </div>
           </div>

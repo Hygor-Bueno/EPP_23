@@ -84,8 +84,9 @@ const TableProd = (props) => {
 
   return (
     <React.Fragment>
+      <div className="d-flex flex-column justify-content-around h-100">
       <form onSubmit={handleSearchProd}>
-        <HeaderSearch className="d-flex gap-2 pb-2">
+        <HeaderSearch className="d-flex gap-5">
           <div className="col-2">
             <Input
               name="Codigo"
@@ -118,9 +119,9 @@ const TableProd = (props) => {
               <option value='1'>Ativo</option>
             </Select>
           </div>
-          <Search className="w-100">
-            <Button onAction={handleSearchProd} iconImage={faSearch} />
-            <Button onAction={() => {
+          <Search className="d-flex gap-1">
+            <div><Button onAction={handleSearchProd} iconImage={faSearch} /></div>
+            <div><Button onAction={() => {
               const csv = new CSVGenerator();
               const fileJson = dataProd.map(item => {
                 // console.log(item);
@@ -134,11 +135,8 @@ const TableProd = (props) => {
               });
 
               csv.generateCSV(fileJson, 'documento');
-            }}iconImage={faFileCsv} />
-            <Button
-              iconImage={faEraser}
-              onAction={() => { setIdProd(''); setIdCategory(''); setStatusProd(''); fetchData(); }}
-            />
+            }}iconImage={faFileCsv} /></div>
+            <div><Button iconImage={faEraser} onAction={() => { setIdProd(''); setIdCategory(''); setStatusProd(''); fetchData(); }} /></div>
             {ScreenChildren}
           </Search>
         </HeaderSearch>
@@ -185,6 +183,7 @@ const TableProd = (props) => {
           </Table>
         )}
       </ContainerTableInformation>
+      </div>
     </React.Fragment>
   );
 };
