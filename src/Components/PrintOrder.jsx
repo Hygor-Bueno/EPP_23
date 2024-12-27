@@ -134,7 +134,7 @@ export default function PrintOrder(props) {
         items.forEach((item) => {
             dataItems.forEach(dataItem => {
                 if (parseInt(item.epp_id_product) === parseInt(dataItem.CODACESSO)) {
-                    item.description = dataItem.DESCREDUZIDA;
+                    item.description = dataItem.DESCCOMPLETA;
                     result.push(item);
                 }
             })

@@ -58,7 +58,7 @@ export default class LogSales {
             let req = await this.#conn.get(`&id_product=${this.epp_id_product}&id_shop=${localStorage.getItem('num_store')}`,'EPP/Product.php');
             if(req.length<1) throw new Error('Dados não encontrados');
             this.#price_base = req[0].PRECO;
-            this.#description = req[0].DESCREDUZIDA;
+            this.#description = req[0].DESCCOMPLETA;
         } catch (error) {
             result = {error: true,message:error}
         }
