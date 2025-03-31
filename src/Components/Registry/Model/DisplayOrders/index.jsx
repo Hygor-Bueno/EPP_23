@@ -21,8 +21,10 @@ const DisplayOrder = (props) => {
   const combineItemsByPluMenu = (items) => {
     const grouped = {};
 
+    console.log(items);
+
     items.forEach((item) => {
-      const { pluMenu, typeBase, eppLogId, eppIdMenu } = item.logMenu;
+      const { pluMenu, typeBase, eppLogId, eppIdMenu, status_log_menu } = item.logMenu;
       const { description, idCategoryFk, idProduct } = item.product;
       const { idMenu } = item.menu;
 
@@ -36,7 +38,7 @@ const DisplayOrder = (props) => {
 
       if (!existingEntry) {
         // Cria nova entrada para este pluMenu
-        existingEntry = { ...item.menu, idPluMenu: pluMenu, items: [] };
+        existingEntry = { ...item.menu, idPluMenu: pluMenu, status_log_menu: status_log_menu, items: [] };
         grouped[idMenu].data.push(existingEntry);
       }
 
@@ -46,7 +48,7 @@ const DisplayOrder = (props) => {
         idLog: eppLogId,
         description,
         category_fk: idCategoryFk,
-        product: idProduct,
+        product: idProduct
       });
     });
 
@@ -80,52 +82,60 @@ const DisplayOrder = (props) => {
                 if (item.id === valueMenu) {
                   return (
                     <div key={item.id}>
-                      {item.data.map((group) => (
-                        <Request onClick={() => {
+                      {item.data.map((group) => {
 
-                          let cod;
-                          setMenuDescruiption(group.idMenu);
-                          setMenuCod(group.idPluMenu);
-                          setTypeBase(group.typeBase);
+                        // Aqui estou desativando um card pelo status do menu.
+                        if (group.status_log_menu == 0) {
+                          return null;
+                        }
 
-                          // Aqui faço uma sepação para conseguir recuperar um valor pelo callback do useState e conseguir renderizar para cada input verificando seu tipo.
-                          group.items.map((item,index) => {
-                            if(index == 0){
-                              cod = item.idLog;
-                            }else{
-                              cod = `${cod}-${item.idLog}`
-                            }
+                        return (
+                          <Request
+                            onClick={() => {
+                            let cod;
+                            setMenuDescruiption(group.idMenu);
+                            setMenuCod(group.idPluMenu);
+                            setTypeBase(group.typeBase);
 
-                            if(item.typeBase.toLowerCase() === "rice") {
-                              setCodRice(item.product);
-                            }
-                            else if(item.typeBase.toLowerCase() === "dessert") {
-                              setDessert(item.product)
-                            }
-                            else console.error('error');
-                          })
+                            // Aqui faço uma sepação para conseguir recuperar um valor pelo callback do useState e conseguir renderizar para cada input verificando seu tipo.
+                            group.items.map((item,index) => {
+                              if(index == 0){
+                                cod = item.idLog;
+                              }else{
+                                cod = `${cod}-${item.idLog}`
+                              }
 
-                          setCod(cod);
-                          setPage(3);
-                          props.setOpenDetails(false);
-                        }} key={group.idPluMenu}>
-                          <div>
-                            <Col col={12} sm={6} md={4} lg={3} xl={2}>
-                              <strong>Numero do cartão: </strong>{group.idPluMenu}
-                            </Col>
-                            <Col>
-                              {group.items.map((subitem, index) => (
-                                <Col>
-                                  <RowTwo col={6} sm={6} md={4} lg={3} xl={2} key={`${group.idPluMenu}-${index}`}>
-                                    <strong className='gap-1'>{subitem.typeBase.toLowerCase() == "rice" ? "Arroz:" : "Sobremessa:"} </strong>
-                                    <div>{subitem.description} - <strong>{subitem.product}</strong></div>
-                                  </RowTwo>
-                                </Col>
-                              ))}
-                            </Col>
-                          </div>
-                        </Request>
-                      ))}
+                              if(item.typeBase.toLowerCase() === "rice") {
+                                setCodRice(item.product);
+                              }
+                              else if(item.typeBase.toLowerCase() === "dessert") {
+                                setDessert(item.product)
+                              }
+                              else console.error('error');
+                            })
+
+                            setCod(cod);
+                            setPage(3);
+                            props.setOpenDetails(false);
+                          }} key={group.idPluMenu}>
+                            <div>
+                              <Col col={12} sm={6} md={4} lg={3} xl={2}>
+                                <strong>Numero do cartão: </strong>{group.idPluMenu}
+                              </Col>
+                              <Col>
+                                {group.items.map((subitem, index) => (
+                                  <Col>
+                                    <RowTwo col={6} sm={6} md={4} lg={3} xl={2} key={`${group.idPluMenu}-${index}`}>
+                                      <strong className='gap-1'>{subitem.typeBase.toLowerCase() == "rice" ? "Arroz:" : "Sobremessa:"} </strong>
+                                      <div>{subitem.description} - <strong>{subitem.product}</strong></div>
+                                    </RowTwo>
+                                  </Col>
+                                ))}
+                              </Col>
+                            </div>
+                          </Request>
+                        )
+                      })}
                     </div>
                   );
                 }
@@ -143,27 +153,5 @@ const DisplayOrder = (props) => {
 
   );
 };
-
-  // DisplayOrder.propTypes = {
-  //   onAction: PropTypes.func.isRequired,
-  //   data: PropTypes.arrayOf(
-  //     PropTypes.shape({
-  //       logMenu: PropTypes.shape({
-  //         pluMenu: PropTypes.string.isRequired,
-  //         typeBase: PropTypes.string.isRequired,
-  //         eppLogId: PropTypes.string.isRequired,
-  //         eppIdMenu: PropTypes.string.isRequired,
-  //       }).isRequired,
-  //       product: PropTypes.shape({
-  //         idProduct: PropTypes.string.isRequired,
-  //         description: PropTypes.string.isRequired,
-  //         idCategoryFk: PropTypes.string.isRequired,
-  //       }).isRequired,
-  //       menu: PropTypes.shape({
-  //         idMenu: PropTypes.string.isRequired,
-  //       }).isRequired,
-  //     })
-  //   ).isRequired,
-  // };
 
 export default DisplayOrder;

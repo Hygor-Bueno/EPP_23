@@ -26,7 +26,7 @@ const DisplayOrder = (props) => {
         const groupedItems = new Map();
 
         items.forEach(item => {
-            const key = item.logMenu.pluMenu;
+          const key = item.logMenu.pluMenu;
 
             if (!groupedItems.has(key)) {
                 groupedItems.set(key, {
@@ -76,7 +76,7 @@ const DisplayOrder = (props) => {
         <Container {...rest}>
             <Modal onClick={(e) => e.stopPropagation()}>
                 <Row>
-                    <h2>Detalhes do menu</h2>
+                    <h2>Detalhes do men</h2>
                 </Row>
                 <Row>
                     <ModalRequest>
@@ -84,7 +84,7 @@ const DisplayOrder = (props) => {
                             const categories = item.products.map(product =>
                                 findCategoriesByIds(product.category, menu.data)
                             );
-
+                            console.log(item);
                             return idMenu === item.logMenu.eppIdMenu && (
                                 <Request onClick={() => handleRequestClick(item)} key={`menu_${index}`}>
                                     <Row className="container">
