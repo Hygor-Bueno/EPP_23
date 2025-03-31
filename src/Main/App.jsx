@@ -8,8 +8,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation, faPen, faTrash, faPlus, faEraser, faCopy, faHome, faSave, faUndoAlt, faSquare, faQrcode,faTable,faDownload} from '@fortawesome/free-solid-svg-icons'
 import Home from '../Components/Home/Home.jsx';
 import Skeleton from '../Components/Skeleton/Skeleton.jsx';
-import Registry from '../Components/Registry/Registry.jsx';
 import Order from '../Components/Order/Order';
+import Register from '../Components/Registry/Register.jsx';
+import Registry from '../Components/Registry/Registry.jsx';
 
 library.add(faSearch, faCircleXmark, faUserCircle, faLock, faTrashAlt, faCheckSquare, faRightFromBracket, faCirclePlus, faTruck, faPrint, faChevronLeft, faChevronCircleLeft, faChevronRight, faChevronCircleRight, faBoxesPacking, faMoneyCheckDollar, faComputer, faCircleCheck, faCircleExclamation, faPen, faTrash, faPlus, faEraser, faCopy, faHome, faSave, faUndoAlt, faSquare, faQrcode,faTable,faDownload)
 
@@ -22,7 +23,8 @@ export default function App() {
                 <Route path="/" element={loadPage(<Skeleton><Home /></Skeleton>)} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/order" element={<Skeleton><Order /></Skeleton>} />
-                <Route path="/registry" element={<Skeleton><Registry /></Skeleton>} />
+                <Route path="/registry" element={<Skeleton><Register /></Skeleton>} />
+                {/* <Route path="/supper" element={<Skeleton><Register /></Skeleton>} /> */}
             </Routes>
         </HashRouter>
     )
