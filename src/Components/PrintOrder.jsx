@@ -24,9 +24,10 @@ export default function PrintOrder(props) {
         </button>
     );
     async function print() {
-        let additionalItems = props.logSales.filter(item => parseInt(item.menu) === 0);
+        let additionalItems = props.logSales;
         let addItems = addtionalItems(await formatAddItems(additionalItems));
-        let menuItem = props.logSales.filter(item => parseInt(item.menu) === 1);
+        // let menuItem = props.logSales.filter(item => parseInt(item.menu) === 1);
+        let menuItem = null;
         // Cria uma nova janela
         const newWindow = window.open("", "_blank", "width=600,height=400");
         if (newWindow) {
@@ -74,8 +75,7 @@ export default function PrintOrder(props) {
         // Fecha a nova janela após a impressão;
         newWindow.close();
     }
-    function bodyOrder(menuItem, addItems) {
-        console.log(menuItem,props.pluMenu)
+    function bodyOrder(menusItems, addItems) {
         return (`
                     <div class='brokenDiv'>
                         <strong>ENCOMENDA CEIA PEGPESE</strong><br/>
@@ -88,17 +88,7 @@ export default function PrintOrder(props) {
                         Pagar: R$ ${parseFloat(props.total - props.signal).toFixed(2)}<br/>
                         Total: R$ ${parseFloat(props.total).toFixed(2)}<br/>
                         <hr/>
-                        ${
-                            props.pluMenu && `
-                                Menu: ${props.menu} - ${util.maskName(menuItem[0].getDescription())}<br/>
-                                Código: ${props.pluMenu}<br/>
-                                Tipo do arroz: ${props.rice}<br/>
-                                Sobremesa: ${props.dessert}<br/>
-                                Subtotal: R$ ${parseFloat(menuItem[0].price).toFixed(2)}<br/>
-                                <hr/>
-                            `
-                        }
-                        Adicional:<br/>
+                        Itens:<br/>
                         ${addItems}<br/>
                         <hr/>
                         <strong>
@@ -118,6 +108,7 @@ export default function PrintOrder(props) {
                         ______________________________<br/>
                         Assinatura do Cliente<br/>
                         <br/>
+
                         ______________________________<br/>
                         Assinatura do Responsável<br/>
                         <br/>
@@ -143,7 +134,7 @@ export default function PrintOrder(props) {
         items.forEach((item) => {
             dataItems.forEach(dataItem => {
                 if (parseInt(item.epp_id_product) === parseInt(dataItem.CODACESSO)) {
-                    item.description = dataItem.DESCREDUZIDA;
+                    item.description = dataItem.DESCCOMPLETA;
                     result.push(item);
                 }
             })
@@ -155,6 +146,7 @@ export default function PrintOrder(props) {
         let util = new Util();
         items.forEach((item) => requests.push(util.getConsincoProduct(item.epp_id_product)));
         const values = await Promise.all(requests);
+        console.log(values);
         return values;
     }
 }
