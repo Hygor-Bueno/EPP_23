@@ -74,8 +74,7 @@ export default function PrintOrder(props) {
         // Fecha a nova janela após a impressão;
         newWindow.close();
     }
-    function bodyOrder(menuItem, addItems) {
-        console.log(menuItem,props.pluMenu)
+    function bodyOrder(menusItems, addItems) {
         return (`
                     <div class='brokenDiv'>
                         <strong>ENCOMENDA CEIA PEGPESE</strong><br/>
@@ -88,8 +87,7 @@ export default function PrintOrder(props) {
                         Pagar: R$ ${parseFloat(props.total - props.signal).toFixed(2)}<br/>
                         Total: R$ ${parseFloat(props.total).toFixed(2)}<br/>
                         <hr/>
-                        
-                        Pedidos:<br/>
+                        Itens:<br/>
                         ${addItems}<br/>
                         <hr/>
                         <strong>
@@ -101,7 +99,7 @@ export default function PrintOrder(props) {
                         Horario: ${props.hoursDelivery}<br/>
                         Loja Entrega: ${props.localDelivery.replace(/-/g, ' ').replace(/[_0-9]/g, '')}<br/>
                         <hr/>
-                        <strong>Atenção:</strong> Caso não venha retirar sua encomenda até a data reservada, 
+                        <strong>Atenção:</strong> Caso não venha retirar sua encomenda até a data reservada,
                         consideraremos a desistência do seu pedido e não haverá estorno do valor.
                         <br/>
                         <br/>
@@ -109,19 +107,20 @@ export default function PrintOrder(props) {
                         ______________________________<br/>
                         Assinatura do Cliente<br/>
                         <br/>
+
                         ______________________________<br/>
                         Assinatura do Responsável<br/>
                         <br/>
 
                         Agradecemos a Preferência...<br/>
-                    </div> 
+                    </div>
         `)
     }
     function addtionalItems(items) {
         let result = '';
         items.forEach((item) => {
             result += `
-                Cód.: ${item.epp_id_product}.<br/>            
+                Cód.: ${item.epp_id_product}.<br/>
                 Descrição: ${util.maskName(item.description)} - ${item.quantity} ${item.getMeasure()}. (Preço unit/kg R$ ${parseFloat(item.price / item.quantity).toFixed(2)})<br/>
                 Subtotal:R$ ${parseFloat(item.price).toFixed(2)}<br/>
                 <br/>
@@ -134,7 +133,7 @@ export default function PrintOrder(props) {
         items.forEach((item) => {
             dataItems.forEach(dataItem => {
                 if (parseInt(item.epp_id_product) === parseInt(dataItem.CODACESSO)) {
-                    item.description = dataItem.DESCREDUZIDA;
+                    item.description = dataItem.DESCCOMPLETA;
                     result.push(item);
                 }
             })
@@ -146,6 +145,7 @@ export default function PrintOrder(props) {
         let util = new Util();
         items.forEach((item) => requests.push(util.getConsincoProduct(item.epp_id_product)));
         const values = await Promise.all(requests);
+        console.log(values);
         return values;
     }
 }
