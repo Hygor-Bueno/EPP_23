@@ -9,7 +9,7 @@ import { faEdit, faEraser, faFileCsv, faSearch } from '@fortawesome/free-solid-s
 import { CSVGenerator } from '../class/CSV.js';
 import ConsincoTable from './Consinco/index.jsx';
 import TableProd from './TableProd/index.jsx';
-import TableMenu from './TableMenu/index.jsx';
+// import TableMenu from './TableMenu/index.jsx';
 import { GroupButton, NavigationSearch } from './styled.jsx';
 
 const ResponsiveTable = ({ data, headers, isConsinco, isConsicoSecondary, isMenu }) => {

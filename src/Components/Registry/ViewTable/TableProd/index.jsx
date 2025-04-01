@@ -82,6 +82,8 @@ const TableProd = (props) => {
     fetchData();
   }, [refrash]);
 
+
+
   return (
     <React.Fragment>
       <div className="d-flex flex-column justify-content-around h-100">
@@ -158,7 +160,7 @@ const TableProd = (props) => {
               </TableRow>
             </TableHead>
             <tbody>
-              {dataProd.map((row, rowIndex) => (
+              {dataProd?.map((row, rowIndex) => (
                 <TableRow
                   key={`table_${rowIndex}`}
                   className={focusLine === rowIndex ? 'focused' : ''}
@@ -174,7 +176,7 @@ const TableProd = (props) => {
                 >
                   <TableCell>{row.id_product}</TableCell>
                   <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.category}</TableCell>
+                  <TableCell>{menu.data.find(({ id_category }) => id_category === row.id_category_fk)?.cat_description || 'Não encontrado'}</TableCell>
                   <TableCell>{row.measure}</TableCell>
                   <TableCell>{row.status_prod === '1' ? <FontAwesomeIcon color="#00b318" icon={faPowerOff} /> : <FontAwesomeIcon color="#ff0000" icon={faPowerOff} />}</TableCell>
                 </TableRow>

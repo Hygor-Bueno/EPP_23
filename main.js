@@ -13,6 +13,7 @@ async function createWindow() {
     },
   });
   await win.loadURL("http://192.168.0.99:71/GLOBAL/View/EPP_XXIII/");
+  // await win.loadURL("http://gigpp.com.br:72/GLOBAL/View/EPP_XXIII/");
 }
 
 app.whenReady().then(() => {
@@ -39,6 +40,6 @@ const templateMenu = [
     ]
   }
 ]
-//Menu 
+//Menu
 const menu = Menu.buildFromTemplate(templateMenu);
 Menu.setApplicationMenu(menu);

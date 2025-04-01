@@ -130,6 +130,7 @@ export class Connection {
     }
     async settingUrl(middlewer, params) {
         let server = "http://192.168.0.99:71/GLOBAL";
+        //let server = "http://gigpp.com.br:72/GLOBAL";
         let token = localStorage.getItem("token");
         this.URL = server + middlewer + token + (params ? params : "");
     }

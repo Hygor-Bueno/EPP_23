@@ -83,7 +83,7 @@ const TableMenu = (props) => {
                 onKeyPress={(e) => { if (e.key === 'Enter') handleSearch(e); }}
                 name="Tipo do Menu"
               >
-                {category.data.map(({ description, idMenu }, index) => (
+                {category?.data?.map(({ description, idMenu }, index) => (
                   <option key={`menu_${index}`} value={idMenu}>{description}</option>
                 ))}
               </Select>

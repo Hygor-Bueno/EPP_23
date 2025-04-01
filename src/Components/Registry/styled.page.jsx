@@ -147,7 +147,7 @@ export const Container = styled.div`
 
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  /* align-items: center; */
 
   .whiteColor {
     background-color: #ffF;

@@ -4,6 +4,7 @@
   "author": {
     "name": "PegPese"
   },
+  "homepage": "./",
   "private": true,
   "main": "main.js",
   "dependencies": {
