@@ -586,13 +586,13 @@ export default function Home() {
         let dessert = await util.getConsincoProduct(idDessert);
         let listRice = [], listDessert = [];
         if (rice) {
-            listRice.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCREDUZIDA"] });
+            listRice.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCCOMPLETA"] });
         } else {
             listRice.push({ idProduct: idRice, description: 'Não possui.' });
         }
 
         if (dessert) {
-            listDessert.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCREDUZIDA"] });
+            listDessert.push({ idProduct: rice["SEQPRODUTO"], description: rice["DESCCOMPLETA"] });
         } else {
             listDessert.push({ idProduct: idDessert, description: 'Não possui.' });
         }
